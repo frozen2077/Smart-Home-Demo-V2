@@ -1,3 +1,4 @@
+#include <Arduino_FreeRTOS.h>
 #include <ArduinoJson.h>
 #include <BH1750.h>
 #include <EEPROM.h>
@@ -11,7 +12,7 @@ uint8_t selectedEffect = 2;
 uint8_t selectedBright = 128;
 uint8_t a = 0;
 uint8_t c = 0;
-uint8_t mom, dad, dog;
+uint8_t red, green, blue;
 String inputString = "";
 String sr, sg, sb;
 String tempStrData = "";
@@ -23,11 +24,14 @@ long lastMsg = "";
 long lastMsg2 = 5000; 
 long lastRain = "";
 
-void setup()
-{
+void setup() {
+
+// UART & USART setup --------------------------------------
+
   Serial.begin(9600);
   mySerial.begin(9600);
 
+// Pin Mode setup ------------------------------------------
 
   pinMode(5, OUTPUT);
 
@@ -35,27 +39,49 @@ void setup()
   digitalWrite(KILLBUTTON, HIGH); 
   digitalWrite(8 , 1);
 
-  FastLED.addLeds<WS2811,PIN,GRB>(leds,NUM_LEDS).setCorrection(TypicalLEDStrip);
-  FastLED.setBrightness(selectedBright);  
-
-  EEPROM.get(0,selectedEffect);
-  EEPROM.get(1,selectedBright);
-  EEPROM.get(5, c);
-  if(selectedEffect == 1){
-    EEPROM.get(2, mom);
-    EEPROM.get(3, dad);
-    EEPROM.get(4, dog);
-  } 
-
   attachInterrupt(digitalPinToInterrupt(KILLBUTTON), changeEffect3, FALLING); 
   attachInterrupt(digitalPinToInterrupt(BUTTON), changeEffect2, FALLING);
 
-  mySCoop.start();
+
+  FastLED.addLeds<WS2811,PIN,GRB>(leds,NUM_LEDS).setCorrection(TypicalLEDStrip);
+  FastLED.setBrightness(selectedBright);  
+
+
+// EEPROM setup --------------------------------------------
+
+  EEPROM.get(0, selectedEffect);
+  EEPROM.get(1, selectedBright);
+  EEPROM.get(5, c);
+
+  if(selectedEffect == 1){
+    EEPROM.get(2, red);
+    EEPROM.get(3, green);
+    EEPROM.get(4, blue);
+  } 
+
+
 
   Wire.begin();
   lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE);
 
-  inputString.reserve(1000);
+  inputString.reserve(1000);                 // Allocate memory big enough for the inputstring
+
+  xTaskCreate(
+    TaskDigitalRead
+    ,  "DigitalRead"                         // A name just for humans
+    ,  128                                   // This stack size can be checked & adjusted by reading the Stack Highwater
+    ,  NULL                                  //Parameters for the task
+    ,  2                                     // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+    ,  NULL );                               //Task Handle
+
+  xTaskCreate(
+    TaskDigitalRead
+    ,  "DigitalRead"                         // A name just for humans
+    ,  128                                   // This stack size can be checked & adjusted by reading the Stack Highwater
+    ,  NULL                                  //Parameters for the task
+    ,  1                                    // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+    ,  NULL );                               //Task Handle
+
 }
 
 
@@ -64,9 +90,9 @@ void changeEffect() {
     EEPROM.put(0, selectedEffect);
     EEPROM.put(1, selectedBright);
     if(selectedEffect == 1){
-      EEPROM.put(2, mom);
-      EEPROM.put(3, dad);
-      EEPROM.put(4, dog);
+      EEPROM.put(2, red);
+      EEPROM.put(3, green);
+      EEPROM.put(4, blue);
     }
     delay(500);
     asm volatile ("jmp 0");     
@@ -96,7 +122,7 @@ defineTaskLoop(ledmain){
                 break;
              }
     case 1 : {
-                setAll(mom,dad,dog);
+                setAll(red,green,blue);
                 break;
               }                     
     case 2 : {
@@ -159,15 +185,15 @@ void loop() {
   mySCoop.sleep(50); 
   String lednum,ledbri;
 
-  int lednum_byte, ledbri_byte;
+  uint8_t lednum_byte, ledbri_byte;
 
-  if (stringComplete)//当发现缓存中有数据时，将数据送至字符数组a中{"lednum":3}
+  if (stringComplete)                             // 当发现缓存中有数据时，将数据送至字符数组a中{"lednum":3}
   {
      //Serial.println(inputString);
      if(inputString.indexOf("n")!= -1)  
         {
          lednum = inputString.substring(1);
-         int lednum_byte = lednum.toInt();
+         uint8_t lednum_byte = lednum.toInt();
          selectedEffect = lednum_byte;
          inputString = "";
          stringComplete = false;
@@ -176,20 +202,20 @@ void loop() {
       else if(inputString.indexOf("b")!= -1)  
         {
          ledbri = inputString.substring(1);
-         int ledbri_byte = ledbri.toInt();
+         uint8_t ledbri_byte = ledbri.toInt();
          selectedBright = ledbri_byte;
          inputString = "";
          stringComplete = false;
          changeEffect();
          }
-      else if(inputString.indexOf("x")!= -1)  //{"hex":255y245z224}{"hex":250a253b255}{"hex":0xFAy0xFDz0xFF
+      else if(inputString.indexOf("x")!= -1)      // {"hex":255y245z224} {"hex":250a253b255} {"hex":0xFAy0xFDz0xFF}
         {
          sr = inputString.substring(1,4);
          sg = inputString.substring(4,7);
          sb = inputString.substring(7);
-         int ir = sr.toInt();int ig = sg.toInt();int ib = sb.toInt();
-         mom = ir; dad = ig; dog= ib;
-         //Serial.println(mom);Serial.println(dad);Serial.println(dog);
+         uint8_t ir = sr.toInt(); uint8_t ig = sg.toInt(); uint8_t ib = sb.toInt();
+         red = ir; green = ig; blue= ib;
+         //Serial.println(red);Serial.println(green);Serial.println(blue);
          selectedEffect = 1;
          inputString = "";
          stringComplete = false;
@@ -197,10 +223,10 @@ void loop() {
          }
      else if(inputString.indexOf("m")!= -1)  
         {
-         int acmodei = inputString.substring(1).toInt();
+         uint8_t acmodei = inputString.substring(1).toInt();
          switch (acmodei) {
              case 0 :{
-                    for (int k = 0; k < 5; k++)
+                    for (uint8_t k = 0; k < 5; k++)
                     {
                       mySerial.print(IR1[k]);}
                       delay(100); 
@@ -235,7 +261,7 @@ void loop() {
     lastMsg = now;
     String gas = "t"+String(analogRead(A0));
     delay(100);
-        for (int k = 0; k < 4; k++)
+        for (uint8_t k = 0; k < 4; k++)
         {
           Serial.print(head2[k]);
         }
@@ -249,7 +275,7 @@ void loop() {
     if (analogRead(A1) >500){
         digitalWrite(5,1);
         delay(100);
-        for (int k = 0; k < 4; k++)
+        for (uint8_t k = 0; k < 4; k++)
         {
           Serial.print(head2[k]);
         }
@@ -259,7 +285,7 @@ void loop() {
    else if (analogRead(A2) <500){
         digitalWrite(5,1);
         delay(100);
-        for (int k = 0; k < 4; k++)
+        for (uint8_t k = 0; k < 4; k++)
         {
           Serial.print(head2[k]);
         }
@@ -273,7 +299,7 @@ void loop() {
     uint16_t lux = lightMeter.readLightLevel();
     String luxs = "l"+String(lux);
     delay(100);
-        for (int k = 0; k < 4; k++)
+        for (uint8_t k = 0; k < 4; k++)
         {
           Serial.print(head2[k]);
         }
@@ -300,7 +326,7 @@ void serialEvent() {
     inputString="";
     if (tempStrData.length() > 3 )  
   {     
-    for (int ii = 3; ii < tempStrData.length(); ii++) 
+    for (uint8_t ii = 3; ii < tempStrData.length(); ii++) 
     {
         inputString += tempStrData[ii];delay(2);
     }
