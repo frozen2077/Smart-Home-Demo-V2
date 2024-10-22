@@ -1,6 +1,6 @@
 # Joy's Smart Home Collection V2
 
-Welcome to my personal smart home project repository. This repository contains a collection of code, hardware schematics, and UI designs I have been working on to create a smart home environment that suits my needs. The project is started as my undergraduate thesis project and is designed to keep growing and integrating with various smart devices and provide an unique and seamless experience.
+Welcome to my personal smart home project repository. This repository contains a collection of code, hardware schematics, and UI designs I have been working on to create a smart home environment that suits my needs. The project is started as my undergraduate thesis project and is designed to keep growing and integrating with various smart devices to provide an unique and seamless experience.
 
 > **Note:** I don't have much time to write usage instructions for this project recently, so it's just a collection of files for now. If you have some previous experience, you can try to figure it out by yourself.  Or if you are interested in any specific part of the project, please let me know and I will try to write some instructions for you.
 
@@ -49,10 +49,16 @@ The repository is organized into several components, each responsible for differ
 ## Showcase
 
 ### Web UI (2.0)
+
+UI Showcase featured by YT "Everything Smart Home" Channel
+<iframe width="560" height="315" src="https://www.youtube.com/embed/HYmtGLPDdkk?si=O_IT3RxZfcszkRrI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ![ha-dashboard](UI/Screenshot_20231218_162024_Home%20Assistant.jpg)    
 ![ha-dashboard-2](UI/Screenshot_20231214_130111_Home%20Assistant.jpg)    
 
 ### App UI (1.0)
+<iframe width="560" height="315" src="//player.bilibili.com/player.html?isOutside=true&aid=501380034&bvid=BV1FN411o7tJ&cid=291187473&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+
 <img src="UI/0.jpg" alt="app-ui-1" width="300" >
 <img src="UI/2.jpg" alt="app-ui-3" width="300" >
 
