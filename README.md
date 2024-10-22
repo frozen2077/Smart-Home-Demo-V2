@@ -50,14 +50,13 @@ The repository is organized into several components, each responsible for differ
 
 ### Web UI (2.0)
 
-UI Showcase featured by YT "Everything Smart Home" Channel
-<iframe width="560" height="315" src="https://www.youtube.com/embed/HYmtGLPDdkk?si=O_IT3RxZfcszkRrI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[UI Showcase featured by YT "Everything Smart Home" Channel](https://www.youtube.com/watch?v=HYmtGLPDdkk&t=3s)
 
 ![ha-dashboard](UI/Screenshot_20231218_162024_Home%20Assistant.jpg)    
 ![ha-dashboard-2](UI/Screenshot_20231214_130111_Home%20Assistant.jpg)    
 
 ### App UI (1.0)
-<iframe width="560" height="315" src="//player.bilibili.com/player.html?isOutside=true&aid=501380034&bvid=BV1FN411o7tJ&cid=291187473&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+[Feature Showcase on Bilibili](https://www.bilibili.com/video/BV1FN411o7tJ/?vd_source=0720b0b898d660cb78d6a08f4cce925d)
 
 <img src="UI/0.jpg" alt="app-ui-1" width="300" >
 <img src="UI/2.jpg" alt="app-ui-3" width="300" >
