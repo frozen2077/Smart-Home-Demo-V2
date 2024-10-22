@@ -1,0 +1,28 @@
+brightness: 100
+auto_reload: true
+state_entity_id: input_boolean.streamdeck
+pages:
+  - name: Home
+    buttons: !include includes/home.yaml
+  - name: Media
+    buttons: !include includes/media.yaml
+  - name: Spotify
+    buttons: !include includes/spotify.yaml
+  - name: Testing
+    buttons: !include includes/testing.yaml
+
+anonymous_pages:
+  - name: bas
+    buttons: !include includes/anon_bas.yaml
+  - name: all-lights
+    buttons: !include includes/anon_all_lights.yaml
+  - name: living-room-lights
+    buttons: !include includes/anon_living_room_lights.yaml
+  - name: bedroom-lights
+    buttons: !include includes/anon_bedroom_lights.yaml
+  - name: automatic-lights
+    buttons: !include includes/anon_automatic_lights.yaml
+  - name: timers
+    buttons: !include includes/anon_timers.yaml
+  - name: sensors
+    buttons: !include includes/anon_sensors.yaml

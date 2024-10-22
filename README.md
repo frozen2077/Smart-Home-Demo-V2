@@ -43,6 +43,7 @@ The repository is organized into several components, each responsible for differ
   - `Configs/dashboard`: Homeassistant dashboard configs (yaml). 
   - `Lovelace cards`: Homeassistant custom lovelace cards (html/css/js).
   - `Themes`: Homeassistant custom themes (css/yaml).
+  - `Stream Deck`: Homeassistant Stream Deck controller (python).
 
 - **UI Designs**: Contains screenshots for the user interface of the smart home control system (App/Web).
 
@@ -71,6 +72,10 @@ The repository is organized into several components, each responsible for differ
 <img src="1.0/8.png" alt="1.0-8" width="300" >
 <img src="1.0/9.png" alt="1.0-9" width="300" >
 
+### Stream Deck HomeAssistant Controller
+
+![streamdeck](UI/sd0.webp)
+![streamdeck-2](UI/sd1.webp)
 
 ## License
 
