@@ -59,12 +59,12 @@ The repository is organized into several components, each responsible for differ
 ### Schematics (2.0)
 ![render](Schematics/3D_PCB1_2023-11-02.png)
 ![schematics](Schematics/SCH_Schematic1_1-P1_2023-10-24.png)
-![pcb](Schematics\screenshot-1729606878422.png)
+![pcb](Schematics/screenshot-1729606878422.png)
 
 ### Schematics (1.0)
 ![1.0](1.0/45470061212566221.jpg)
-![1.0](1.0/8.png)
-![1.0](1.0/9.png)
+<img src="1.0/8.png" alt="1.0-8" width="300" >
+<img src="1.0/9.png" alt="1.0-9" width="300" >
 
 
 ## License
