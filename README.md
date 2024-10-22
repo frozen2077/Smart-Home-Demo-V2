@@ -53,8 +53,8 @@ The repository is organized into several components, each responsible for differ
 ![ha-dashboard-2](UI/Screenshot_20231214_130111_Home%20Assistant.jpg)    
 
 ### App UI (1.0)
-![app-ui-1](UI/0.jpg)      
-![app-ui-3](UI/2.jpg)    
+<img src="UI/0.jpg" alt="app-ui-1" width="300" >
+<img src="UI/2.jpg" alt="app-ui-3" width="300" >
 
 ### Schematics (2.0)
 ![render](Schematics/3D_PCB1_2023-11-02.png)
