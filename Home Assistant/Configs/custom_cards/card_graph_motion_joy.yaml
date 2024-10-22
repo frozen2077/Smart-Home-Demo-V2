@@ -1,0 +1,114 @@
+---
+### Card Graph ###
+card_graph_motion_joy:
+  variables:
+    ulm_card_graph_color: "var(--info-color)"
+    ulm_card_graph_name: "n/a"
+    ulm_card_graph_color2: "var(--info-color)"
+    ulm_card_graph_name2: "n/a"
+    ulm_card_graph_entity2: ""
+    ulm_card_graph_hours: 24
+    ulm_card_graph_points: 1
+    ulm_card_graph_type: "fill"
+  triggers_update: "all"
+  styles:
+    grid:
+      - grid-template-areas: "'item1 item2'"
+      - grid-template-columns: "2fr 3fr"
+    card:
+      - border-radius: "var(--border-radius)"
+      - box-shadow: "var(--box-shadow)"
+      - margin: "0px 12px 12px"
+      - padding: "0px"
+      - background: rgba(var(--color-theme),0.05)
+      - width: auto
+  custom_fields:
+    item1:
+      card:
+        type: "custom:button-card"
+        template:
+          - "icon_info_motion_graph"
+          - "card_generic_old"
+        styles:
+          card:
+            - box-shadow: "none"
+            - background: "transparent"
+            - padding: "12px"
+        entity: "[[[ return variables.ulm_card_graph_entity ]]]"
+        name: "[[[ return variables.ulm_card_graph_name ]]]"
+        label: >
+          [[[
+            let state = variables.ulm_card_graph_entity.state;
+            let ent = "Clear";
+            if(state == "off")
+              ent = "Detected";
+              return ent;
+            return ent;
+          ]]]        
+    # item2:
+    #   card:
+    #     type: "history-graph"
+    #     hours_to_show: 12
+    #     show_names: false
+    #     entities: >
+    #       [[[
+    #         var ent = [];
+    #         ent.push(variables.ulm_card_graph_entity);
+    #         if(variables.ulm_card_graph_entity2 != "")
+    #           ent.push(variables.ulm_card_graph_entity2);
+    #         return ["light.wled"];
+    #       ]]]
+
+
+    item2:
+      card:
+        type: "custom:mini-graph-card"
+        entities: >
+          [[[
+            var ent = [];
+            ent.push("binary_sensor.tapo_camera_87e7_cell_motion_detection");
+            if(variables.ulm_card_graph_entity2 != "")
+              ent.push(variables.ulm_card_graph_entity2);
+            return ent;
+          ]]]
+        line_color: >
+          [[[
+            var col = [];
+            col.push(variables.ulm_card_graph_color);
+            if(variables.ulm_card_graph_color2 != "")
+              col.push(variables.ulm_card_graph_color2);
+            return col;
+          ]]]
+        show:
+          name: false
+          icon: false
+          legend: false
+          state: false
+          labels: false
+          graph: "[[[ return variables.ulm_card_graph_type=='fill'?'line':variables.ulm_card_graph_type; ]]]"
+          fill: "[[[ return variables.ulm_card_graph_type=='fill'?true:false; ]]]"
+        color_thresholds:
+          - value: 0
+            color: 'var(--google-blue)'
+          - value: 0.1
+            color: 'rgba(var(--color-pink),1)'
+        state_map:
+          - value: 'off'
+            label: Clear
+          - value: 'on'
+            label: Detected  
+        hours_to_show: "[[[ return variables.ulm_card_graph_hours; ]]]"
+        points_per_hour: "[[[ return variables.ulm_card_graph_points; ]]]"
+        align_state: center
+        upper_bound: 0.5
+        height: 60
+        style: |
+          ha-card.flex.type-custom-mini-graph-card {
+            box-shadow: none;
+            background: transparent;
+            padding: 20px 0px 12px 0px;  
+            width: 92%;
+          }
+          ha-card.flex.type-custom-mini-graph-card .graph {
+            padding: 0px;
+          }

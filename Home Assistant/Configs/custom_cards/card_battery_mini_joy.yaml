@@ -1,0 +1,227 @@
+---
+### Chip Temperature ###
+card_battery_mini_joy:
+  template:
+    - "ulm_actions_card"
+  variables:
+    ulm_card_icon: ""
+    ulm_card_threshold: [80,60,40,20]   
+    ulm_card_battery_color: ["rgba(144, 190, 109, 1)", 
+       "rgba(249, 199, 79)", 
+       "rgba(248, 150, 30)", 
+       "rgba(243, 114, 44)", 
+       "rgba(249, 65, 68)", 
+       "var(--color-theme)"]
+    ulm_card_battery_charger_type_entity_id: ""
+    ulm_card_battery_charger_type_entity_id: ""
+  triggers_update: "all"
+  show_icon: false
+  show_label: false
+  show_name: false
+  show_state: false
+  styles:
+    grid:
+      - grid-template-columns: "min-content auto"
+      - column-gap: "4px"
+      - grid-template-areas: "'item1 item2'"
+      - grid-template-rows: "min-content"
+    card:
+      - border-radius: "18px"
+      - box-shadow: "var(--box-shadow)"
+      - padding: "3.5px 4px"
+      - backdrop-filter: var(--bg-filter)
+      - background: "var(--card-blur-color)" 
+  style: |
+    #roundbar {grid-area: item1 !important;}       
+  custom_fields:
+    item1:
+      card:
+        type: "custom:button-card"
+        entity: "[[[ return entity.entity_id ]]]"
+        color: "var(--google-grey)"
+        icon: |
+          [[[ return (variables.ulm_card_icon ? variables.ulm_card_icon : entity.attributes.icon) || 'mdi\:battery' ]]]    
+        show_icon: true
+        show_label: false
+        show_name: false             
+        styles:
+          icon:
+            - top: '0px'
+            - color: |
+                [[[
+                  const battery_level = states[entity.entity_id].state;
+                  let color = "rgba(var(--color-theme), 0.9)";
+                  if (battery_level !== "unavailable") {
+                    if (battery_level >= variables.ulm_card_threshold[0]) {
+                      color = variables.ulm_card_battery_color[0];
+                    } else if (battery_level >= variables.ulm_card_threshold[1]) {
+                      color = variables.ulm_card_battery_color[1];
+                    } else if (battery_level >= variables.ulm_card_threshold[2]) {
+                      color = variables.ulm_card_battery_color[2];
+                    } else if (battery_level >= variables.ulm_card_threshold[3]) {
+                      color = variables.ulm_card_battery_color[3];
+                    } else {
+                      color = variables.ulm_card_battery_color[4];
+                    } 
+                  } else {
+                      color = variables.ulm_card_battery_color[5];
+                  }
+                  return color;
+                ]]]       
+            - width: 55%
+          img_cell:
+            - background-color: "rgba(var(--color-theme),0.05)"
+            - border-radius: "50%"
+            - place-self: "center"
+            - width: "28px"
+            - height: "28px"
+          grid:
+            - grid-template-areas: "'i'"
+            - grid-template-columns: "min-content"
+            - grid-template-rows: "min-content"
+          card:
+            - border-radius: "none"
+            - box-shadow: "none"
+            - padding: "0px"
+            - background: none
+          size: "130%"    
+    item2:
+      card:
+        type: "custom:button-card"
+        entity: "[[[ return entity.entity_id ]]]"
+        color: "var(--google-grey)"
+        show_icon: true
+        show_label: true
+        show_name: true   
+        styles:
+          grid:
+            - grid-template-areas: "'l l' 'n i'"
+            - grid-template-columns: "25px auto"    
+            - grid-template-rows: " min-content min-content" 
+            - column-gap: "0px"                   
+          card:
+            - border-radius: "0"
+            - box-shadow: "none"
+            - padding: "0px 0px 0 0"
+            - background: none 
+          name:
+            - font-size: "10px" 
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+            - text-align: start
+            - filter: opacity(60%)
+          label:
+            - font-size: "12px"
+            - font-weight: bold 
+            - justify-self: start
+            - align-self: center
+            - text-wrap: no-wrap
+            - text-align: start
+            # - display: -webkit-box
+            - -webkit-line-clamp: 1
+            - -webkit-box-orient: vertical
+          icon:    
+            - width: "100%"
+            - height: "100%"
+            - place-self: center
+            - right: -4px
+            - top: 0px
+            - transform: rotate(90deg)
+            - color: |
+                [[[
+                  const battery_level = states[entity.entity_id].state;
+                  let color = "rgba(var(--color-theme), 0.9)";
+                  if (battery_level !== "unavailable") {
+                    if (battery_level >= variables.ulm_card_threshold[0]) {
+                      color = variables.ulm_card_battery_color[0];
+                    } else if (battery_level >= variables.ulm_card_threshold[1]) {
+                      color = variables.ulm_card_battery_color[1];
+                    } else if (battery_level >= variables.ulm_card_threshold[2]) {
+                      color = variables.ulm_card_battery_color[2];
+                    } else if (battery_level >= variables.ulm_card_threshold[3]) {
+                      color = variables.ulm_card_battery_color[3];
+                    } else {
+                      color = variables.ulm_card_battery_color[4];
+                    } 
+                  } else {
+                      color = variables.ulm_card_battery_color[5];
+                  }
+                  return color;
+                ]]]                 
+          img_cell:
+            - background-color: "rgba(var(--color-theme),0.0)"
+            - border-radius: "0"
+            - align-self: "center"
+            - justify-self: "start"
+            - width: "14px"
+            - height: "14px"
+        icon: >
+          [[[
+            const battery_level = entity.state;
+
+            let infix = "";
+            if (variables.ulm_card_battery_charger_type_entity_id == null) {
+
+              infix = variables.ulm_card_battery_battery_state_entity_id !== null &&
+                states[variables.ulm_card_battery_battery_state_entity_id].state.toLowerCase() === "charging" ?
+                "-charging" : ""
+            } else if (variables.ulm_card_battery_charger_type_entity_id){
+
+              switch (states[variables.ulm_card_battery_charger_type_entity_id].state.toLowerCase()) {
+                case "wireless":
+                  infix = "-charging-wireless";
+                  break;
+                case "charging":
+                  infix = "-charging";
+                  break;
+                case "ac":
+                  infix = "-charging";
+                  break;
+                case "usb":
+                  infix = "-charging";
+                  break;
+                default:
+                  infix = "";
+              }
+            }
+            else infix = "";
+            // Generate the icon based on the battery_level
+            let icon = "mdi:help-circle-outline";
+            if (battery_level == 100) {
+              icon = "mdi:battery";
+            } else if (battery_level < 10) {
+              icon = "mdi:battery" + infix + "-outline";
+            } else {
+              icon = "mdi:battery" + infix + "-" + Math.floor(battery_level / 10) * 10;
+            }
+            return  icon;
+          ]]]                                  
+        label: >
+            [[[ return  entity.attributes.friendly_name  ]]]
+        name: >
+            [[[ return  entity.state + entity.attributes.unit_of_measurement ]]]  
+      # [[[ return  '\xa0' + '' + '60%'  ]]]        
+    roundbar:
+      card:            
+        type: "custom:round-progressbar-card"
+        entity: "[[[ return entity.entity_id ]]]"
+        radius: "28px"
+        inner_radius: "20px"
+        width: "8"
+        circle_enabled: false
+        tap_action:
+          action: 'call-service'
+          service: 'cover.toggle'
+          service_data: '' 
+          target:
+            entity_id: "[[[ return entity.entity_id ]]]"
+        double_tap_action:
+          action: 'more-info'                
+        hold_action:
+          action: 'more-info'
+          entity: "[[[ return entity.entity_id ]]]"                                 
+        color: >
+          [[[
+              return '';
+          ]]]                             

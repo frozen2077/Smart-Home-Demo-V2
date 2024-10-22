@@ -1,0 +1,95 @@
+---
+card_energy_joy:
+  variables:
+    ulm_card_graph_name: "No name set"
+    ulm_card_graph_color: "var(--info-color)"
+    ulm_card_graph_lable: ""
+    ulm_card_graph_icon: "mdi:lightning-bolt"
+    ulm_card_graph_entity: ""
+    ulm_card_graph_entity_cur: ""
+    ulm_card_graph_entity_day: ""
+    ulm_card_graph_hours: 24
+    ulm_card_graph_type: "fill"
+    ulm_card_graph_points: "0.5"
+    ulm_card_graph_group_by: "interval"    
+  styles:
+    grid:
+      - grid-template-areas: "'item1' 'item3'"
+      - grid-template-columns: "1fr"
+      - grid-template-rows: "42fr 94fr"
+      - row-gap: "12px"
+    card:
+      - border-radius: "var(--border-radius)"
+      - box-shadow: "var(--box-shadow)"
+      - padding: "12px"
+  custom_fields:
+    item1:
+      card:
+        type: "custom:button-card"
+        size: "20px"
+        show_icon: true
+        show_entity_picture: false
+        show_state: false
+        show_name: true
+        show_label: true
+        template:
+          - "icon_info_computer_status"
+        name: |
+           [[[
+             var current = states[variables.ulm_card_graph_entity_cur].state;
+             var measure = states[variables.ulm_card_graph_entity_cur].attributes["unit_of_measurement"];            
+             return current + measure;
+           ]]]           
+        label: "[[[ return variables.ulm_card_graph_name ]]]"
+        icon: "[[[ return variables.ulm_card_graph_icon ]]]"
+        tap_action:
+          action: "more-info"        
+        styles:
+          card:
+            - box-shadow: "none"
+            - padding: "0px"        
+    item3:
+      card:
+        type: "custom:mini-graph-card"
+        entities: > 
+          [[[
+            var ent = [];
+            ent.push(variables.ulm_card_graph_entity_day);
+            return ent;
+          ]]]
+        line_color: >
+          [[[
+            var col = [];
+            col.push(variables.ulm_card_graph_color);
+            return col;
+          ]]]
+        aggregate_func: diff
+        unit: "kWh"
+        show:
+          name: false
+          icon: false
+          legend: false
+          state: true
+          points: true
+          labels: true
+          labels_secondary: true
+          graph: "bar"
+          fill: "[[[ return variables.ulm_card_graph_type=='fill'?true:false; ]]]"
+        align_state: right  
+        color_thresholds:
+          - value: 5
+            color: "#006ee6"
+          - value: 10
+            color: "#FCD663"
+          - value: 20
+            color: "#E61E63"       
+        hours_to_show: 48
+        group_by: hour
+        bar_spacing: 6
+        line_width: 4
+        height: 140
+        style: |
+          ha-card {
+            box-shadow: none;
+            border-radius: 0px;
+            padding: 0px !important;                    

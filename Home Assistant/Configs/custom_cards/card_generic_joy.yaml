@@ -1,0 +1,103 @@
+---
+### Card Generic ###
+card_generic_joy:
+  show_last_changed: false
+  template:
+    - "icon_more_info_joy"
+  variables:
+    ulm_card_name: "[[[ return entity.attributes.friendly_name ]]]"
+    ulm_card_icon: "[[[ return entity.attributes.icon ]]]"
+    ulm_line_color: rgba(var(--primary-color-plain),0.8)
+  show_icon: false
+  show_name: false
+  show_label: false
+  styles:
+    card:
+      - border-radius: "var(--border-radius)"
+      - box-shadow: "var(--box-shadow)"
+      - padding: "0"
+      - backdrop-filter: var(--bg-filter)
+      - background: "var(--card-blur-color)" 
+  style: |
+    #graph {grid-area: item1 !important; pointer-events: none ;}          
+  custom_fields:
+    item1:
+      card:
+        type: "custom:button-card"
+        style: |
+          #roundbar {grid-area: item1 !important;}  
+        styles:
+          card:
+            - padding: "12px"                  
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card"
+              icon: "[[[ return variables.ulm_card_icon]]]"
+              entity: "[[[ return entity.entity_id ]]]"
+              styles:
+                card:
+                  - background: "none"                 
+                icon:
+                  - color: "rgba(var(--color-theme),0.9)"
+                img_cell:
+                  - background-color: "rgba(var(--color-theme),0.05)"
+                  - border-radius: "50%"
+                  - place-self: "center"
+                  - width: "42px"
+                  - height: "42px"           
+          item2:
+            card:
+              type: "custom:button-card"
+              entity: "[[[ return entity.entity_id ]]]"
+              show_icon: false
+              show_name: true
+              show_label: true
+              label: "[[[ return entity.attributes.friendly_name ]]]"    
+              tap_action:
+                action: more-info             
+              name: >
+                [[[
+                  var unit = entity.attributes.unit_of_measurement != null ? " " + entity.attributes.unit_of_measurement : ""
+                  if (entity.state == "on") {
+                    return variables.ulm_on;
+                  } else if (entity.state == "off") {
+                    return variables.ulm_off;
+                  } else if (entity.state == "unavailable") {
+                    return variables.ulm_unavailable;
+                  } else if (entity.state == "idle") {
+                    return variables.ulm_idle;
+                  } else if (entity.state == "open") {
+                    return variables.ulm_open;
+                  } else if (entity.state == "closed") {
+                    return variables.ulm_closed;
+                  } else {
+                    return entity.state + unit;
+                  }
+                ]]]              
+
+    graph:
+      card:
+        type: "custom:mini-graph-card"
+        entities: 
+          - "[[[ return entity.entity_id ]]]"
+        line_color: "[[[ return variables.ulm_line_color ]]]"
+        show:
+          name: false
+          icon: false
+          legend: false
+          state: false
+          graph: "line"
+          fill: true
+        height: 100  
+        hours_to_show: 24
+        style: |
+          ha-card {
+            box-shadow: none;
+            border-radius: 0 !important;
+            padding: 0px !important;
+            position: absolute !important;
+            bottom: 0 !important;
+            background: transparent;
+          }                        
+  

@@ -1,0 +1,529 @@
+---
+### Card Graph ###
+card_computer_status_joy:
+  variables:
+    ulm_card_graph_color: "var(--info-color)"
+    ulm_card_graph_name: "n/a"
+    ulm_card_graph_hours: 1
+    ulm_card_graph_points: 60
+    ulm_card_graph_type: "fill"
+    ulm_card_graph_entity: "sensor.cpu_temperature"       
+  triggers_update: "all"
+  styles:
+    grid:
+      - grid-template-areas: "'item1 item7' 'item2 item3' 'item4 item5' 'item6 item6'"
+      - grid-template-columns: "1fr 1fr"
+      - grid-template-rows: "min-content min-content min-content min-content"
+    card:
+      - border-radius: "var(--border-radius)"
+      - box-shadow: "var(--box-shadow)"
+      - padding: "0"
+      - backdrop-filter: var(--bg-filter)
+      - background: var(--card-blur-color)       
+  custom_fields:
+    item1:
+      card:          
+        type: "custom:button-card"
+        icon: "mdi:raspberry-pi" 
+        style: |
+          ha-card {
+            background-image: url("/local/rpi4_low.png");
+            background-repeat: no-repeat;
+            background-position: -19% -7%;
+            background-size: 45%            
+          }          
+        label: |
+           [[[
+             var min = states["sensor.load_1m"].state.toString();
+             var min2 = states["sensor.load_5m"].state.toString();
+             var min3 = states["sensor.load_15m"].state.toString();
+             return min + "  " + min2 + "  " + min3;
+           ]]]                 
+        name: "Raspberry Pi"            
+        template: "icon_info_computer_status"
+        styles:
+          icon:
+            - color: "rgba(var(--color-theme),0.9)" 
+          card:
+            - border-radius: "0px"
+            - box-shadow: "none"
+            - padding: "12px 12px 12px" 
+            - background-color: transparent 
+        custom_fields:
+          notification: >
+            [[[
+              if (states["binary_sensor.rpi_power_status"].state =="off"){
+                return `<ha-icon icon="mdi:check" style="color: var(--primary-background-color); border-radius: 20px; position: absolute; left: 38px; top: 8px; height: 12px; width: 12px; border: 2px solid var(--card-background-color); font-size: 10px; line-height: 8px; background-color: rgba(var(--color-green),1);"></ha-icon>`
+              }
+              else {
+                return `<ha-icon icon="mdi:exclamation" style="color: var(--primary-background-color); border-radius: 20px; position: absolute; left: 38px; top: 8px; height: 12px; width: 12px; border: 2px solid var(--card-background-color); font-size: 10px; line-height: 8px; background-color: rgba(var(--color-amber),1);"></ha-icon>`
+              }
+            ]]]            
+    item7:
+      card:
+        type: "custom:mini-graph-card"
+        entities: > 
+          [[[
+            var ent = [];
+            ent.push("sensor.processor_use");
+            return ent;
+          ]]]
+        line_color: var(--google-green)
+        show:
+          name: false
+          icon: false
+          legend: false
+          state: false
+          graph: "bar"
+        hours_to_show: "1"
+        points_per_hour: "60"
+        color_thresholds:
+          - value: 30
+            color: "#80C994"
+          - value: 60
+            color: "#FCD663"
+          - value: 90
+            color: "#E61E63"             
+        height: 120
+        style: |
+          ha-card {
+            box-shadow: none;
+            border-radius: 0px;
+            padding: 12px 20px 12px 12px !important;
+            background-color: transparent !important;
+          }            
+    item2:
+      card:
+        type: "custom:button-card"
+        show_icon: false
+        show_label: false
+        show_name: false
+        styles:
+          grid:
+            - grid-template-areas: "'item1 item2'"
+            - grid-template-columns: "1fr 3fr"
+          card:
+            - border-radius: "0px"
+            - box-shadow: "none"
+            - padding: "0px 12px 12px"
+            - background-color: transparent 
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card"
+              icon: "mdi:chip"
+              template:
+                - "icon_only"
+              styles:
+                card:
+                  - border-radius: "0px"
+                  - box-shadow: "none"
+                  - padding: "0"
+                  - background-color: transparent
+                img_cell:
+                  - background-color: "rgba(var(--color-theme),0.05)"
+                  - border-radius: "30%"
+                  - width: "var(--widget-height)"
+                  - height: "var(--widget-height)"                    
+              tap_action:
+                action: "more-info"
+          item2:
+            card:
+              type: custom:bar-card
+              positions:
+                name: 'outside'
+                icon: 'off'
+                state: 'on'
+                indicator: 'off'
+                value: 'outside'
+              name: "CPU"  
+              height: 6px
+              speed: 5
+              entities:
+                - entity: sensor.processor_use
+              severity:
+                - color: rgba(var(--color-green),1)
+                  from: 0
+                  to: 25  
+                - color: rgba(var(--color-blue),1)
+                  from: 25
+                  to: 45                   
+                - color: rgba(var(--color-amber),1)
+                  from: 45
+                  to: 85 
+                - color: rgba(var(--color-red),1)
+                  from: 85
+                  to: 100                 
+              style: |
+                bar-card-divider {
+                  display: none;
+                }
+                ha-card #states {
+                  padding: 0;
+                }
+                ha-card {
+                  box-shadow: none;
+                  padding: 0px 0px 0px 12.5px;
+                  border-radius: 0;
+                  background-color: transparent !important;
+                } 
+                bar-card-backgroundbar {
+                  right: 0px;
+                } 
+                bar-card-background {
+                  margin-right: 10px !important;
+                }
+                bar-card-currentbar {
+                  right: 0px !important;
+                } 
+                bar-card-card {
+                  flex-direction: column !important;
+                }
+                bar-card-name {
+                  margin: 0px auto 2px 0px !important;
+                  font-size: 10px;
+                  font-weight: bolder !important;
+                }   
+                bar-card-value {
+                  margin: 2px auto auto 0px !important;
+                  font-size: 10px;
+                  font-weight: bolder !important;
+                  filter: opacity(40%);
+                }          
+    item3:
+      card:
+        type: "custom:button-card"
+        show_icon: false
+        show_label: false
+        show_name: false
+        styles:
+          grid:
+            - grid-template-areas: "'item1 item2'"
+            - grid-template-columns: "1fr 3fr"
+          card:
+            - border-radius: "0px"
+            - box-shadow: "none"
+            - padding: "0px 12px 12px"
+            - background-color: transparent 
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card"
+              icon: "mdi:memory"
+              template:
+                - "icon_only"
+              styles:
+                card:
+                  - border-radius: "0px"
+                  - box-shadow: "none"
+                  - padding: "0"
+                  - background-color: transparent 
+                img_cell:
+                  - background-color: "rgba(var(--color-theme),0.05)"
+                  - border-radius: "30%"
+                  - width: "var(--widget-height)"
+                  - height: "var(--widget-height)"                    
+              tap_action:
+                action: "more-info"
+          item2:
+            card:
+              type: custom:bar-card
+              positions:
+                name: 'outside'
+                icon: 'off'
+                state: 'on'
+                indicator: 'off'
+                value: 'outside'
+              name: "Memory"  
+              height: 6px
+              speed: 5
+              entities:
+                - entity: sensor.memory_use_percent
+              severity:
+                - color: rgba(var(--color-green),1)
+                  from: 0
+                  to: 30  
+                - color: rgba(var(--color-blue),1)
+                  from: 30
+                  to: 50                   
+                - color: rgba(var(--color-yellow),1)
+                  from: 50
+                  to: 70 
+                - color: rgba(var(--color-amber),1)
+                  from: 70
+                  to: 85                   
+                - color: rgba(var(--color-red),1)
+                  from: 85
+                  to: 100                   
+              style: |
+                bar-card-divider {
+                  display: none;
+                }
+                ha-card #states {
+                  padding: 0;
+                }
+                ha-card {
+                  box-shadow: none;
+                  padding: 0px 0px 0px 12.5px;
+                  border-radius: 0;
+                  background-color: transparent !important;
+                } 
+                bar-card-backgroundbar {
+                  right: 0px;
+                } 
+                bar-card-background {
+                  margin-right: 10px !important;
+                }
+                bar-card-currentbar {
+                  right: 0px !important;
+                } 
+                bar-card-card {
+                  flex-direction: column !important;
+                }
+                bar-card-name {
+                  margin: 0px auto 2px 0px !important;
+                  font-size: 10px;
+                  font-weight: bolder !important;
+                }   
+                bar-card-value {
+                  margin: 2px auto auto 0px !important;
+                  font-size: 10px;
+                  font-weight: bolder !important;
+                  filter: opacity(40%);
+                }   
+    item4:
+      card:
+        type: "custom:button-card"
+        show_icon: false
+        show_label: false
+        show_name: false
+        styles:
+          grid:
+            - grid-template-areas: "'item1 item2'"
+            - grid-template-columns: "1fr 3fr"
+          card:
+            - border-radius: "0px"
+            - box-shadow: "none"
+            - padding: "0px 12px 0px"
+            - background-color: transparent 
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card"
+              icon: "mdi:harddisk"
+              template:
+                - "icon_only"
+              styles:
+                card:
+                  - border-radius: "0px"
+                  - box-shadow: "none"
+                  - padding: "0"
+                  - background-color: transparent 
+                img_cell:
+                  - background-color: "rgba(var(--color-theme),0.05)"
+                  - border-radius: "30%"
+                  - width: "var(--widget-height)"
+                  - height: "var(--widget-height)"                  
+              tap_action:
+                action: "more-info"
+          item2:
+            card:
+              type: custom:bar-card
+              positions:
+                name: 'outside'
+                icon: 'off'
+                state: 'on'
+                indicator: 'off'
+                value: 'outside'
+              name: "Disk"  
+              height: 6px
+              speed: 5
+              entities:
+                - entity: sensor.disk_use_percent
+              severity:
+                - color: rgba(var(--color-green),1)
+                  from: 0
+                  to: 25  
+                - color: rgba(var(--color-blue),1)
+                  from: 25
+                  to: 45                   
+                - color: rgba(var(--color-amber),1)
+                  from: 45
+                  to: 85 
+                - color: rgba(var(--color-red),1)
+                  from: 85
+                  to: 100                   
+              style: |
+                bar-card-divider {
+                  display: none;
+                }
+                ha-card #states {
+                  padding: 0;
+                }
+                ha-card {
+                  box-shadow: none;
+                  padding: 0px 0px 0px 12.5px;
+                  border-radius: 0;
+                  background-color: transparent !important;
+                } 
+                bar-card-backgroundbar {
+                  right: 0px;
+                } 
+                bar-card-background {
+                  margin-right: 10px !important;
+                }
+                bar-card-currentbar {
+                  right: 0px !important;
+                } 
+                bar-card-card {
+                  flex-direction: column !important;
+                }
+                bar-card-name {
+                  margin: 0px auto 2px 0px !important;
+                  font-size: 10px;
+                  font-weight: bolder !important;
+                }   
+                bar-card-value {
+                  margin: 2px auto auto 0px !important;
+                  font-size: 10px;
+                  font-weight: bolder !important;
+                  filter: opacity(40%);
+                }
+    item5:
+      card:
+        type: "custom:button-card"
+        show_icon: false
+        show_label: false
+        show_name: false
+        styles:
+          grid:
+            - grid-template-areas: "'item1 item2'"
+            - grid-template-columns: "1fr 3fr"
+          card:
+            - border-radius: "0px"
+            - box-shadow: "none"
+            - padding: "0px 12px 0px"
+            - background-color: transparent 
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card"
+              icon: "mdi:swap-horizontal-bold"
+              template:
+                - "icon_only"
+              styles:
+                card:
+                  - border-radius: "0px"
+                  - box-shadow: "none"
+                  - padding: "0"
+                  - background-color: transparent 
+                img_cell:
+                  - background-color: "rgba(var(--color-theme),0.05)"
+                  - border-radius: "30%"
+                  - width: "var(--widget-height)"
+                  - height: "var(--widget-height)"                  
+              tap_action:
+                action: "more-info"
+          item2:
+            card:
+              type: custom:bar-card
+              positions:
+                name: 'outside'
+                icon: 'off'
+                state: 'on'
+                indicator: 'off'
+                value: 'outside'
+              name: "Swap"  
+              height: 6px
+              speed: 5
+              entities:
+                - entity: sensor.swap_use_percent
+              severity:
+                - color: rgba(var(--color-green),1)
+                  from: 0
+                  to: 25  
+                - color: rgba(var(--color-blue),1)
+                  from: 25
+                  to: 45                   
+                - color: rgba(var(--color-amber),1)
+                  from: 45
+                  to: 85 
+                - color: rgba(var(--color-red),1)
+                  from: 85
+                  to: 100                   
+              style: |
+                bar-card-divider {
+                  display: none;
+                }
+                ha-card #states {
+                  padding: 0;
+                }
+                ha-card {
+                  box-shadow: none;
+                  padding: 0px 0px 0px 12.5px;
+                  border-radius: 0;
+                  background-color: transparent !important;
+                } 
+                bar-card-backgroundbar {
+                  right: 0px;
+                } 
+                bar-card-background {
+                  margin-right: 10px !important;
+                }
+                bar-card-currentbar {
+                  right: 0px !important;
+                } 
+                bar-card-card {
+                  flex-direction: column !important;
+                }
+                bar-card-name {
+                  margin: 0px auto 2px 0px !important;
+                  font-size: 10px;
+                  font-weight: bolder !important;
+                }   
+                bar-card-value {
+                  margin: 2px auto auto 0px !important;
+                  font-size: 10px;
+                  font-weight: bolder !important;
+                  filter: opacity(40%);
+                }  
+    item6:
+      card:
+        type: "custom:mini-graph-card"
+        entities: > 
+          [[[
+            var ent = [];
+            ent.push(variables.ulm_card_graph_entity);
+            return ent;
+          ]]]
+        line_color: >
+          [[[
+            var col = [];
+            col.push(variables.ulm_card_graph_color);
+            return col;
+          ]]]
+        show:
+          name: false
+          icon: false
+          legend: false
+          state: false
+          graph: "[[[ return variables.ulm_card_graph_type=='fill'?'line':variables.ulm_card_graph_type; ]]]"
+          fill: "[[[ return variables.ulm_card_graph_type=='fill'?true:false; ]]]"
+        color_thresholds:
+          - value: 45
+            color: "#89B3F8"
+          - value: 55
+            color: "#FCD663"
+          - value: 65
+            color: "#E61E63"          
+        hours_to_show: "[[[ return variables.ulm_card_graph_hours; ]]]"
+        points_per_hour: "[[[ return variables.ulm_card_graph_points; ]]]"
+        line_width: 2
+        height: 70
+        style: |
+          ha-card {
+            box-shadow: none;
+            border-radius: 0px;
+            padding: 0px !important;  
+            background-color: transparent !important;
+            }            

@@ -1,0 +1,332 @@
+card_glance_joy:
+  show_icon: false
+  show_label: false
+  show_name: false
+  show_state: false
+  triggers_update: "all"  
+  styles:
+    grid:
+      - grid-template-areas: "'item1 item2 item4 item3'"
+      - grid-template-columns: "4fr 2fr 1fr 1fr"
+      - grid-template-rows: "min-content"      
+      - column-gap: "7px"
+    card:
+      - border-radius : 0
+      - box-shadow: none
+      - height: "50px"
+      - padding: "0px"
+      - background: transparent
+  custom_fields:
+    item1:
+      card:
+        type: "custom:button-card"
+        styles:
+          grid:
+            - grid-template-areas: "'item1 item2 item3 item4'"
+            - grid-template-columns: "1fr 1fr 1fr 1fr "
+          card:
+            - box-shadow: "none"
+            - padding: "0px"
+            - border-radius: 14px 
+            - background-color: rgba(var(--color-theme),0.05)            
+        custom_fields:
+          item1:
+            card:           
+              type: "custom:button-card"
+              entity: "camera.tapo_camera_87e7_hd_stream"
+              icon: mdi:arrow-left-drop-circle-outline   
+              show_icon: true
+              show_name: false
+              show_state: false
+              styles:
+                icon:
+                  - color: rgba(var(--color-theme), 0.2)   
+                img_cell:
+                  - place-self: "center"
+                  - height: "38px"
+                grid:
+                  - grid-template-areas: "'i'" 
+                card:
+                  - padding: "0" 
+                  - border-radius: 0 
+                  - background-color: transparent                  
+              size: "20px"    
+              tap_action:
+                action: call-service
+                service: button.press
+                service_data:
+                  entity_id: button.tapo_camera_87e7_move_left
+          item2:
+            card:           
+              type: "custom:button-card"
+              entity: "camera.tapo_camera_87e7_hd_stream"
+              icon: mdi:arrow-right-drop-circle-outline   
+              show_icon: true
+              show_name: false
+              show_state: false
+              styles:
+                icon:
+                  - color: rgba(var(--color-theme), 0.2)   
+                img_cell:
+                  - place-self: "center"
+                  - height: "38px"
+                grid:
+                  - grid-template-areas: "'i'" 
+                card:
+                  - padding: "0" 
+                  - border-radius: 0 
+                  - background-color: transparent                  
+              size: "20px"    
+              tap_action:
+                action: call-service
+                service: button.press
+                service_data:
+                  entity_id: button.tapo_camera_87e7_move_right
+          item3:
+            card:           
+              type: "custom:button-card"
+              entity: "camera.tapo_camera_87e7_hd_stream"
+              icon: mdi:arrow-up-drop-circle-outline   
+              show_icon: true
+              show_name: false
+              show_state: false
+              styles:
+                icon:
+                  - color: rgba(var(--color-theme), 0.2)   
+                img_cell:
+                  - place-self: "center"
+                  - height: "38px"
+                grid:
+                  - grid-template-areas: "'i'" 
+                card:
+                  - padding: "0" 
+                  - border-radius: 0   
+                  - background-color: transparent                  
+              size: "20px"    
+              tap_action:
+                action: call-service
+                service: button.press
+                service_data:
+                  entity_id: button.tapo_camera_87e7_move_up
+          item4:
+            card:           
+              type: "custom:button-card"
+              entity: "camera.tapo_camera_87e7_hd_stream"
+              icon: mdi:arrow-down-drop-circle-outline   
+              show_icon: true
+              show_name: false
+              show_state: false
+              styles:
+                icon:
+                  - color: rgba(var(--color-theme), 0.2)   
+                img_cell:
+                  - place-self: "center"
+                  - height: "38px"
+                grid:
+                  - grid-template-areas: "'i'" 
+                card:
+                  - padding: "0" 
+                  - border-radius: 0  
+                  - background-color: transparent
+              size: "20px"    
+              tap_action:
+                action: call-service
+                service: button.press
+                service_data:
+                  entity_id: button.tapo_camera_87e7_move_down              
+    item2:
+      card:
+        type: "custom:button-card"
+        styles:
+          grid:
+            - grid-template-areas: "'item1 item2'"
+            - grid-template-columns: "1fr 1fr"
+          card:
+            - box-shadow: "none"
+            - padding: "0px"
+            - border-radius: 14px  
+            - background-color: rgba(var(--color-theme),0.05)             
+        custom_fields:
+          item1:
+            card:           
+              type: "custom:button-card"
+              entity: "camera.tapo_camera_87e7_hd_stream"
+              icon: mdi:weather-night   
+              show_icon: true
+              show_name: false
+              show_state: false
+              styles:
+                icon:
+                  - color: |
+                      [[[
+                          if (states["select.tapo_camera_87e7_night_vision"].state == 'on')
+                            return 'rgba(var(--color-blue), 1)';              
+                          else
+                            return 'rgba(var(--color-theme), 0.2)';
+                      ]]]     
+                img_cell:
+                  - background-color: |
+                      [[[
+                          if (states["select.tapo_camera_87e7_night_vision"].state == 'on')
+                            return 'rgba(var(--color-blue), 0.2)';              
+                          else
+                            return 'transparent';
+                      ]]]  
+                  - place-self: "center"
+                  - height: "38px"
+                grid:
+                  - grid-template-areas: "'i'" 
+                card:
+                  - padding: "0" 
+                  - border-radius: 0 
+                  - background-color: transparent    
+                  - box-shadow: none                    
+              size: "20px"    
+              tap_action:
+                action: "call-service"
+                service: select.select_option
+                service_data:
+                  entity_id: select.tapo_camera_87e7_night_vision   
+                  option: 'on'
+          item2:
+            card:           
+              type: "custom:button-card"
+              entity: "camera.tapo_camera_87e7_hd_stream"
+              icon: mdi:weather-sunny     
+              show_icon: true
+              show_name: false
+              show_state: false
+              styles:
+                icon:
+                  - color: |
+                      [[[
+                          if (states["select.tapo_camera_87e7_night_vision"].state != 'on')
+                            return 'rgba(var(--color-yellow), 1)';              
+                          else
+                            return 'rgba(var(--color-theme), 0.2)';
+                      ]]]     
+                img_cell:
+                  - background-color: |
+                      [[[
+                          if (states["select.tapo_camera_87e7_night_vision"].state != 'on')
+                            return 'rgba(var(--color-yellow), 0.2)';              
+                          else
+                            return 'transparent';
+                      ]]]  
+                  - place-self: "center"
+                  - height: "38px"
+                grid:
+                  - grid-template-areas: "'i'" 
+                card:
+                  - padding: "0"
+                  - border-radius: 0 
+                  - background-color: transparent
+                  - box-shadow: none                  
+              size: "20px"    
+              tap_action:
+                action: "call-service"
+                service: select.select_option
+                service_data:
+                  entity_id: select.tapo_camera_87e7_night_vision   
+                  option: 'off'
+    item3:
+      card:
+        type: "custom:button-card"
+        entity: "camera.tapo_camera_87e7_hd_stream"
+        icon: |
+            [[[
+                if (states["switch.tapo_camera_87e7_privacy"].state == 'on')
+                  return 'mdi:eye-off';              
+                else
+                  return 'mdi:eye';
+            ]]]          
+        show_icon: true
+        show_name: false
+        show_state: false
+        styles:
+          icon:
+            - color: |
+                [[[
+                    if (states["switch.tapo_camera_87e7_privacy"].state == 'on')
+                      return 'rgba(var(--color-red), 1)';              
+                    else
+                      return 'rgba(var(--color-green), 1)';
+                ]]]     
+          img_cell:
+            - background-color: |
+                [[[
+                    if (states["switch.tapo_camera_87e7_privacy"].state == 'on')
+                      return 'rgba(var(--color-red), 0.2)';              
+                    else
+                      return 'rgba(var(--color-green),0.2)';
+                ]]]  
+            - place-self: "center"
+            - height: "38px"
+          grid:
+            - grid-template-areas: "'i'" 
+          card:
+            - border-radius: "14px"
+            - box-shadow: "none"
+            - padding: "0"
+            - background-color: transparent              
+        size: "20px"    
+        tap_action:
+          action: "call-service"
+          service: "switch.toggle"          
+          service_data: |
+            [[[
+              var obj;
+              obj = {entity_id: "switch.tapo_camera_87e7_privacy"};
+              return obj;
+            ]]]     
+    item4:
+      card:
+        type: "custom:button-card"
+        entity: "camera.tapo_camera_87e7_hd_stream"
+        icon: |
+            [[[
+                if (states["siren.tapo_camera_87e7_siren"].state == 'on')
+                  return 'mdi:alarm-light-outline';              
+                else
+                  return 'mdi:alarm-light-off-outline';
+            ]]]          
+        show_icon: true
+        show_name: false
+        show_state: false
+        triggers_update: "all"
+        styles:
+          icon:
+            - color: |
+                [[[
+                    if (states["siren.tapo_camera_87e7_siren"].state == 'on')
+                      return 'rgba(var(--color-pink), 1)';              
+                    else
+                      return 'rgba(var(--color-theme), 0.2)';
+                ]]]     
+          img_cell:
+            - background: |
+                [[[
+                    if (states["siren.tapo_camera_87e7_siren"].state == 'on')
+                      return 'rgba(var(--color-pink), 0.2)';              
+                    else
+                      return 'transparent';
+                ]]]  
+            - place-self: "center"
+            - height: "38px"
+          grid:
+            - grid-template-areas: "'i'" 
+          card:
+            - border-radius: "14px"
+            - box-shadow: "none"
+            - padding: "0" 
+            - background-color: rgba(var(--color-theme),0.05)              
+        size: "20px"    
+        tap_action:
+          action: "call-service"
+          service: "siren.toggle"
+          service_data: |
+            [[[
+              var obj;
+              obj = { entity_id: "siren.tapo_camera_87e7_siren"};
+              return obj;
+            ]]]                 

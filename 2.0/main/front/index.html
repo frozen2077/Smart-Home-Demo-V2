@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\"/>
+    <title>WebSocket Example</title>
+</head>
+<body>
+    <div class='wrap'>
+        <h1>ESP32 Gateway</h1>
+        <div id="content"></div>
+        <h2>/wifi</h2><hr>
+        <div class='ap' id="ap_0">
+            <a href='#p' onclick='c(this)' id="w_0">Access Point 00</a>
+            <div class='ap_info'>
+                <div class='ap_r' id="wdd_0">10%</div>
+                <div role='img' aria-label='10%' title='10%' class='q' id="wd_0"></div>
+            </div>
+        </div>
+        <div class='ap' id="ap_1"><a href='#p' onclick='c(this)' id="w_1">Access Point 01</a><div class='ap_info'><div class='ap_r' id="wdd_1">10%</div><div role='img' aria-label='88%' title='88%' class='q' id="wd_1"></div></div></div>
+        <div class='ap' id="ap_2"><a href='#p' onclick='c(this)' id="w_2">Access Point 02</a><div class='ap_info'><div class='ap_r' id="wdd_2">10%</div><div role='img' aria-label='88%' title='88%' class='q' id="wd_2"></div></div></div>
+        <div class='ap' id="ap_3"><a href='#p' onclick='c(this)' id="w_3">Access Point 03</a><div class='ap_info'><div class='ap_r' id="wdd_3">10%</div><div role='img' aria-label='60%' title='60%' class='q' id="wd_3"></div></div></div>
+        <div class='ap' id="ap_4"><a href='#p' onclick='c(this)' id="w_4">Access Point 04</a><div class='ap_info'><div class='ap_r' id="wdd_4">10%</div><div role='img' aria-label='60%' title='60%' class='q' id="wd_4"></div></div></div>
+        <div class='ap' id="ap_5"><a href='#p' onclick='c(this)' id="w_5">Access Point 05</a><div class='ap_info'><div class='ap_r' id="wdd_5">10%</div><div role='img' aria-label='60%' title='60%' class='q' id="wd_5"></div></div></div>
+        <div class='ap' id="ap_6"><a href='#p' onclick='c(this)' id="w_6">Access Point 06</a><div class='ap_info'><div class='ap_r' id="wdd_6">10%</div><div role='img' aria-label='40%' title='40%' class='q' id="wd_6"></div></div></div>
+        <div class='ap' id="ap_7"><a href='#p' onclick='c(this)' id="w_7">Access Point 07</a><div class='ap_info'><div class='ap_r' id="wdd_7">10%</div><div role='img' aria-label='40%' title='40%' class='q' id="wd_7"></div></div></div>
+        <div class='ap' id="ap_8"><a href='#p' onclick='c(this)' id="w_8">Access Point 08</a><div class='ap_info'><div class='ap_r' id="wdd_8">10%</div><div role='img' aria-label='20%' title='20%' class='q' id="wd_8"></div></div></div>
+        <div class='ap' id="ap_9"><a href='#p' onclick='c(this)' id="w_9">Access Point 09</a><div class='ap_info'><div class='ap_r' id="wdd_9">10%</div><div role='img' aria-label='20%' title='20%' class='q' id="wd_9"></div></div></div>
+        <div class='ap' id="ap_10"><a href='#p' onclick='c(this)' id="w_10">Access Point 10</a><div class='ap_info'><div class='ap_r' id="wdd_10">10%</div><div role='img' aria-label='20%' title='20%' class='q' id="wd_10"></div></div></div>
+        <div class='ap' id="ap_11"><a href='#p' onclick='c(this)' id="w_11">Access Point 11</a><div class='ap_info'><div class='ap_r' id="wdd_11">10%</div><div role='img' aria-label='10%' title='10%' class='q' id="wd_11"></div></div></div>
+        <div>
+            <label for='s'>SSID</label><br/>
+            <input id='s' name='s' length=32 placeholder='SSID'><br/>
+            <label for='password'>Password</label>
+            <input id='password' name='password' length=64 type='password' placeholder='password'>
+            <input type='checkbox' id='show-password' onclick='f()'>
+            <label for='show-password'>Show Password</label><br/><br/>
+            <button type='submit' onclick="wsSentPassFcn()" >Save & Connect</button><br/><br/>
+            <button onclick='(()=>{ws.send(`{"t":"cmd", "c":"scan"}`)})()'>Refresh</button> 
+        </div><br/>                
+    </div>
+</body>
+<script>
+    const contentDiv = document.getElementById('content');
+    var ws;
+
+    function c(l){document.getElementById('s').value=l.innerText||l.textContent;
+    password = l.nextElementSibling.lastElementChild.classList.contains('l');
+		document.getElementById('password').disabled = !password;
+		if(password)document.getElementById('password').focus()};
+	function f() {var x = document.getElementById('p');x.type==='password'?x.type='text':x.type='password';}
+
+
+    function updateContent(message) {
+        contentDiv.textContent = message;
+    }
+    function wsSentPassFcn() {
+        let ssid = document.getElementById('s').value;
+        let pass = document.getElementById('password').value;
+        ws.send(JSON.stringify({"t":"cmd","c":"con","ssid": ssid, "pass": pass}));
+    }
+    function wifi_sacn_handler(obj) {
+        let entry = obj.n;
+        for (let i = 0; i < entry; i++){
+            document.getElementById(`ap_${i}`).style.display = "flex";
+            document.getElementById(`w_${i}`).innerHTML = `${obj.i[i].s}`;
+            document.getElementById(`wdd_${i}`).innerHTML = `${obj.i[i].r}dB`;
+            if (obj.i[i].r > -60) {
+                document.getElementById(`wd_${i}`).classList.add("q-4")}
+            else if (obj.i[i].r > -70) {
+                document.getElementById(`wd_${i}`).classList.add("q-3")}
+            else if (obj.i[i].r > -80) {
+                document.getElementById(`wd_${i}`).classList.add("q-2")}
+            else {
+                document.getElementById(`wd_${i}`).classList.add("q-1")}
+            if (obj.i[i].a != 0) {
+                document.getElementById(`wd_${i}`).classList.add("l")}            
+        }
+        for (let i = obj.n; i < 12; i++){
+            document.getElementById(`ap_${i}`).style.display = "none";
+            // document.getElementById(`wdd_${i}`).innerHTML = "";
+        }        
+    }
+    function connect() {
+        // ws = new WebSocket(`ws://${window.location.hostname}:80/socket/ws`); // Replace with your server address
+        ws = new WebSocket(`ws://${window.location.hostname}:80/socket/ws`); // Replace with your server address        
+        ws.onopen = function() {
+            console.log('Ws connected');
+        };
+        ws.onmessage = function(e) {
+            console.log(e.data);
+            let obj = JSON.parse(String(e.data));
+            console.log(obj);
+            if (obj.t == "ws") wifi_sacn_handler(obj);
+            else if (obj.t == "text") updateContent(obj.c);                           
+            updateContent(event.data);
+        };
+        ws.onclose = function(e) {
+            console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+            setTimeout(function() {connect();}, 2000);
+        };
+        ws.onerror = function(err) {
+            console.error('Socket encountered error: ', err.message, 'Closing socket');
+            ws.close();
+        };
+    }
+    connect();
+
+
+
+</script>
+
+<style>
+
+:root{
+	 /* CSS VARIABLE THEME COLOR */
+	/*--primarycolor:#9933CC;*/
+	--primarycolor:#1fa3ec;
+}
+
+body.invert,
+body.invert a,
+body.invert h1 {
+	background-color:#060606;
+	color:white;
+}
+body.invert .msg{
+	background-color: #282828;
+	border-top: 1px solid #555;
+	border-right: 1px solid #555;
+	border-bottom: 1px solid #555;
+	color:#fff;
+}
+body.invert .q[role=img] {
+    -webkit-filter: invert(1);
+    filter: invert(1);
+}
+.c,
+body {
+    text-align: center;
+    font-family: verdana
+}
+.wrap {
+	text-align:left;
+	display:inline-block;
+	min-width:260px;
+	max-width:500px;
+}
+div,
+input,select {
+    padding: 5px;
+    font-size: 1em;
+    /*width: 100%;*/
+    /*/*margin: 3px 0 10px 0; // BEFORE spacing shows label closer to input, but need to do same for AFTER*/
+    margin: 5px 0;
+	box-sizing: border-box;
+}
+div{
+	margin: 4px 0;
+}
+input,button,select,.msg{
+	border-radius:.3rem;
+    width: 100%;
+}
+input[type=radio],input[type=checkbox]{
+    width: auto;
+}
+button,input[type="button"],input[type="submit"] {
+    border: 0;
+    background-color: var(--primarycolor);
+    color: #fff;
+    line-height: 2.4rem;
+    font-size: 1.2rem;
+}
+input[type="file"]{
+	border: 1px solid var(--primarycolor);
+}
+a {
+    color: #000;
+    font-weight: 700;
+    text-decoration: none;
+    align-self: center;
+}
+a:hover {
+    color: var(--primarycolor);
+    text-decoration: underline;
+}
+.ap {
+    display: none; 
+    justify-content: space-between;
+}
+.ap_info {
+    display: flex;
+    width: 120px;
+    justify-content: flex-end;
+    margin: 0;
+}
+.ap_r {
+    width: 60px;
+    text-align: left;
+    flex-grow: 1;
+    padding: 0 5px;
+    margin: 0;
+}
+.h {
+	display: none;
+}
+.q {
+    height: 16px;
+    margin: 0;
+    padding: 0 5px;
+    text-align: left;
+    min-width: 38px;
+    flex-basis: 1;
+}
+.q.q-0:after {
+    background-position-x: 0;
+}
+.q.q-1:after {
+    background-position-x: -16px;
+}
+.q.q-2:after {
+    background-position-x: -32px;
+}
+.q.q-3:after {
+    background-position-x: -48px;
+}
+.q.q-4:after {
+    background-position-x: -64px;
+}
+.q.l:before {
+    background-position-x: -80px;
+    padding-right: 5px
+}
+.ql .q {
+    float: left;
+}
+
+.q:after,
+.q:before {
+    content: '';width:16px;height:16px;display:inline-block;background-repeat:no-repeat;background-position: 16px 0;
+ background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAAAQCAMAAADeZIrLAAAAJFBMVEX///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADHJj5lAAAAC3RSTlMAIjN3iJmqu8zd7vF8pzcAAABsSURBVHja7Y1BCsAwCASNSVo3/v+/BUEiXnIoXkoX5jAQMxTHzK9cVSnvDxwD8bFx8PhZ9q8FmghXBhqA1faxk92PsxvRc2CCCFdhQCbRkLoAQ3q/wWUBqG35ZxtVzW4Ed6LngPyBU2CobdIDQ5oPWI5nCUwAAAAASUVORK5CYII=');
+}
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+    .q:before,
+    .q:after {
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALwAAAAgCAMAAACfM+KhAAAALVBMVEX///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAOrOgAAAADnRSTlMAESIzRGZ3iJmqu8zd7gKjCLQAAACmSURBVHgB7dDBCoMwEEXRmKlVY3L//3NLhyzqIqSUggy8uxnhCR5Mo8xLt+14aZ7wwgsvvPA/ofv9+44334UXXngvb6XsFhO/VoC2RsSv9J7x8BnYLW+AjT56ud/uePMdb7IP8Bsc/e7h8Cfk912ghsNXWPpDC4hvN+D1560A1QPORyh84VKLjjdvfPFm++i9EWq0348XXnjhhT+4dIbCW+WjZim9AKk4UZMnnCEuAAAAAElFTkSuQmCC');
+        background-size: 95px 16px;
+    }
+}
+
+.msg {
+	padding: 20px;
+	margin: 20px 0;
+	border: 1px solid #eee;
+	border-left-width: 5px;
+	border-left-color: #777;
+}
+
+.msg h4 {
+    margin-top: 0;
+	margin-bottom: 5px;
+}
+.msg.P {
+    border-left-color: var(--primarycolor);
+}
+.msg.P h4 {
+    color: var(--primarycolor);
+}
+.msg.S {
+    border-left-color: #5cb85c;
+}
+.msg.S h4 {
+    color: #5cb85c;
+}
+.msg.D {
+    border-left-color: #dc3630;
+}
+.msg.D h4 {
+    color: #dc3630;
+}
+
+dt {
+	font-weight: bold;
+}
+dd {
+	margin: 0;
+	padding: 0 0 0.5em 0;
+}
+td {
+	vertical-align: top;
+}
+button.D{
+	background-color:#dc3630;
+}
+
+button{
+	/*transition: 0s filter;*/
+	transition: 0s opacity;
+	transition-delay: 3s;
+	transition-duration: 0s;
+	cursor: pointer;
+}
+
+button:active{
+	opacity: 50% !important;
+	/*filter: brightness(50%);*/
+	cursor: wait;
+	transition-delay: 0s;
+}
+
+button:hover{
+	/*opacity: 80%;*/
+}
+
+:disabled {
+	opacity: 0.5;
+}
+</style>
+</html>

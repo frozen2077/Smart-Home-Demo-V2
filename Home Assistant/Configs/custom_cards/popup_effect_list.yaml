@@ -1,0 +1,13 @@
+---
+popup_effect_list:
+  tap_action:
+    action: "fire-dom-event"
+    browser_mod:
+      command: "popup"
+      large: true
+      hide_header: true
+      card:
+        type: iframe
+        url: >-
+          https://wled.frozenmine.xyz
+        aspect_ratio: '9:21' 

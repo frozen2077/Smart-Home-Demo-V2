@@ -1,0 +1,204 @@
+---
+### Card Graph ###
+card_remote_header_joy:
+  variables:
+    ulm_card_graph_color: "var(--info-color)"
+    ulm_card_graph_name: "n/a"
+    ulm_card_graph_hours: 1
+    ulm_card_graph_points: 60
+    ulm_card_graph_type: "fill"
+    ulm_card_remote_volume_id: ""
+    ulm_card_media_player_name: "[[[ return entity.attributes.friendly_name ]]]"
+    ulm_card_media_player_icon: false
+    ulm_card_media_player_enable_art: true
+    ulm_card_media_player_player_controls_entity: "[[[ return entity.entity_id ]]]"    
+  show_icon: false
+  show_name: false
+  show_label: false
+  triggers_update: "all" 
+  styles:
+    grid:
+      - grid-template-areas: "'item1 item2 item3'"
+      - grid-template-columns: "2fr 1fr 3fr"
+      - grid-template-rows: "min-content"
+      - column-gap: 0    
+      - row-gap: "12px"
+    card:
+      - border-radius: "var(--border-radius)"
+      - box-shadow: "var(--box-shadow)"
+      - padding: "12px 12px 12px 12px"
+      - backdrop-filter: var(--bg-filter)
+      - background: "var(--card-blur-color)"        
+  custom_fields:
+    item1:
+      card:          
+        type: "custom:button-card"
+        entity: "[[[ return entity.entity_id ]]]"                
+        name: "Google TV"            
+        template: "icon_info_computer_status"
+        icon: |
+          [[[
+            var icon = "mdi:speaker";
+            if(entity.attributes.app_name){
+              var app = entity.attributes.app_name.toLowerCase();
+              if(app == "spotify"){
+                var icon = "mdi:spotify";
+              } else if(app == "google podcasts"){
+                var icon = "mdi:google-podcast";
+              } else if(app == "plex"){
+                var icon = "mdi:plex";
+              } else if(app == "soundcloud"){
+                var icon = "mdi:soundcloud";
+              } else if(app == "youtube music"){
+                var icon = "mdi:youtube";
+              } else if (app == "oto music"){
+                var icon = "mdi:music-circle";
+              } else if (entity.attributes.icon){
+                var icon = entity.attributes.icon;
+              }
+            }
+            return variables.ulm_card_media_player_icon || icon;
+          ]]]            
+        label: |
+          [[[
+              let state = entity.state;
+              return variables["ulm_" + state] ? variables["ulm_" + state] : state;
+          ]]]         
+        tap_action:
+          action: "toggle"        
+        styles:
+          icon:
+            - color: "rgba(var(--color-theme),0.9)" 
+          card:
+            - border-radius: "0px"
+            - box-shadow: "none"
+            - padding: "0 4px 0 0" 
+            - background-color: transparent 
+          name:
+            - align-self: "end"
+            - justify-self: "start"
+            - font-weight: "bold"
+            - font-size: "14px"
+            - margin-left: "12px"
+            - filter: "opacity(100%)"
+          label:
+            - justify-self: "start"
+            - align-self: "start"
+            - font-weight: "bolder"
+            - font-size: "13px"
+            - filter: "opacity(40%)"
+            - margin-left: "12px"  
+          icon:
+            - color: >
+                [[[                     
+                    if (entity.state == "on"){
+                      return 'rgba(var(--primary-color-plain),1)';
+                    }
+                    else{
+                      return 'rgba(var(--color-theme),0.2)'
+                    }
+                ]]]
+          img_cell:
+            - background-color: |
+                [[[                     
+                    if (entity.state == "on"){
+                      return 'rgba(var(--primary-color-plain),0.2)';
+                    }
+                    else{
+                      return 'rgba(var(--color-theme),0.05)'
+                    }
+                ]]]                          
+        custom_fields:
+          # notification: >
+            # [[[
+            #   if (states["binary_sensor.rpi_power_status"].state =="off"){
+            #     return `<ha-icon icon="mdi:check" style="color: var(--primary-background-color); border-radius: 20px; position: absolute; left: 38px; top: 8px; height: 12px; width: 12px; border: 2px solid var(--card-background-color); font-size: 10px; line-height: 8px; background-color: rgba(var(--color-green),1);"></ha-icon>`
+            #   }
+            #   else {
+            #     return `<ha-icon icon="mdi:exclamation" style="color: var(--primary-background-color); border-radius: 20px; position: absolute; left: 38px; top: 8px; height: 12px; width: 12px; border: 2px solid var(--card-background-color); font-size: 10px; line-height: 8px; background-color: rgba(var(--color-amber),1);"></ha-icon>`
+            #   }
+            # ]]] 
+    item2:
+      card:           
+        type: "custom:button-card"
+        icon: mdi:remote
+        show_icon: true
+        show_name: false
+        show_state: false                        
+        styles:
+          icon:
+            - color: >
+                [[[
+                      "rgba(var(--color-theme),0.5)" 
+                ]]]  
+          img_cell:
+            - background-color: >
+                [[[
+                      return "rgba(var(--color-theme),0.05)" ;
+                ]]]
+            - border-style: solid
+            - border-width: 2px
+            - border-color: rgba(var(--color-theme),0.05)                          
+            - place-self: "center"
+            - border-radius: "14px"                  
+            - width: "38px"
+            - height: "38px"
+          grid:
+            - grid-template-areas: "'i'" 
+          card:
+            - padding: "0px" 
+            - box-shadow: "none"
+            - border-radius: "0"                  
+            - background-color: transparent                 
+        size: "20px"    
+                                 
+    item3:
+      card:
+        type: "custom:my-slider-v2"
+        entity: "[[[ return variables.ulm_card_remote_volume_id ]]]"
+        radius: "14px"
+        height: 42px        
+        styles:
+          card: 
+            - height: 42px
+            - margin: 0 0 0 12px
+          container:
+            - border-radius: 14px
+          progress:
+            - background: >
+                [[[
+                    if (entity.state == "unavailable"){
+                      return "rgba(var(--color-grey),1)";
+                    }
+                    if (entity.state  != "off"){
+                      return 'rgba(var(--primary-color-plain),0.3)';
+                    }
+                    else return "rgba(var(--color-theme),0.05)"                     
+                ]]]
+            - border-radius: 14px  
+            - display: flex                
+          track:
+            - background: >
+                [[[
+                    if (entity.state == "unavailable"){
+                      return "rgba(var(--color-grey),1)";
+                    }
+                    if (entity.state  != "off"){
+                      return 'rgba(var(--color-theme),0.05)';
+                    }
+                    else return "rgba(var(--color-theme),0.05)"                 
+                ]]]
+          thumb:
+            - background: 'rgba(255,255,255,0.3)'
+            - border-radius: 14px  
+            - right: 10px
+            - height: 50%
+            - width: 3px  
+            - place-self: center        
+        card_mod:
+        style: |
+          ha-card {
+            border-radius: 14px;
+            background-color: transparent;
+            box-shadow: none;
+          }          

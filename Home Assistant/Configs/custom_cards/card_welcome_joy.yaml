@@ -1,0 +1,423 @@
+---
+### Card Input Boolean ###
+card_welcome_joy:
+  variables:
+    ulm_card_name: "No name set"
+    ulm_card_indoor_temp: "N/A"
+    ulm_card_outdoor_temp: "N/A"
+    ulm_card_entity_1: "N/A"
+    ulm_card_entity_2: "N/A"
+    ulm_card_entity_3: "N/A"
+    ulm_card_entity_4: "N/A"
+  triggers_update: "all"    
+  styles:
+    grid:
+      - grid-template-areas: "'item1' 'item2'"
+      - grid-template-columns: "1fr"
+      - grid-template-rows: "min-content min-content"
+      - row-gap: "12px"
+    card:
+      - box-shadow: none
+      - padding: "0"
+      - backdrop-filter: none
+      - background: none
+      - border-radius: 0
+      - overflow: visible 
+  custom_fields:
+    item1:
+      card:
+        type: "custom:button-card"
+        styles:
+          grid:
+            - grid-template-areas: "'item1 item2'"
+            - grid-template-columns: "1fr 1fr"
+            - grid-template-rows: "min-content"
+            - row-gap: "12px" 
+          card:
+            - box-shadow: none
+            - padding: "0"
+            - backdrop-filter: none
+            - background: none
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card" 
+              show_icon: false
+              show_state: false
+              show_name: true
+              show_label: true
+              styles:
+                grid:
+                  - grid-template-areas: '"l" "n"' 
+                name:
+                  - justify-self: start
+                  - font-size: 26px
+                  - font-weight: 500      
+                label:
+                  - justify-self: start
+                  - align-self: end
+                  - font-size: 14px 
+                  - font-weight: 300                   
+                card:
+                  - background: none 
+                  - border-radius: 0 
+                  - box-shadow: none                                             
+              name: >
+                [[[
+                  return new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })
+                ]]]
+              label: >
+                [[[
+                  let date = new Date();
+                  let weekday = date.toLocaleDateString("en-US", {weekday: 'long'});
+                  let day = date.toLocaleDateString("en-US", {day: 'numeric'});
+                  let month = date.toLocaleDateString("en-US", {month: 'short'});
+                  return weekday + ', ' + day + ' ' + month;
+                ]]]
+              custom_fields:
+
+          item2:
+            card:
+              type: "custom:button-card" 
+              show_icon: true
+              show_state: false
+              show_name: true
+              show_label: true
+              styles:
+                grid:
+                  - grid-template-areas: '"icon l" "icon n"' 
+                  - grid-template-columns: "min-content min-content"
+                  - grid-template-rows: "1fr 1fr" 
+                  - column-gap: 8px 
+                  - justify-content: end                                 
+                name:
+                  - justify-self: end
+                  - font-size: 26px
+                  - font-weight: 500      
+                label:
+                  - justify-self: end
+                  - align-self: end
+                  - font-size: 14px 
+                  - font-weight: 300                      
+                card:
+                  - background: none 
+                  - border-radius: 0
+                  - box-shadow: none 
+                  - overflow: visible 
+                custom_fields:   
+                  icon: 
+                    - justify-self: end
+                    - align-self: end
+                    - margin-bottom: -11px                         
+              name: >
+                [[[
+                  return states[variables.ulm_card_outdoor_temp].state + states[variables.ulm_card_outdoor_temp].attributes["unit_of_measurement"];
+                ]]] 
+              label: >
+                [[[
+                  return states[variables.ulm_card_indoor_temp].state + states[variables.ulm_card_indoor_temp].attributes["unit_of_measurement"];
+                ]]] 
+              custom_fields:   
+                icon: |
+                  [[[
+                    let weather = states['weather.home_2'].state;
+                    return '<img src = "/local/icon/weather/set1/' + weather + '.svg" width="50" height="50">'
+                  ]]]                         
+    item2:
+      card:
+        type: "custom:button-card"
+        styles:
+          grid:
+            - grid-template-areas: "'item1 item2 item3 item4'"
+            - grid-template-columns: "2fr 2fr 1fr 1fr"
+            - grid-template-rows: "min-content"
+            - column-gap: 8px
+          card:
+            - box-shadow: none
+            - padding: "0 0 0px 0"
+            - backdrop-filter: none
+            - background: none
+            - border-radius: 0
+            - overflow: visible 
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card"
+              icon: "mdi:raspberry-pi"     
+              label: |
+                [[[
+                  return "Last";
+                ]]]                 
+              name: |
+                [[[
+                  return "Door"
+                ]]]            
+              template: "icon_info_computer_status"
+              styles:
+                icon:
+                  - color: "rgba(var(--color-theme),0.9)" 
+                card:
+                  - border-radius: calc(var(--border-radius) - 4px)
+                  - box-shadow: "var(--box-shadow)"
+                  - padding: "8px"
+                  - backdrop-filter: var(--bg-filter)   
+                  - background-color: var(--card-blur-color)  
+                  - overflow: visible                   
+                name:
+                  - align-self: "end"
+                  - justify-self: "start"
+                  - font-weight: "bold"
+                  - font-size: "14px"
+                  - margin-left: "8px"
+                  - filter: "opacity(100%)"
+                label:
+                  - justify-self: "start"
+                  - align-self: "start"
+                  - font-weight: "bolder"
+                  - font-size: "13px"
+                  - filter: "opacity(40%)"
+                  - margin-left: "8px"       
+          item2:
+            card:
+              type: "custom:button-card"
+              icon: "mdi:raspberry-pi"     
+              label: |
+                [[[
+                  return "Last";
+                ]]]                 
+              name: |
+                [[[
+                  return "Door"
+                ]]]            
+              template: "icon_info_computer_status"
+              styles:
+                icon:
+                  - color: "rgba(var(--color-theme),0.9)" 
+                card:
+                  - border-radius: calc(var(--border-radius) - 4px)
+                  - box-shadow: "var(--box-shadow)"
+                  - padding: "8px"
+                  - backdrop-filter: var(--bg-filter)   
+                  - background-color: var(--card-blur-color) 
+                  - overflow: visible                   
+                name:
+                  - align-self: "end"
+                  - justify-self: "start"
+                  - font-weight: "bold"
+                  - font-size: "14px"
+                  - margin-left: "8px"
+                  - filter: "opacity(100%)"
+                label:
+                  - justify-self: "start"
+                  - align-self: "start"
+                  - font-weight: "bolder"
+                  - font-size: "13px"
+                  - filter: "opacity(40%)"
+                  - margin-left: "8px"                  
+          item3:
+            card:
+              type: "custom:button-card" 
+              tap_action:
+                action: "toggle"
+              show_icon: true
+              show_name: false
+              icon: >
+                  [[[
+                    if (states[variables.ulm_card_entity_3].state != "on"){
+                      return "mdi:fan";
+                    }
+                    else {
+                      return 'mdi:fan'
+                    }
+                  ]]]     
+              entity: "[[[ return variables.ulm_card_entity_3 ]]]"               
+              styles:
+                grid:
+                  - grid-template-areas: "'i'"
+                card:
+                  - place-self: "center"
+                  - border-radius: calc(var(--border-radius) - 4px)
+                  - box-shadow: "var(--box-shadow)"
+                  - padding: "8px"
+                  - backdrop-filter: var(--bg-filter)   
+                  - background-color: var(--card-blur-color)
+                  - overflow: "visible !important"                   
+                icon:
+                  - color: >
+                      [[[
+                        if (states[variables.ulm_card_entity_3].state != "on"){
+                          return "rgba(var(--color-theme),0.9)";
+                        }
+                        else {
+                          return 'rgba(var(--primary-color-plain),1)'
+                        }
+                      ]]]
+                  - animation: >
+                      [[[
+                        if (states[variables.ulm_card_entity_3].state != "on"){
+                          return "";
+                        }
+                        else {
+                          return 'rotating 2s infinite linear;'
+                        }
+                      ]]]                                                         
+                img_cell:
+                  - background-color: >
+                      [[[
+                        if (states[variables.ulm_card_entity_3].state != "on"){
+                          return "rgba(var(--color-theme),0)";
+                        }
+                        else {
+                          return 'rgba(var(--primary-color-plain),0.2)'
+                        }
+                      ]]]                   
+                  - border-radius: "50%"
+                  - place-self: "center"
+                  - width: "42px"
+                  - height: "42px"                     
+              size: "22px"
+              color: "var(--google-grey)"    
+              extra_styles: |  
+                @keyframes rotating {
+                  0% {
+                    -webkit-transform: rotate(0deg);
+                    -ms-transform: rotate(0deg);
+                    transform: rotate(0deg);
+                  }
+                  25% {
+                    -webkit-transform: rotate(90deg);
+                    -ms-transform: rotate(90deg);
+                    transform: rotate(90deg);
+                  }
+                  50% {
+                    -webkit-transform: rotate(180deg);
+                    -ms-transform: rotate(180deg);
+                    transform: rotate(180deg);
+                  }
+                  75% {
+                    -webkit-transform: rotate(270deg);
+                    -ms-transform: rotate(270deg);
+                    transform: rotate(270deg);
+                  }
+                  100% {
+                    -webkit-transform: rotate(360deg);
+                    -ms-transform: rotate(360deg);
+                    transform: rotate(360deg);
+                  }
+                }        
+              style:
+                .: |
+                  ha-card #notification ha-icon {
+                    width: 10px !important;
+                    height: 10px !important;
+                  }                                         
+          item4:
+            card:
+              type: "custom:button-card" 
+              tap_action:
+                action: "toggle"
+              show_icon: true
+              show_name: false
+              entity: "[[[ return variables.ulm_card_entity_4 ]]]"              
+              icon: >
+                  [[[
+                    if (states[variables.ulm_card_entity_4].state != "on"){
+                      return "mdi:radiator";
+                    }
+                    else {
+                      return 'mdi:radiator'
+                    }
+                  ]]]                
+              styles:
+                grid:
+                  - grid-template-areas: "'i'"
+                card:
+                  - place-self: "center"
+                  - border-radius: calc(var(--border-radius) - 4px)
+                  - box-shadow: "var(--box-shadow)"
+                  - padding: "8px"
+                  - backdrop-filter: var(--bg-filter)   
+                  - background-color: var(--card-blur-color)
+                  - overflow: "visible !important"                   
+                icon:
+                  - color: >
+                      [[[
+                        if (states[variables.ulm_card_entity_4].state != "on"){
+                          return "rgba(var(--color-theme),0.9)";
+                        }
+                        else {
+                          return 'rgba(var(--primary-color-plain),1)'
+                        }
+                      ]]]
+                  - animation: >
+                      [[[
+                        if (states[variables.ulm_card_entity_4].state != "on"){
+                          return "";
+                        }
+                        else {
+                          return 'breathing 3s ease-out infinite normal;'
+                        }
+                      ]]]                                                         
+                img_cell:
+                  - background-color: >
+                      [[[
+                        if (states[variables.ulm_card_entity_4].state != "on"){
+                          return "rgba(var(--color-theme),0)";
+                        }
+                        else {
+                          return 'rgba(var(--primary-color-plain),0.2)'
+                        }
+                      ]]]                   
+                  - border-radius: "50%"
+                  - place-self: "center"
+                  - width: "42px"
+                  - height: "42px"   
+              extra_styles: |  
+                @keyframes breathing {
+                  0% {
+                    -webkit-transform: scale(1.1);
+                    -ms-transform: scale(1.1);
+                    transform: scale(1.1);
+                  }
+                  25% {
+                    -webkit-transform: scale(0.9);
+                    -ms-transform: scale(0.9);
+                    transform: scale(0.9);
+                  }
+                  50% {
+                    -webkit-transform: scale(1.1);
+                    -ms-transform: scale(1.1);
+                    transform: scale(1.1);
+                  }
+                 75% {
+                    -webkit-transform: scale(0.9);
+                    -ms-transform: scale(0.9);
+                    transform: scale(0.9);
+                  }
+                  100% {
+                    -webkit-transform: scale(1.1);
+                    -ms-transform: scale(1.1);
+                    transform: scale(1.1);
+                  }
+                }
+              style:
+                .: |
+                  ha-card #notification ha-icon {
+                    width: 10px !important;
+                    height: 10px !important;
+                  }                                           
+              size: "20px"
+              color: "var(--google-grey)"                                                                     
+              custom_fields:
+                notification: >
+                  [[[
+                    if (states[variables.ulm_card_entity_4].state =="unavailable"){
+                      return `<ha-icon icon="mdi:exclamation" style="color: var(--primary-background-color); border-radius: 20px; position: absolute; left: 38px; top: 8px; height: 12px; width: 12px; border: 2px solid var(--card-background-color); font-size: 10px; line-height: 8px; background-color: rgba(var(--color-red),1);"></ha-icon>`
+                    } 
+                    else if (states[variables.ulm_card_entity_4].state =="on"){
+                      return `<ha-icon icon="mdi:thermometer" style="color: var(--primary-background-color); border-radius: 20px; position: absolute; left: 38px; top: 8px; height: 12px; width: 12px; border: 2px solid var(--card-background-color); font-size: 10px; line-height: 8px; background-color: rgba(var(--color-amber),1);"></ha-icon>`
+                      }
+                    else {
+                      return "";
+                    }
+                  ]]]

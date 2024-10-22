@@ -1,0 +1,1528 @@
+---
+button_card_templates: !include_dir_merge_named "../../custom_components/ui_lovelace_minimalist/__ui_minimalist__/ulm_templates/"
+title: "Minimalist Desktop"
+theme: "minimalist-desktop-origin"
+background: "var(--background-image)"
+# views: !include_dir_merge_list "views/"
+resources:
+  - url: /local/colorGenerator.js
+    type: module
+views: 
+  - title: "Living Room"
+    path: 0
+    icon: "mdi:flower"
+    cards:
+      - type: "vertical-stack"
+        cards:    
+        - type: horizontal-stack 
+          cards:
+            - type: 'custom:button-card'
+              template: chip_back
+              variables:
+                ulm_chip_back_path: /ui-lovelace-minimalist/0
+              styles:
+                card:
+                  - backdrop-filter: var(--bg-filter)
+                  - background: var(--card-blur-color)                   
+            - type: 'custom:button-card'
+              template: chip_icon_only
+              variables:
+                ulm_chip_icon_only: '❤️' 
+              tap_action:
+                action: "call-service"
+                service: frontend.reload_themes
+              styles:
+                card:
+                  - backdrop-filter: var(--bg-filter)
+                  - background: var(--card-blur-color)                   
+            - type: 'custom:button-card'
+              template: chip_icon_only
+              variables:
+                ulm_chip_icon_only: '🛠' 
+              tap_action:
+                action: "call-service"
+                service: script.3_dot_reload_s8                  
+              styles:
+                card:
+                  - backdrop-filter: blur(10px)
+                  - background: var(--card-blur-color)  
+            - type: 'custom:button-card'
+              template: chip_icon_only
+              variables:
+                ulm_chip_icon_only: '🪐' 
+              tap_action:
+                action: "call-service"
+                service: input_button.press
+                data:               
+                  entity_id: input_button.reload_wallpaper               
+              styles:
+                card:
+                  - backdrop-filter: blur(10px)
+                  - background: var(--card-blur-color)                                 
+            - type: 'custom:button-card'
+              template: chip_temperature
+              variables:
+                ulm_chip_temperature_inside: sensor.mi_home_temperature
+                ulm_chip_temperature_outside: sensor.home_realfeel_temperature
+                ulm_chip_temperature_weather: weather.home_2   
+              styles:
+                card:
+                  - backdrop-filter: var(--bg-filter)
+                  - background: var(--card-blur-color)    
+            - type: 'custom:button-card'
+              template: chips
+              entity: binary_sensor.0xa4c1385ebee7d3aa_presence
+              label: | 
+                  [[[
+                    const date = new Date(states["sensor.sun_next_rising"].state);
+                    const hours = date.getHours().toString().padStart(2, '0');
+                    const minutes = date.getMinutes().toString().padStart(2, '0');
+                    const date2 = new Date(states["sensor.sun_next_setting"].state);
+                    const hours2 = date2.getHours().toString().padStart(2, '0');
+                    const minutes2 = date2.getMinutes().toString().padStart(2, '0');
+                    return "🌞 " + `${hours}:${minutes}` + " 🌜 " + `${hours2}:${minutes2}`;  
+                  ]]]     
+              styles:
+                card:
+                  - backdrop-filter: var(--bg-filter)
+                  - background: var(--card-blur-color)       
+            - type: 'custom:button-card'
+              template: chips
+              entity: sensor.bh1750_lux
+              label: | 
+                  [[[
+                    return "🌟 " + states[entity.entity_id].state + "Lux";  
+                  ]]]     
+              styles:
+                card:
+                  - backdrop-filter: var(--bg-filter)
+                  - background: var(--card-blur-color)                                                
+            - type: 'custom:button-card'
+              template: chips
+              entity: binary_sensor.0xa4c1385ebee7d3aa_presence
+              label: | 
+                  [[[
+                    var icon = "📡";
+                    if ( states[entity.entity_id].state == 'off') 
+                      return icon + " " + "Clear" ;
+                    else if ( states[entity.entity_id].state == 'on')
+                      return icon + " " + "Detected" ;
+                    else;
+                      return icon + " " + "Unknown" ;  
+                  ]]]     
+              styles:
+                card:
+                  - backdrop-filter: var(--bg-filter)
+                  - background: var(--card-blur-color)           
+            - type: 'custom:button-card'
+              template: chips
+              entity: device_tracker.xiaomi_13_ultra
+              label: | 
+                  [[[
+                    var icon = "📱";
+                    if ( states[entity.entity_id].state == 'home') 
+                      return icon + " " + "Home" ;
+                    else if ( states[entity.entity_id].state == 'not_home')
+                      return icon + " " + "Away" ;
+                    else;
+                      return icon + " " + "Unknown" ;  
+                  ]]]     
+              styles:
+                card:
+                  - backdrop-filter: var(--bg-filter)
+                  - background: var(--card-blur-color)   
+
+            - type: 'custom:button-card'
+              template: chips
+              entity: input_boolean.streamdeck_display
+              label: | 
+                  [[[
+                    return "📱 " + states[entity.entity_id].state.charAt(0).toUpperCase() + states[entity.entity_id].state.slice(1);
+                  ]]]     
+              styles:
+                card:
+                  - backdrop-filter: var(--bg-filter)
+                  - background: var(--card-blur-color)                          
+              tap_action:
+                action: "call-service"
+                service: input_boolean.toggle
+                data:               
+                  entity_id: input_boolean.streamdeck_display               
+              hold_action:
+                action: "more-info"           
+                entity: input_number.streamdeck_brightness  
+
+            - type: 'custom:button-card'
+              template: chips
+              entity: sensor.ha_frozenjoy_lol_8123_cert_expiry
+              label: | 
+                  [[[
+                    var icon = "📋";
+                    var state = states[entity.entity_id].state.slice(0,10);
+                    return icon + " " + state
+                  ]]]
+              styles:
+                card:
+                  - backdrop-filter: var(--bg-filter)
+                  - background: var(--card-blur-color)                     
+            - type: 'custom:button-card'
+              template: chips
+              entity: sensor.work
+              label: | 
+                  [[[
+                    var icon = "🚕";
+                    var time = states[entity.entity_id].attributes.duration.toString().slice(0,2);
+                    var distance = states[entity.entity_id].attributes.distance.toString().slice(0,5);
+                    var unit = states[entity.entity_id].attributes.unit_of_measurement.toString();
+                    return icon + " " + time + unit + " / " + distance + "km" ;
+                  ]]]   
+              styles:
+                card:
+                  - backdrop-filter: var(--bg-filter)
+                  - background: var(--card-blur-color)                     
+        - type: "vertical-stack"
+          cards:
+            - type: "custom:button-card"
+              template: "card_welcome_joy" 
+              variables:
+                ulm_card_indoor_temp: "sensor.mi_home_temperature"
+                ulm_card_outdoor_temp: "sensor.pvvx_temperature"
+                ulm_card_entity_3: "switch.bot_85f0"  
+                ulm_card_entity_4: "switch.bot_85f0"     
+              style: |
+                ha-card#card {backdrop-filter: none !important;}           
+            - type: custom:simple-weather-card
+              entity: weather.home_2
+              primary_info:
+                - wind_bearing
+                - humidity
+              secondary_info:
+                - precipitation
+                - precipitation_probability 
+              style: |
+                ha-card {backdrop-filter: var(--bg-filter); background: var(--card-blur-color) !important;} 
+            - type: grid
+              columns: 2
+              square: false             
+              cards:    
+                - type: custom:mod-card
+                  card:            
+                    type: custom:html-template-card
+                    ignore_line_breaks: true
+                    picture_elements_mode: true
+                    content: >
+                      <div style="position: relative;" id="blo">    
+                      <iframe style="position: absolute; width: 100%; height: 100%; left: 0;
+                      top: 0; color-scheme: none" src="/local/html/clock2/index.html" frameborder="none"
+                      scrolling="no"></iframe>      
+                      </div> 
+                  style:   
+                    .: |                    
+                      ha-card {
+                        backdrop-filter: var(--bg-filter); 
+                        background: var(--card-blur-color) !important;
+                        border-radius: 50%;
+                        aspect-ratio : 1 / 1;
+                        box-shadow: var(--ha-card-box-shadow);
+                      } 
+                      #blo {position: inherit !important;}                      
+                      @media (max-width: 1600px) and (min-width: 1000px ) and (min-height: 800px ) {
+                        iframe {transform: scale(0.85);}
+                        #blo {padding-top: 102%;}
+                      }
+                      @media (max-width: 1600px) and (min-width: 1000px ) and (max-height: 800px ) {
+                        iframe {transform: scale(0.95);}  
+                        #blo {padding-top: 100%;}
+                      }
+                      @media (max-width: 1000px) {
+                        iframe {transform: scale(0.9);}
+                        #blo {padding-top: 100%;}
+                      }                                                                      
+                - type: markdown
+                  style: |
+                    ha-card {backdrop-filter: var(--bg-filter); background: var(--card-blur-color) !important;}      
+                  content: |
+                    ## ジョン・ウィック
+                - type: "custom:button-card"
+                  template:
+                    - "card_generic_joy"                    
+                  entity: sensor.mi_home_temperature
+                  variables:   
+                    ulm_card_name: ""
+                    ulm_line_color: "var(--google-blue)"
+                - type: "custom:button-card"
+                  template:
+                    - "card_generic_joy"                    
+                  entity: sensor.mi_home_humidity
+                  variables:   
+                    ulm_card_name: ""
+                    ulm_line_color: "var(--google-green)"
+                - type: "custom:button-card"
+                  template:
+                    - "card_generic_joy"                    
+                  entity: sensor.pvvx_temperature
+                  variables:   
+                    ulm_card_name: ""
+                    ulm_line_color: "var(--google-yellow)"
+                - type: "custom:button-card"
+                  template:
+                    - "card_generic_joy"                    
+                  entity: sensor.pvvx_humidity
+                  variables:   
+                    ulm_card_name: ""
+                    ulm_line_color: "var(--google-violet)"
+                         
+            # - type: custom:vertical-stack-in-card
+            #   style: |
+            #     ha-card {
+            #       backdrop-filter: var(--bg-filter); 
+            #       background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0))
+            #       }                      
+            #   cards:   
+                # - type: "custom:button-card"
+                #   size: "20px"
+                #   show_icon: true
+                #   show_entity_picture: false
+                #   show_state: false
+                #   show_name: true
+                #   show_label: true
+                #   entity: sensor.smart_plug_current_power
+                #   triggers_update: "all"
+                #   template:
+                #     - "icon_info_computer_status"
+                #   name: |
+                #      [[[
+                #        var current = states[entity.entity_id].state;
+                #        var measure = states[entity.entity_id].attributes["unit_of_measurement"];   
+                #        return Math.round(current * 10 + Number.EPSILON) / 10 + measure;
+                #      ]]]           
+                #   label: "Current Power"
+                #   icon: "mdi:lightning-bolt"
+                #   tap_action:
+                #     action: "more-info"        
+                #   styles:
+                #     card:
+                #       - box-shadow: "none"
+                #       - padding: "12px 12px 0px 12px" 
+                #       - background: transparent                        
+                # - type: "custom:mini-graph-card"
+                #   entities: 
+                #     - entity: sensor.smart_plug_today_energy
+                #       aggregate_func: diff
+                #   unit: "kWh"
+                #   show:
+                #     name: false
+                #     icon: false
+                #     legend: false
+                #     state: true
+                #     points: true
+                #     labels: true
+                #     labels_secondary: true
+                #     graph: "bar"
+                #     fill: true
+                #   align_state: right  
+                #   color_thresholds:
+                #     - value: 0.2
+                #       color: var(--primary-color)
+                #     - value: 0.25
+                #       color: "#FCD663"
+                #     - value: 0.3
+                #       color: "#E61E63"       
+                #   hours_to_show: 48
+                #   group_by: hour
+                #   bar_spacing: 6
+                #   line_width: 4
+                #   height: 140
+                #   lower_bound: 0
+                #   tap_action:
+                #     action: "more-info"
+                #     entity: "sensor.smart_plug_current_power"
+                #   style: |
+                #     ha-card {
+                #       box-shadow: none;
+                #       border-radius: 0px;
+                #       padding: 0px 12px 12px 12px !important; 
+                #       margin-top: -37px;
+                #       background: transparent;  
+                #     }
+                #     ha-card .states {
+                #       padding: 0px 0px 23px 0px;
+                #     }
+                #     ha-card .state__value {
+                #       font-size: 1.5em;
+                #       margin-top: 0.04em;
+                #     }  
+                #     ha-card .state__uom {
+                #       font-size: 1.3em;
+                #       margin-top: 0em;
+                #     } 
+                #     ha-card .state__time {
+                #       font-size: 0.6em;
+                #     }                      
+            - type: "custom:button-card"
+              template: "card_title_joy"
+              name: "Binary Sensors"
+              label: "This is the Minimalist-binary_sensor-card"
+              style: |
+                ha-card#card {backdrop-filter: none !important;}              
+            - type: grid
+              columns: 2
+              square: false             
+              cards:
+                - type: "custom:button-card"
+                  template:
+                    - "card_generic_joy"                    
+                  entity: sensor.processor_temperature
+                  variables:   
+                    ulm_card_name: ""
+                    ulm_line_color: "rgba(var(--primary-color-plain),1)"   
+                # - type: "custom:button-card"
+                #   template:
+                #     - "card_generic_joy"                    
+                #   entity: sensor.wi_temperature
+                #   variables:   
+                #     ulm_card_name: ""
+                #     ulm_line_color: "rgba(var(--primary-color-plain),1)"                                                         
+            - type: 'custom:button-card'
+              template: card_phone_joy_new
+              entity: sensor.sm_x800_battery_level                
+              variables:
+                   ulm_card_name: "Galaxy Tab S8+"
+                   ulm_card_battery_battery_state_entity_id: sensor.sm_x800_battery_state
+                   ulm_card_battery_charger_type_entity_id: sensor.sm_x800_charger_type                      
+                   ulm_card_battery_battery_level_danger: 15
+                   ulm_card_battery_battery_level_warning: 30 
+                   ulm_card_wifi_freq: sensor.sm_x800_wifi_frequency
+                   ulm_card_wifi_speed: sensor.sm_x800_wifi_link_speed
+                   ulm_card_wifi_signal: sensor.sm_x800_wifi_signal_strength
+                   ulm_card_wifi_state: binary_sensor.sm_x800_wifi_state
+                   ulm_card_internal_storage: sensor.sm_x800_internal_storage
+                   ulm_card_external_storage: sensor.sm_x800_external_storage                   
+                   ulm_card_wifi_connection: sensor.sm_x800_wifi_connection
+                   ulm_card_battery_temp: sensor.sm_x800_battery_temperature 
+            - type: 'custom:button-card'
+              template: card_phone_joy_new_13u
+              entity: sensor.xiaomi_13_ultra_battery_level                
+              variables:
+                   ulm_card_name: "Xiaomi 13 Ultra"
+                   ulm_card_battery_battery_state_entity_id: sensor.xiaomi_13_ultra_battery_state
+                   ulm_card_battery_charger_type_entity_id: sensor.xiaomi_13_ultra_charger_type                      
+                   ulm_card_battery_battery_level_danger: 15
+                   ulm_card_battery_battery_level_warning: 30 
+                   ulm_card_wifi_freq: sensor.xiaomi_13_ultra_wifi_frequency
+                   ulm_card_wifi_speed: sensor.xiaomi_13_ultra_wifi_link_speed
+                   ulm_card_wifi_signal: sensor.xiaomi_13_ultra_wifi_signal_strength
+                   ulm_card_wifi_state: binary_sensor.xiaomi_13_ultra_wifi_state
+                   ulm_card_internal_storage: sensor.xiaomi_13_ultra_internal_storage
+                   ulm_card_external_storage: sensor.xiaomi_13_ultra_internal_storage                   
+                   ulm_card_wifi_connection: sensor.xiaomi_13_ultra_wifi_connection
+                   ulm_card_battery_temp: sensor.xiaomi_13_ultra_battery_temperature                    
+      - type: "vertical-stack"
+        cards:
+          - type: custom:mod-card
+            card:           
+              type: 'custom:button-card'
+              template: chips_blank
+            style: 
+              .: |
+                ha-card {background: transparent !important;} 
+                ha-card.type-custom-mod-card {z-index: -1 !important;}
+          - type: grid
+            columns: 2
+            square: false             
+            cards:            
+              - type: "custom:button-card"
+                template: "card_title_joy"
+                name: "Lights"
+                label: "This"
+                style: |
+                  ha-card#card {backdrop-filter: none !important;}                
+              - type: custom:mod-card
+                style: 
+                  .: |
+                    ha-card {
+                      background: transparent !important;
+                      box-shadow: none; 
+                      backdrop-filter: none !important; 
+                      border-radius: 0;                     
+                    } 
+                    ha-card #states {
+                      padding: 0px;
+                    }
+                    ha-card button-card {
+                      margin-top: 10px;
+                      max-width: none !important;  
+                    }
+                card:                     
+                  type: "custom:button-card"
+                  template: card_light_group2
+                  entity: light.livingroom_lights 
+                  variables:
+                    ulm_card_light_enable_color: true
+                    ulm_card_light_enable_slider: true
+                    ulm_card_light_force_background_color: true 
+                    ulm_card_light_enable_popup: true 
+                    ulm_card_light_enable_horizontal: true                                           
+          - type: grid
+            columns: 5
+            square: false              
+            cards:                           
+              - type: 'custom:button-card'
+                template: card_vertical_button_small_joy
+                entity: input_select.lighting_preset
+                name: Morning Sunshine
+                icon: mdi:weather-sunny
+                show_last_changed: false
+                variables:
+                  ulm_card_vertical_button_state: "Morning Sunshine"
+                  ulm_card_vertical_button_state_entity: "script.morning_sunshine_selected"                  
+                  ulm_card_vertical_button_color: "252, 214, 99"     
+              - type: 'custom:button-card'
+                template: card_vertical_button_small_joy
+                entity: input_select.lighting_preset
+                name: Fireside Stories
+                icon: mdi:campfire
+                show_last_changed: false
+                variables:
+                  ulm_card_vertical_button_state: "Fireside Stories"
+                  ulm_card_vertical_button_state_entity: "script.fireside_stories_selected"                  
+                  ulm_card_vertical_button_color: "241, 139, 130"
+              - type: 'custom:button-card'
+                template: card_vertical_button_small_joy
+                entity: input_select.lighting_preset
+                name: The Magic Forest
+                icon: mdi:forest
+                show_last_changed: false
+                variables:
+                  ulm_card_vertical_button_state: "Magic Forest"
+                  ulm_card_vertical_button_state_entity: "script.magic_forest_selected"                  
+                  ulm_card_vertical_button_color: "233, 30, 99"  
+              - type: 'custom:button-card'
+                template: card_vertical_button_small_joy
+                entity: input_select.lighting_preset
+                name: Song of Deep Sea
+                icon: mdi:waves
+                show_last_changed: false
+                variables:
+                  ulm_card_vertical_button_state: "Song of Deep Sea"
+                  ulm_card_vertical_button_state_entity: "script.song_of_deepsea_selected"                  
+                  ulm_card_vertical_button_color: "102, 31, 255"    
+              - type: 'custom:button-card'
+                template: card_vertical_button_small_joy
+                entity: input_select.lighting_preset
+                name: Manual Control
+                icon: mdi:hammer-wrench
+                variables:
+                  ulm_card_vertical_button_state: "Auto"
+                  ulm_card_vertical_button_state_entity: "script.auto_selected"
+                  ulm_card_vertical_button_color: "187, 187, 187"
+          - type: grid
+            columns: 5
+            square: false               
+            cards:                     
+              - type: 'custom:button-card'
+                template: card_vertical_button_small_joy
+                entity: input_select.lighting_preset
+                icon: mdi:desk-lamp-on
+                show_last_changed: false
+                name: Study
+                variables:
+                  ulm_card_vertical_button_state: study
+                  ulm_card_vertical_button_state_entity: script.study_mode_selected            
+                  ulm_card_vertical_button_color: "255,255,255"
+              - type: 'custom:button-card'
+                template: card_vertical_button_small_joy
+                entity: input_select.lighting_preset
+                icon: mdi:garage 
+                name: Underground
+                variables:
+                  ulm_card_vertical_button_state: underground
+                  ulm_card_vertical_button_state_entity: script.undergrond_mode_selected
+                  ulm_card_vertical_button_color: "0,255,238"    
+              - type: 'custom:button-card'
+                template: card_vertical_button_small_joy
+                entity: input_select.lighting_preset
+                icon: >
+                  [[[ return states[variables.ulm_card_vertical_button_state_entity].attributes["icon"];]]]
+                variables:
+                  ulm_card_vertical_button_state: "Candy Dreams" 
+                  ulm_card_vertical_button_state_entity: "scene.candy_dreams"               
+                  ulm_card_vertical_button_color: "246, 168, 255"
+              - type: 'custom:button-card'
+                template: card_vertical_button_small_joy
+                entity: input_select.lighting_preset
+                icon: >
+                  [[[ return states[variables.ulm_card_vertical_button_state_entity].attributes["icon"];]]]
+                variables:
+                  ulm_card_vertical_button_state: "Summer Nights" 
+                  ulm_card_vertical_button_state_entity: "scene.summer_nights"               
+                  ulm_card_vertical_button_color: "44, 255, 149"
+              - type: 'custom:button-card'
+                template: card_vertical_button_small_joy
+                entity: input_select.lighting_preset
+                icon: mdi:garage 
+                name: Underground
+                variables:
+                  ulm_card_vertical_button_state: undergroun
+                  ulm_card_vertical_button_state_entity: script.undergrond_mode_selected
+                  ulm_card_vertical_button_color: "0,255,238"  
+          # - type: "custom:button-card"
+          #   template: card_light_ambi_joy
+          #   entity: light.first_led_instance_2
+          #   variables:
+          #     ulm_card_light_entity_1: "light.wled_athom"
+          #     ulm_card_light_entity_2: "light.wled_lamp"
+          #     ulm_card_light_entity_3: "light.first_led_instance_2"                                    
+          - type: grid
+            columns: 2
+            square: false
+            cards:  
+              # - type: "custom:button-card"
+              #   template: card_light_wled
+              #   entity: light.ambilightsr
+              #   variables:
+              #     ulm_card_light_enable_slider: true
+              #     ulm_card_light_enable_color: true
+              #     ulm_card_light_force_background_color: true 
+              #     ulm_card_light_enable_popup: true 
+              #     ulm_card_light_enable_collapse: false  
+              #     ulm_card_light_wled_preset_entity: "select.ambilightsr" 
+              #   custom_fields:
+              #     item1:
+              #       card:
+              #         type: "custom:button-card"
+              #         custom_fields:
+              #           item3:
+              #             card:
+              #               type: "custom:button-card"
+              #               tap_action:
+              #                 action: 'fire-dom-event'
+              #                 browser_mod:
+              #                   service: browser_mod.popup
+              #                   data:
+              #                     hide_header: true
+              #                     style: |
+              #                       --popup-min-width: 1300px;
+              #                     content:
+              #                       type: iframe
+              #                       url: >-
+              #                         https://wled.frozenjoy.lol:1111
+              #                       aspect_ratio: '16:9'  
+              - type: "custom:button-card"
+                template: card_light_joy
+                entity: light.hue_color_lamp_2
+                variables:
+                  ulm_card_light_name: "Hue Bulb"
+                  ulm_card_light_enable_slider: true
+                  ulm_card_light_enable_color: true
+                  ulm_card_light_enable_popup: true                     
+                  ulm_card_light_force_background_color: true                                              
+              - type: "custom:button-card"
+                template: card_light_wled
+                entity: light.lamp
+                variables:
+                  ulm_card_light_enable_slider: true
+                  ulm_card_light_enable_color: true
+                  ulm_card_light_force_background_color: true 
+                  ulm_card_light_enable_popup: true 
+                  ulm_card_light_enable_collapse: false 
+                  ulm_card_light_wled_preset_entity: "select.lamp"
+                custom_fields:
+                  item1:
+                    card:
+                      type: "custom:button-card"
+                      custom_fields:
+                        item3:
+                          card:
+                            type: "custom:button-card"
+                            tap_action:
+                              action: 'fire-dom-event'
+                              browser_mod:
+                                service: browser_mod.popup
+                                data:
+                                  hide_header: true
+                                  style: |
+                                    --popup-min-width: 1300px;
+                                  content:
+                                    type: iframe
+                                    url: >-
+                                      https://wled.frozenjoy.lol:1113
+                                    aspect_ratio: '16:9' 
+              - type: "custom:button-card"
+                template: card_light_wled
+                entity: light.wled
+                variables:
+                  ulm_card_light_enable_slider: true
+                  ulm_card_light_enable_color: true
+                  ulm_card_light_force_background_color: true 
+                  ulm_card_light_enable_popup: true 
+                  ulm_card_light_enable_collapse: false 
+                  ulm_card_light_wled_preset_entity: "select.wled"
+                custom_fields:
+                  item1:
+                    card:
+                      type: "custom:button-card"
+                      custom_fields:
+                        item3:
+                          card:
+                            type: "custom:button-card"
+                            tap_action:
+                              action: 'fire-dom-event'
+                              browser_mod:
+                                service: browser_mod.popup
+                                data:
+                                  hide_header: true
+                                  style: |
+                                    --popup-min-width: 1300px;
+                                  content:
+                                    type: iframe
+                                    url: >-
+                                      https://wled.frozenjoy.lol:1114
+                                    aspect_ratio: '16:9'                                          
+              - type: "custom:button-card"
+                template: card_light_joy
+                entity: light.desk_lamp
+                variables:
+                  ulm_card_light_name: "Desk Lamp"
+                  ulm_card_light_enable_slider: true
+                  ulm_card_light_enable_color: true
+                  ulm_card_light_enable_popup: true                     
+                  ulm_card_light_force_background_color: true        
+              - type: "custom:button-card"
+                template: card_light_joy
+                entity: light.hue_color_lamp_1
+                variables:
+                  ulm_card_light_enable_slider: true
+                  ulm_card_light_enable_color: true
+                  ulm_card_light_enable_popup: true                     
+                  ulm_card_light_force_background_color: true                                                                                            
+              # - type: "custom:button-card"
+              #   template: card_light_joy
+              #   entity: light.hue_color_lamp_2
+              #   variables:
+              #     ulm_card_light_name: "Hue Bulb Right"
+              #     ulm_card_light_enable_slider: true
+              #     ulm_card_light_enable_color: true
+              #     ulm_card_light_enable_popup: true                     
+              #     ulm_card_light_force_background_color: true    
+                                      
+              # - type: "custom:button-card"
+              #   template: card_light_wled
+              #   entity: light.tree
+              #   variables:
+              #     ulm_card_light_enable_slider: true
+              #     ulm_card_light_enable_color: true
+              #     ulm_card_light_force_background_color: true 
+              #     ulm_card_light_enable_popup: true 
+              #     ulm_card_light_enable_collapse: false 
+              #     ulm_card_light_wled_preset_entity: "select.tree" 
+              #   custom_fields:
+              #     item1:
+              #       card:
+              #         type: "custom:button-card"
+              #         custom_fields:
+              #           item3:
+              #             card:
+              #               type: "custom:button-card"
+              #               tap_action:
+              #                 action: 'fire-dom-event'
+              #                 browser_mod:
+              #                   service: browser_mod.popup
+              #                   data:
+              #                     hide_header: true
+              #                     style: |
+              #                       --popup-min-width: 1300px;
+              #                     content:
+              #                       type: iframe
+              #                       url: >-
+              #                         https://wled.frozenjoy.lol:1113
+              #                       aspect_ratio: '16:9'
+              - type: "custom:button-card"
+                template: card_light_joy
+                entity: light.bulb_vintage
+                variables:
+                  ulm_card_light_name: "Vintage Bulb"
+                  ulm_card_light_enable_slider: true
+                  ulm_card_light_enable_color: true
+                  ulm_card_light_enable_popup: true                     
+                  ulm_card_light_force_background_color: true     
+              # - type: "custom:button-card"
+              #   template: card_light_joy
+              #   entity: light.govee_bulb
+              #   variables:
+              #     # ulm_card_light_name: "Yeelight Bulb"
+              #     ulm_card_light_enable_slider: true
+              #     ulm_card_light_enable_color: true
+              #     ulm_card_light_enable_popup: true                     
+              #     ulm_card_light_force_background_color: true             
+              # - type: "custom:button-card"
+              #   template: card_light_joy
+              #   entity: light.govee_bulb_2
+              #   variables:
+              #     # ulm_card_light_name: "Yeelight Bulb"
+              #     ulm_card_light_enable_slider: true
+              #     ulm_card_light_enable_color: true
+              #     ulm_card_light_enable_popup: true                     
+              #     ulm_card_light_force_background_color: true                                                                   
+              # - type: "custom:button-card"
+              #   template: card_light_wled
+              #   entity: light.wled_2
+              #   variables:
+              #     ulm_card_light_enable_slider: true
+              #     ulm_card_light_enable_color: true
+              #     ulm_card_light_force_background_color: true 
+              #     ulm_card_light_enable_popup: true 
+              #     ulm_card_light_enable_collapse: false
+              #     ulm_card_light_wled_preset_entity: "select.wled_preset_2"
+              #     ulm_card_light_sk6812: true
+              #   custom_fields:
+              #     item1:
+              #       card:
+              #         type: "custom:button-card"
+              #         custom_fields:
+              #           item3:
+              #             card:
+              #               type: "custom:button-card"
+              #               tap_action:
+              #                 action: 'fire-dom-event'
+              #                 browser_mod:
+              #                   service: browser_mod.popup
+              #                   data:
+              #                     hide_header: true
+              #                     style: |
+              #                       --popup-min-width: 1300px;
+              #                     content:
+              #                       type: iframe
+              #                       url: >-
+              #                         https://wled.frozenjoy.lol:1114
+              #                       aspect_ratio: '16:9' 
+
+              # - type: "custom:button-card"
+              #   template: card_light_joy_tree_lights
+              #   entity: light.tree_lights
+              #   variables:
+              #     ulm_card_light_enable_slider: true
+              #     ulm_card_light_enable_color: false
+              #     ulm_card_light_force_background_color: true 
+              #     ulm_card_light_enable_popup: true   
+              #     ulm_card_light_color: "var(--color-yellow)"   
+              #     ulm_card_light_double_row: true
+              #     ulm_card_light_double_row_entity: "light.tree_lights_purple" 
+              #     ulm_card_light_double_row_color: "var(--color-purple)"                       
+              # - type: "vertical-stack"
+              #   cards:                       
+              #     - type: "custom:button-card"
+              #       template: card_light_joy
+              #       entity: light.bot_85f0
+              #       variables:
+              #         ulm_card_light_force_background_color: true 
+              #       style: |
+              #         ha-card#card {padding-top: 6.4px !important; padding-bottom: 6.4px !important;}   
+          - type: "custom:button-card"
+            template: card_light_ambi_joy
+            entity: light.first_led_hardware_instance_component_led_device
+            variables:
+              ulm_card_light_entity_1: "light.wled_lamp_component_led_device"
+              ulm_card_light_entity_2: "light.wled_ceiling_component_led_device"
+              ulm_card_light_entity_3: "light.hue_bulb_component_led_device"                                     
+      - type: "vertical-stack"
+        cards:
+          - type: 'custom:button-card'
+            template: chips_blank  
+            style: |
+              ha-card#card {background: transparent !important;} 
+          - type: grid
+            columns: 2
+            square: false             
+            cards:              
+              - type: "custom:button-card"
+                template: "card_title_joy"
+                name: "Media"
+                label: "Say what?" 
+                style: |
+                  ha-card#card {backdrop-filter: none !important;}                  
+              - type: custom:mod-card
+                style: 
+                  .: |
+                    ha-card {
+                      background: transparent !important;
+                      box-shadow: none; 
+                      backdrop-filter: none !important; 
+                      border-radius: 0;                     
+                    } 
+                    ha-card #states {
+                      padding: 0px;
+                    }
+                    ha-card button-card {
+                      margin-top: 10px;
+                      max-width: none !important;  
+                    }                    
+                card:                
+                  type: "custom:button-card"
+                  template: card_media_group
+                  entity: media_player.speaker_trio
+                  name: Speaker trio
+                  variables: 
+                    ulm_card_media_player_name: Home Group
+                    ulm_card_media_player_enable_art: true
+                    ulm_card_media_player_enable_controls: true 
+                    ulm_card_media_player_enable_volume_slider: true
+                    ulm_card_media_player_enable_popup: true    
+          # - type: custom:mini-media-player
+          #   entity: media_player.nestaudio8300
+          #   artwork: material                                
+          - type: grid
+            columns: 2
+            square: false
+            cards:      
+              # - type: "custom:button-card"
+              #   template: card_media_player_joy
+              #   entity: media_player.living_room_pair
+              #   name: Livingroom Speaker 
+              #   variables:
+              #     ulm_card_media_player_name: Pair                
+              #     ulm_card_media_player_enable_art: true
+              #     ulm_card_media_player_enable_controls: true 
+              #     ulm_card_media_player_enable_volume_slider: true
+              #     ulm_card_media_player_enable_popup: true
+              #     ulm_card_media_player_long_mode: false
+              #   styles: 
+              #     card:
+              #       - background: |
+              #           [[[
+              #             if (variables.ulm_card_media_player_enable_art && states[entity.entity_id].attributes.entity_picture_local != null)
+              #               return 'linear-gradient(to top, transparent 0%, transparent 40%), center / cover no-repeat url(' + states[entity.entity_id].attributes.entity_picture_local + ')'
+              #             else 
+              #               return '50% 32% / 459%  no-repeat url("/local/background/leaves-t0.png"), var(--card-blur-color)'
+              #           ]]]                 
+              - type: "custom:button-card"
+                template: card_media_player_joy
+                entity: media_player.living_room_tv
+                name: Chromecast  
+                variables: 
+                  ulm_card_media_player_name: Chromecast
+                  ulm_card_media_player_enable_art: true
+                  ulm_card_media_player_enable_controls: true 
+                  ulm_card_media_player_enable_volume_slider: true
+                  ulm_card_media_player_enable_popup: true
+                  ulm_card_media_player_long_mode: false
+                styles: 
+                  card:
+                    - background: |
+                        [[[
+                          if (variables.ulm_card_media_player_enable_art && states[entity.entity_id].attributes.entity_picture_local != null)
+                            return 'linear-gradient(to top, transparent 0%, transparent 40%), center / cover no-repeat url(' + states[entity.entity_id].attributes.entity_picture_local + ')'
+                          else 
+                            return '18% 32% / 459%  no-repeat url("/local/background/leaves-t0.png"), var(--card-blur-color)'
+                        ]]]  
+              - type: "custom:button-card"
+                template: card_media_player_joy
+                entity: media_player.living_room_tv
+                name: Chromecast  
+                variables: 
+                  ulm_card_media_player_name: Chromecast
+                  ulm_card_media_player_enable_art: true
+                  ulm_card_media_player_enable_controls: true 
+                  ulm_card_media_player_enable_volume_slider: true
+                  ulm_card_media_player_enable_popup: true
+                  ulm_card_media_player_long_mode: false
+                styles: 
+                  card:
+                    - background: |
+                        [[[
+                          if (variables.ulm_card_media_player_enable_art && states[entity.entity_id].attributes.entity_picture_local != null)
+                            return 'linear-gradient(to top, transparent 0%, transparent 40%), center / cover no-repeat url(' + states[entity.entity_id].attributes.entity_picture_local + ')'
+                          else 
+                            return '18% 32% / 459%  no-repeat url("/local/background/leaves-t0.png"), var(--card-blur-color)'
+                        ]]]                                          
+              - type: "custom:button-card"
+                template: card_media_player_joy
+                entity: media_player.nestaudio8300
+                name: Nest Audio 
+                variables: 
+                  ulm_card_media_player_name: Nest Audio
+                  ulm_card_media_player_enable_art: true
+                  ulm_card_media_player_long_mode: true
+                  ulm_card_media_player_color_entity: "sensor.color_nest8300"
+                styles:
+                  card:
+                    - height: >
+                        [[[
+                          if (!variables.ulm_card_media_player_long_mode) {
+                            return "calc(var(--widget-height)*2 + 42px + 24px + 24px)";}  
+                          else return "calc(var(--widget-height)*2 + 42px + 24px + 24px + var(--widget-height) + 32px)";   
+                        ]]]    
+                    - background: |
+                        [[[
+                          if (variables.ulm_card_media_player_enable_art && states[entity.entity_id].attributes.entity_picture_local != null) {
+                            let col = states[variables.ulm_card_media_player_color_entity].attributes.background
+                            let pic = states[entity.entity_id].attributes.entity_picture_local
+                            return `linear-gradient(to top, rgba(${col}, 0.6) 0%, var(--card-blur-color) 80%), center / cover no-repeat url(${pic})`
+                          }
+                          else 
+                            return 'center / 305% no-repeat url("/local/background/leaves-t0.png"), var(--card-blur-color)'
+                        ]]]                           
+              - type: "vertical-stack"
+                cards:                                  
+                - type: "custom:button-card"
+                  template: card_ir_tv_joy
+                  variables:
+                    ulm_card_name: "Hitachi AC" 
+                    ulm_main_entity: "remote.rm4_mini"
+                    ulm_main_device: "hitachi"
+                    ulm_sub_cmd_0: "power"
+                    ulm_sub_cmd_1: "on_24"
+                    ulm_sub_cmd_2: "on_25"    
+                    ulm_sub_cmd_3: "on_26"    
+                    ulm_sub_cmd_4: "lv_1"    
+                    ulm_sub_cmd_5: "lv_2"                       
+                    ulm_sub_cmd_6: "lv_3"  
+                    ulm_sub_icon_0: "mdi:air-conditioner"
+                    ulm_sub_icon_1: "mdi:numeric-4-circle-outline"
+                    ulm_sub_icon_2: "mdi:numeric-5-circle-outline"   
+                    ulm_sub_icon_3: "mdi:numeric-6-circle-outline"   
+                    ulm_sub_icon_4: "mdi:fan-speed-1"   
+                    ulm_sub_icon_5: "mdi:fan-speed-2"                      
+                    ulm_sub_icon_6: "mdi:fan-speed-3"                      
+                - type: "custom:button-card"
+                  template: card_cover_slim_joy
+                  entity: cover.curtain_281f
+                  variables:
+                    ulm_card_cover_name: "Curtain"
+                    ulm_card_cover_battery_entity: sensor.curtain_281f_battery                                    
+          # - type: custom:vertical-stack-in-card
+          #   style: |
+          #     ha-card {backdrop-filter: var(--bg-filter); background: var(--card-blur-color) !important;}           
+          #   cards:  
+          #     - type: custom:state-switch
+          #       entity: template
+          #       template: "{% if states('switch.tapo_camera_87e7_privacy') == 'on' %} day {% else %} night {% endif %}" 
+          #       states:
+          #         night:
+          #           type: custom:webrtc-camera
+          #           entity: camera.tapo_camera_87e7_hd_stream
+          #           style: |
+          #             ha-card.type-custom-webrtc-camera {
+          #               --ha-card-border-radius: 0px;
+          #               box-shadow: none !important;
+          #             }
+          #         day:
+          #           type: picture
+          #           image: /local/wallpaper/desktop/wallhaven-kx2vw1_854x480.png
+          #           style: |
+          #             ha-card {
+          #               border-radius: 0px;
+          #               box-shadow: none !important;
+          #             }                    
+          #     - type: entities
+          #       style: |
+          #         ha-card.type-entities #states {
+          #           padding: 12px 12px 0px ;
+          #         }
+          #         ha-card {background: transparent !important;} 
+          #       entities:              
+          #         - type: 'custom:button-card'
+          #           entity: camera.tapo_camera_87e7_hd_stream
+          #           template: card_glance_joy                  
+          #     - type: 'custom:button-card'
+          #       template: card_graph_motion_joy
+          #       style: |
+          #         ha-card {box-shadow: none !important;}             
+          #       variables:
+          #         ulm_card_graph_color: "var(--google-blue)"
+          #         ulm_card_graph_name: Motion 
+          #         ulm_card_graph_entity: binary_sensor.tapo_camera_87e7_cell_motion_detection
+          #         ulm_card_graph_type: bar
+          #         ulm_card_graph_hours: 12
+          #         ulm_card_graph_points: 6               
+          # - type: 'custom:button-card'
+          #   template: chips_blank  
+          #   style: |
+          #     ha-card#card {background: transparent !important;}  
+          # - type: grid
+          #   columns: 2
+          #   square: false
+          #   cards:                  
+          #     - type: custom:button-card
+          #       template: card_speedtest_joy
+          #       variables:
+          #         ulm_custom_card_irmajavi_speedtest_download_speed_entity: "sensor.speedtest_download"
+          #         ulm_custom_card_irmajavi_speedtest_upload_speed_entity: "sensor.speedtest_upload"
+          #         ulm_custom_card_irmajavi_speedtest_ping_entity: "sensor.speedtest_ping"                  
+          #         ulm_custom_card_irmajavi_speedtest_color: blue
+          #         ulm_custom_card_irmajavi_speedtest_router_name: Home
+          #         ulm_custom_card_irmajavi_speedtest_router_model: K2P 
+          #         ulm_custom_card_unit: "Mbps"  
+
+
+
+      - type: "vertical-stack"
+        cards:     
+          - type: "horizontal-stack"
+            cards:        
+              - type: 'custom:button-card'
+                color_type: blank-card 
+                style: |
+                  ha-card#card {background: transparent !important;}    
+              - type: custom:button-card
+                template: chip_time 
+                styles:
+                  card:
+                    - backdrop-filter: var(--bg-filter)
+                    - background: var(--card-blur-color)                    
+          - type: "custom:button-card"
+            template: "card_title_joy"
+            name: "Peeping Tom "
+            label: "This is the Minimalist-light-card"
+            style: |
+              ha-card#card {backdrop-filter: none !important;}
+          - type: 'custom:button-card'
+            template: card_computer_status_joy
+            variables:
+              ulm_card_graph_color: "var(--google-blue)"
+              ulm_card_graph_entity: sensor.processor_temperature
+              ulm_card_graph_hours: 2
+              ulm_card_graph_points: 20                  
+          # - type: 'custom:button-card'
+          #   template: card_rpi_status_joy
+          #   variables:
+          #     ulm_card_graph_color: "var(--google-blue)"
+          #     ulm_card_name: "Orange Pi 3TLS"
+          #     ulm_card_graph_hours: 2
+          #     ulm_card_graph_points: 20       
+          - type: custom:vertical-stack-in-card
+            style: |
+              ha-card {backdrop-filter: var(--bg-filter); background: var(--card-blur-color) !important;}                
+            cards:
+              - type: "custom:button-card"
+                template: card_aria2_header_joy              
+                variables:
+                  ulm_card_aria2_entry: "4271d4ae3d3ba42f55d32f49ac1b0fbc"
+                  ulm_card_aria2_download_speed: sensor.aria_192_168_6_240_download_speed
+                  ulm_card_aria2_upload_speed: sensor.aria_192_168_6_240_upload_speed   
+                styles:
+                  card:
+                    - box-shadow: "none"
+                    - border-radius: "var(--border-radius) var(--border-radius) 0px 0px"
+                    - background: transparent  
+                    - backdrop-filter: none                                 
+              - type: 'custom:aria2-card' 
+                entry_id: 4271d4ae3d3ba42f55d32f49ac1b0fbc
+                style: |
+                    ha-card {
+                      background: transparent !important;
+                      box-shadow: none;
+                    }                                                  
+          - type: custom:vertical-stack-in-card
+            style: |
+              ha-card {backdrop-filter: var(--bg-filter); background: var(--card-blur-color) !important;}                
+            cards:
+              - type: "custom:button-card"
+                template: card_remote_header_joy
+                entity: remote.living_room_tv              
+                variables:
+                  ulm_card_media_player_name: "Google TV"
+                  ulm_card_remote_volume_id: media_player.living_room_tv
+                styles:
+                  card:
+                    - box-shadow: "none"
+                    - border-radius: "var(--border-radius) var(--border-radius) 0px 0px"
+                    - background: transparent  
+                    - backdrop-filter: none                   
+              - type: custom:android-tv-card
+                style: |
+                  remote-button {flex-grow: 1;} 
+                  remote-keyboard {flex-grow: 1; display: flex; }
+                  .row {padding: 8px 0px !important; }
+                  .type-custom-android-tv-card > .row:nth-child(1) {gap: 0px; padding-top:4px !important;}
+                  .type-custom-android-tv-card {background: transparent !important; padding-top:0px;}           
+                remote_id: remote.living_room_tv
+                slider_id: media_player.living_room_tv_2
+                keyboard_id: media_player.android_tv
+                enable_double_click: true
+                double_click_keycode: back              
+                rows:
+                  - - keyboard
+                    - previous
+                    - play_pause
+                    - next
+                    - enter                                       
+                  - - touchpad
+                  - - back
+                    - home
+                    - backr  
+                  - - youtube
+                    - bilibili
+                    - emby
+                    - netflix
+                    - primevideo
+                custom_keys:
+                  backr:
+                    icon: mdi:arrow-u-left-bottom-bold
+                    key: BACK
+                    style:
+                      height: 54px
+                      width: 100%               
+                  back:
+                    icon: mdi:arrow-u-right-bottom-bold
+                    key: BACK
+                    style:
+                      height: 54px
+                      width: 100% 
+                  home:
+                    service: remote.send_command
+                    data:
+                      command: HOME
+                    target:
+                      entity_id: remote.living_room_tv                    
+                    style:
+                      key: HOME                      
+                      height: 54px                  
+                      width: 100% 
+                  previous:
+                    key: MEDIA_PREVIOUS
+                    style:                
+                      width: 100%
+                      left: -4px
+                      border-radius: "20px 0 0 20px"
+                      border-style: solid
+                      border-width: "2px 2px 2px 2px"
+                      border-color: rgba(var(--color-theme),0.05)                       
+                  play_pause:
+                    key: MEDIA_PLAY_PAUSE                    
+                    style:                  
+                      width: 100%
+                      border-radius: "0"
+                      border-style: solid
+                      border-width: "2px 0"
+                      border-color: rgba(var(--color-theme),0.05)                        
+                  next:
+                    key: MEDIA_NEXT                     
+                    style:                 
+                      width: 100%
+                      border-radius: "0 20px 20px 0"
+                      border-style: solid
+                      border-width: 2px
+                      border-color: rgba(var(--color-theme),0.05) 
+                  keyboard:
+                    style:
+                      margin: 0px  
+                      left: 0px
+                      width: 56px
+                      height: 46px
+                  enter:
+                    icon: mdi:check-circle-outline
+                    key: ENTER
+                    style:                                                                                                                            
+                      margin: 0 0 0 auto
+                      right: 0px
+                      width: 56px                    
+                      height: 46px                    
+                custom_sources:
+                  primevideo:
+                    service: media_player.select_source
+                    data:
+                      source: Prime Video
+                    target:
+                      entity_id: media_player.android_tv
+                  netflix:
+                    service: media_player.select_source
+                    data:
+                      source: Netflix
+                    target:
+                      entity_id: media_player.android_tv
+                  youtube:
+                    service: media_player.select_source
+                    data:
+                      source: Youtube
+                    target:
+                      entity_id: media_player.android_tv
+                  bilibili:
+                    icon: fapro:bilibili
+                    service: media_player.select_source
+                    data:
+                      source: Bilibili
+                    target:
+                      entity_id: media_player.android_tv 
+                custom_icons:                                                        
+                button_style:
+                  '--size': 24px
+                  display: flex
+                  margin: auto
+                  height: 42px
+                  width: 42px
+                  background-color: "rgba(var(--color-theme),0.05)"
+                  border-radius: "14px"
+                touchpad_style:
+                  # background: "rgba(var(--color-theme),0.05)"
+                  height: 200px
+                  background: center/102% scroll no-repeat url("/local/wallpaper/mobile/leaves6.jpg")
+                  border-style: solid
+                  border-width: 3px
+                  border-color: rgba(var(--color-theme),0.05)   
+                  opacity: 0.7    
+
+
+  - title: '4'
+    path: '4'
+    icon: mdi:chandelier
+    badges: []
+    cards:
+      - type: "vertical-stack"
+        cards:    
+        - type: horizontal-stack 
+          cards:
+            - type: 'custom:button-card'
+              template: chip_back
+              variables:
+                ulm_chip_back_path: /ui-lovelace-minimalist/0
+            - type: 'custom:button-card'
+              template: chip_icon_only
+              variables:
+                ulm_chip_icon_only: '❤️' 
+              tap_action:
+                action: "call-service"
+                service: frontend.reload_themes  
+            - type: 'custom:button-card'
+              template: chip_icon_only
+              variables:
+                ulm_chip_icon_only: '⚙' 
+              tap_action:
+                action: "navigate"
+                navigation_path: "/config/dashboard"   
+       
+        - type: "custom:button-card"
+          template: "card_title_joy"
+          name: "Congrats with your installation 🎉"
+          label: "Explore here some of the wonderful 'Minimalistic-UI' cards we offer"
+          style: |
+            ha-card#card {backdrop-filter: none !important;} 
+        - type: "custom:button-card"
+          template: "card_automation_sensor_joy" 
+          entity: "automation.heater"
+          variables:
+            ulm_card_min_number_entity: "input_number.radiator_min"
+            ulm_card_max_number_entity: "input_number.radiator_max" 
+        - type: "custom:button-card"
+          template: "card_automation_test_joy" 
+          entity: "automation.heater"
+          variables:
+            ulm_card_min_number_entity: "input_number.radiator_min"
+            ulm_card_max_number_entity: "input_number.radiator_max"                
+        - type: "custom:button-card"
+          template: "card_title_joy"
+          label: "Alarms"
+          name: "Ring Ding Ding !"
+          style: |
+            ha-card#card {backdrop-filter: none !important;}                                     
+        - type: grid
+          columns: 2
+          square: false             
+          cards:               
+            - type: "custom:button-card"
+              template:
+                - card_input_datetime_joy
+              entity: automation.alarm
+              variables:
+                ulm_card_input_datetime_name: "Morning Alarm"
+                ulm_card_input_datetime_entity: input_datetime.morning_alarm    
+        - type: grid
+          columns: 3
+          square: false             
+          cards:                  
+            - type: "custom:button-card"
+              template: card_battery_mini_joy
+              entity: sensor.curtain_281f_battery  
+            - type: "custom:button-card"
+              template:
+                - card_battery_mini_joy
+              entity: sensor.bot_85f0_battery
+              variables:
+                ulm_card_icon: "mdi:heating-coil"   
+            - type: "custom:button-card"
+              template:
+                - card_battery_mini_joy
+              entity: sensor.mi_home_battery_level    
+              variables:
+                ulm_card_icon: "mdi:thermometer-bluetooth"
+            - type: "custom:button-card"
+              template:
+                - card_battery_mini_joy
+              entity: sensor.pvvx_battery_level
+              variables:
+                ulm_card_icon: "mdi:thermometer-bluetooth"                                                         
+        - type: "custom:button-card"
+          template: "card_title_joy"
+          label: "Timers"
+          name: "Tick Tock !"
+          style: |
+            ha-card#card {backdrop-filter: none !important;}                      
+        - type: "custom:button-card"
+          template:
+            - card_timer_joy
+          entity: timer.timer_1
+          variables: 
+            ulm_card_default_color: var(--primary-color-plain) 
+      - type: "vertical-stack"
+        cards:                   
+          - type: "custom:gallery-joy-card"
+            entity: sensor.wallpaper_desktop
+            device: input_text.selectedwallpaper_desktop
+          # - type: button
+          #   tap_action:
+          #     action: navigate
+          #     navigation_path: '#kitchen2'          
+          #   name: Kitchen
+          #   icon: mdi:fridge 
+          - type: grid
+            columns: 2
+            square: false             
+            cards:                         
+              - type: "custom:colorpicker-joy-card"
+                device: 
+                  - input_text.color_foreground_desktop
+                  - input_text.color_background_desktop   
+          - type: 'custom:button-card'
+            template: chips_blank  
+            styles:
+              card:
+                - height: "190px"            
+            style: |
+              ha-card#card {background: transparent !important;}                                     
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-pop-up
+            hash: '#kitchen'
+            name: Kitchen
+            icon: mdi:fridge
+            entity: light.hue_color_lamp_1
+            state: sensor.mi_home_temperature
+            back_open: true
+            margin: 4px
+            margin_top_mobile: 80px
+            bg_color: rgb(30,30,30)
+            bg_opacity: 20 
+            bg_blur: 30  
+            styles: |
+                #root {
+                  width: 96% !important;
+                } 
+                #header-container > div {
+                  backdrop-filter: none !important;
+                  background-color: rgba(var(--color-theme),0.05) !important;
+                } 
+                #header-container > div > div.header-icon {
+                  background-color: rgba(var(--primary-color-plain),0.4) !important;
+                }
+                #header-container > div > div.header-icon > ha-icon {
+                  color: rgba(var(--primary-color-plain),1) !important;                
+                }
+                #header-container > button.close-pop-up {
+                  background: rgba(244, 67, 54, 0.4);
+                }     
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-pop-up
+            hash: '#kitchen2'
+            name: Kitchen2
+            icon: mdi:fridge
+            entity: light.hue_color_lamp_1
+            state: sensor.mi_home_temperature
+            back_open: true
+            margin: 4px
+            margin_top_mobile: 80px
+            bg_color: rgb(30,30,30)
+            bg_opacity: 20 
+            bg_blur: 30  
+            styles: |
+                #root {
+                  width: 96% !important;
+                  box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.3) !important;
+                } 
+                #header-container > div {
+                  backdrop-filter: none !important;
+                  background-color: rgba(var(--color-theme),0.05) !important;
+                } 
+                #header-container > div > div.header-icon {
+                  background-color: rgba(var(--primary-color-plain),0.3) !important;
+                }
+                #header-container > div > div.header-icon > ha-icon {
+                  color: rgba(var(--primary-color-plain),1) !important;                
+                }
+                #header-container > button.close-pop-up {
+                  background: rgba(234, 144, 108, 0.3);
+                }  
+                            
+          - type: grid
+            columns: 2
+            square: false             
+            cards:                  
+              - type: "custom:button-card"
+                template:
+                  - card_battery_mini_joy
+                entity: sensor.curtain_281f_battery  
+              - type: "custom:button-card"
+                template:
+                  - card_battery_mini_joy
+                entity: sensor.curtain_281f_battery                   
+  - title: 'lights'
+    path: 'lights'
+    icon: mdi:waves
+    badges: []
+    cards:
+      # - type: custom:mod-card
+      #   card:            
+      #     type: custom:html-template-card
+      #     ignore_line_breaks: true
+      #     picture_elements_mode: true
+      #     content: >
+      #       <div style="position: relative; padding-top: 100%;">    
+      #       <iframe style="position: absolute; width: 100%; height: 100%; left: 0;
+      #       top: 0; color-scheme: none" src="/local/html/clock2/index.html" frameborder="none"
+      #       scrolling="no"></iframe>      
+      #       </div> 
+      #   style: |
+      #       ha-card {
+      #         backdrop-filter: var(--bg-filter); 
+      #         background: var(--card-blur-color) !important;
+      #         border-radius: var(--ha-card-border-radius);
+      #         box-shadow: var(--ha-card-box-shadow);
+      #       }                
+      # - type: grid
+      #   columns: 2
+      #   square: false
+      #   cards:             
+      #     - type: custom:mod-card
+      #       card:            
+      #         type: custom:html-template-card
+      #         ignore_line_breaks: true
+      #         picture_elements_mode: true
+      #         content: >
+      #           <div style="position: relative; padding-top: 100%;">    
+      #           <iframe style="position: absolute; width: 100%; height: 100%; left: 0;
+      #           top: 0; color-scheme: none" src="/local/html/clock2/index.html" frameborder="none"
+      #           scrolling="no"></iframe>      
+      #           </div> 
+      #       style: |
+      #           ha-card {
+      #             backdrop-filter: var(--bg-filter); 
+      #             background: var(--card-blur-color) !important;
+      #             border-radius: var(--ha-card-border-radius);
+      #             box-shadow: var(--ha-card-box-shadow);
+      #           } 
+
+         
+      # - type: custom:mod-card
+        # card:       
+          # type: iframe
+          # url: /local/html/index.html
+          # aspect_ratio: '1:1' 
+        # style: 
+          # .: |
+            # hui-iframe-card {
+              # color-scheme: none;
+            # }
+          # hui-iframe-card$: |
+            # ha-card.type-iframe {backdrop-filter: var(--bg-filter); background: var(--card-blur-color) !important;}              
+            
+            

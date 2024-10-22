@@ -1,0 +1,247 @@
+---
+card_input_datetime_joy:
+  show_name: false
+  show_icon: false
+  variables:
+    ulm_card_input_datetime_name: "n/a"
+    ulm_card_input_datetime_entity: "n/a"
+    ulm_card_default_color: var(--primary-color-plain)
+    ulm_card_icon: "[[[ return entity.attributes.icon ]]]"
+  triggers_update: "all"
+  styles:
+    grid:
+      - grid-template-areas: "'item1' 'item2'"
+      - grid-template-columns: "1fr"
+      - grid-template-rows: "min-content  min-content"
+      - row-gap: "12px"
+    card:
+      - border-radius: "var(--border-radius)"
+      - box-shadow: "var(--box-shadow)"
+      - padding: "12px"
+      - backdrop-filter: "var(--bg-filter)"   
+      - background: "var(--card-blur-color)"
+  state:
+    - value: "on"
+      styles:
+        card:
+          - background: >- 
+              [[[
+                let color = variables.ulm_card_default_color;
+                  return 'radial-gradient(at bottom, rgba(' + color + ',0.5) 0%, rgba(29,29,29,0) 70%) 50% 100% / 140% 70% no-repeat var(--card-blur-color)'
+                
+              ]]]     
+  custom_fields:
+    item1:
+      card:
+        type: "custom:button-card"
+        icon: "[[[ return variables.ulm_card_icon]]]"
+        template:
+          - "icon_info"
+          - "ulm_language_variables"    
+        styles:
+          icon:
+            - color: >
+                [[[
+                    let color = variables.ulm_card_default_color;
+                    if (entity.state != "on"){
+                      return 'rgba(var(--color-theme),0.2)';
+                    }
+                    else{
+                      return 'rgba(' + color + ',1)'
+                    }
+                ]]]
+          img_cell:
+            - background-color: >
+                [[[
+                    let color = variables.ulm_card_default_color;                  
+                    if (entity.state != "on"){
+                      return 'rgba(var(--color-theme),0.05)';
+                    }
+                    else{
+                      return 'rgba(' + color + ',0.2)'
+                    }
+                ]]] 
+          card:
+            - box-shadow: "none"
+            - background: none                     
+        entity: "[[[ return entity.entity_id ]]]"
+        name: "[[[ return variables.ulm_card_input_datetime_name ]]]"
+        label: >-
+            [[[
+                 var state = entity.state;
+                 return state;
+            ]]]           
+        tap_action:
+          action: "call-service"
+          service: automation.toggle
+          service_data:
+            entity_id: "[[[ return entity.entity_id ]]]"
+        hold_action:
+          action: "more-info"            
+    item2:
+      card:
+        type: "custom:button-card"
+        template: "list_3_items"
+        styles:
+          card:
+            - border-radius: "0"
+            - box-shadow: "none" 
+            - background: none                  
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              styles:
+                card:
+                  - height: 42px              
+              tap_action:
+                action: "call-service"
+                service: "input_datetime.set_datetime"
+                service_data:
+                  entity_id: "[[[ return variables.ulm_card_input_datetime_entity ]]]"
+                  time: >
+                    [[[
+                      let timeString = states[variables.ulm_card_input_datetime_entity].state;
+                      const timeRegex = /^([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/;
+                      if (!timeRegex.test(timeString)) {
+                        throw new Error("Invalid time format. Please use HH:SS:MM.");
+                      }
+                      const [hours, minutes, seconds] = timeString.split(':').map(Number);
+                      const date = new Date();
+                      date.setHours(hours, minutes, seconds, 0); 
+                      const timestamp = date.getTime() - 3600 * 1000
+                      const newdate = new Date(timestamp);
+                      const newhours = newdate.getHours().toString().padStart(2, '0');
+                      const newminutes = newdate.getMinutes().toString().padStart(2, '0');
+                      const newseconds = newdate.getSeconds().toString().padStart(2, '0');
+                      return `${newhours}:${newminutes}:${newseconds}`;
+                    ]]]
+              icon: "mdi:arrow-down"
+          item2:
+            card:
+              type: "custom:button-card"
+              template: "widget_text"
+              entity: "[[[ return variables.ulm_card_input_datetime_entity ]]]"
+              tap_action:
+                action: "call-service"
+                service: "input_datetime.set_datetime"
+                service_data:
+                  entity_id: "[[[ return variables.ulm_card_input_datetime_entity ]]]"
+                  time: >
+                    [[[
+                      let timeString = states[variables.ulm_card_input_datetime_entity].state;
+                      const timeRegex = /^([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/;
+                      if (!timeRegex.test(timeString)) {
+                        throw new Error("Invalid time format. Please use HH:SS:MM.");
+                      }
+                      const [hours, minutes, seconds] = timeString.split(':').map(Number);
+                      const date = new Date();
+                      date.setHours(hours, minutes, seconds, 0); 
+                      const timestamp = date.getTime() + 300 * 1000
+                      const newdate = new Date(timestamp);
+                      const newhours = newdate.getHours().toString().padStart(2, '0');
+                      const newminutes = newdate.getMinutes().toString().padStart(2, '0');
+                      const newseconds = newdate.getSeconds().toString().padStart(2, '0');
+                      return `${newhours}:${newminutes}:${newseconds}`;
+                    ]]]
+              hold_action:
+                action: "call-service"
+                service: "input_datetime.set_datetime"
+                service_data:
+                  entity_id: "[[[ return variables.ulm_card_input_datetime_entity ]]]"
+                  time: >
+                    [[[
+                      let timeString = states[variables.ulm_card_input_datetime_entity].state;
+                      const timeRegex = /^([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/;
+                      if (!timeRegex.test(timeString)) {
+                        throw new Error("Invalid time format. Please use HH:SS:MM.");
+                      }
+                      const [hours, minutes, seconds] = timeString.split(':').map(Number);
+                      const date = new Date();
+                      date.setHours(hours, minutes, seconds, 0); 
+                      const timestamp = date.getTime() - 300 * 1000
+                      const newdate = new Date(timestamp);
+                      const newhours = newdate.getHours().toString().padStart(2, '0');
+                      const newminutes = newdate.getMinutes().toString().padStart(2, '0');
+                      const newseconds = newdate.getSeconds().toString().padStart(2, '0');
+                      return `${newhours}:${newminutes}:${newseconds}`;
+                    ]]]
+          item3:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              styles:
+                card:
+                  - height: 42px
+              tap_action:
+                action: "call-service"
+                service: "input_datetime.set_datetime"
+                service_data:
+                  entity_id: "[[[ return variables.ulm_card_input_datetime_entity ]]]"
+                  time: >
+                    [[[
+                      let timeString = states[variables.ulm_card_input_datetime_entity].state;
+                      const timeRegex = /^([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/;
+                      if (!timeRegex.test(timeString)) {
+                        throw new Error("Invalid time format. Please use HH:SS:MM.");
+                      }
+                      const [hours, minutes, seconds] = timeString.split(':').map(Number);
+                      const date = new Date();
+                      date.setHours(hours, minutes, seconds, 0); 
+                      const timestamp = date.getTime() + 3600 * 1000
+                      const newdate = new Date(timestamp);
+                      const newhours = newdate.getHours().toString().padStart(2, '0');
+                      const newminutes = newdate.getMinutes().toString().padStart(2, '0');
+                      const newseconds = newdate.getSeconds().toString().padStart(2, '0');
+                      return `${newhours}:${newminutes}:${newseconds}`;
+                    ]]]
+              icon: "mdi:arrow-up"
+
+# input_datetime:
+#   tap_action:
+#     action: "more-info"
+#   show_last_changed: true
+
+# widget_text:
+#   tap_action:
+#     action: "toggle"
+#   show_icon: false
+#   show_label: true
+#   show_name: false
+#   label: >-
+#     [[[
+#       var unit = entity.attributes.unit_of_measurement != null ? ' ' + entity.attributes.unit_of_measurement : ''
+#       if (entity.state == 'on') {
+#         return variables.ulm_on;
+#       } else if (entity.state == 'off') {
+#         return variables.ulm_off;
+#       } else if (entity.state == 'unavailable') {
+#         return variables.ulm_unavailable;
+#       } else if (entity.state == 'idle') {
+#         return variables.ulm_idle;
+#       } else if (entity.state == 'open') {
+#         return variables.ulm_open;
+#       } else if (entity.state == 'closed') {
+#         return variables.ulm_closed;
+#       } else {
+#         return entity.state.slice(0,5);
+#       }
+#     ]]]
+#   styles:
+#     grid:
+#       - grid-template-areas: "'l'"
+#     card:
+#       - box-shadow: "none"
+#       - padding: "0px"
+#       - background-color: "rgba(var(--color-theme),0.05)"
+#       - border-radius: "14px"
+#       - place-self: "center"
+#       - height: "42px"
+#     state:
+#       - color: "rgba(var(--color-theme),0.9)"
+#     label:
+#       - font-weight: "bolder" 
+#       - font-size: "14.5px"      
+#   size: "20px"
+#   color: "var(--google-grey)"

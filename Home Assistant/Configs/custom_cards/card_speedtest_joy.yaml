@@ -1,0 +1,206 @@
+---
+card_speedtest_joy:
+  triggers_update: "all"
+  show_name: false
+  show_label: false
+  variables:
+    ulm_custom_card_irmajavi_speedtest_color: "blue"
+    ulm_custom_card_irmajavi_speedtest_router_name: "router_name"
+    ulm_custom_card_irmajavi_speedtest_router_model: "router_model"
+    ulm_custom_card_download: ""
+    ulm_custom_card_upload: ""  
+    ulm_custom_card_ping: ""          
+  styles:
+    grid:
+      - grid-template-areas: "'item1 item2'"
+      - grid-template-columns: "1fr 2fr"
+      - grid-template-rows: "min-content"
+      - column-gap: 12px
+    card:
+      - border-radius: "var(--border-radius)"
+      - box-shadow: "var(--box-shadow)"
+      - padding: "12px"
+      - backdrop-filter: var(--bg-filter)
+      - background: var(--card-blur-color)      
+  custom_fields:
+    item1:
+      card:
+        type: "custom:button-card"
+        entity: >
+          [[[ return variables.ulm_custom_card_irmajavi_speedtest_ping_entity; ]]]        
+        tap_action:
+          action: >
+            [[[ return 'more-info' ]]]    
+        show_last_changed: false
+        show_label: true
+        show_name: true
+        show_icon: true
+        label: |
+          [[[
+              var state2 = "";
+              if (states[variables.ulm_custom_card_irmajavi_speedtest_ping_entity].state){
+                var state2 = states[variables.ulm_custom_card_irmajavi_speedtest_ping_entity].state;
+                if (states[variables.ulm_custom_card_irmajavi_speedtest_ping_entity].attributes.unit_of_measurement){
+                  state2 += states[variables.ulm_custom_card_irmajavi_speedtest_ping_entity].attributes.unit_of_measurement;
+                }
+              }
+              return state2;
+          ]]]
+        name: >-
+          [[[ return variables.ulm_custom_card_irmajavi_speedtest_router_name
+          ]]]
+        icon: "mdi:wifi"
+        style:
+          .: |
+            ha-card#card.button-card-main.type-custom-button-card {
+            }
+        styles:
+          icon:
+            - color: >-
+                [[[ return
+                `rgba(var(--primary-color-plain),
+                1)`; ]]]
+            - width: "20px"
+          label:
+            - justify-self: "center"
+            - align-self: "start"
+            - font-weight: "bolder"
+            - font-size: "10px"
+            - filter: "opacity(40%)"
+          name:
+            - margin-top: "5px"
+            - justify-self: "center"
+            - font-weight: "bold"
+            - font-size: "12px"
+          img_cell:
+            - background-color: >-
+                [[[ return
+                `rgba(var(--primary-color-plain),
+                0.2)`; ]]]
+            - border-radius: "50%"
+            - place-self: "center"
+            - width: "38px"
+            - height: "38px"
+          grid:
+            - grid-template-areas: "'i' 'n' 'l'"
+          card:
+            - box-shadow: "none"
+            - background-color: transparent 
+    item2:
+      card:
+        type: "custom:button-card"
+        styles:
+          grid:
+            - grid-template-areas: "'item1' 'item2'"
+            - grid-template-columns: "1fr"
+            - grid-template-rows: "min-content min-content"
+            - row-gap: "6px"
+          card:
+            - box-shadow: "none"
+            - padding: "0px"
+            - border-radius: "0px" 
+            - background-color: transparent               
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card"
+              color: "var(--primary-color)"              
+              show_label: true
+              show_icon: false
+              name: "Download"
+              entity: >
+                [[[ return variables.ulm_custom_card_irmajavi_speedtest_download_speed_entity; ]]]
+              tap_action:
+                action: >
+                  [[[ return 'more-info' ]]]                  
+              label: |
+                [[[
+                    var state3 = "";
+                    if (states[variables.ulm_custom_card_irmajavi_speedtest_download_speed_entity].state){
+                      var state3 = states[variables.ulm_custom_card_irmajavi_speedtest_download_speed_entity].state;
+                      if (variables.ulm_custom_card_unit){
+                          state3 += variables.ulm_custom_card_unit; 
+                        }
+                      else if (states[variables.ulm_custom_card_irmajavi_speedtest_download_speed_entity].attributes.unit_of_measurement){
+                        state3 += states[variables.ulm_custom_card_irmajavi_speedtest_download_speed_entity].attributes.unit_of_measurement;
+                      }
+                    }
+                    return state3;
+                ]]]
+              styles:
+                icon:
+                  - width: "20px"
+                  - height: "20px"
+                label:
+                  - align-self: "center"
+                  - justify-self: "center"
+                  - font-weight: "bold"
+                  - font-size: "12px"
+                name:
+                  - align-self: "center"
+                  - justify-self: "center"
+                  - font-weight: "bold"
+                  - font-size: "8px"
+                  - filter: "opacity(40%)"
+                grid:
+                  - grid-template-areas: "'l' 'n'"
+                  - grid-template-columns: "auto"
+                  - grid-template-rows: "min-content"
+                card:
+                  - box-shadow: "none"
+                  - padding-top: "8px"
+                  - padding-botton: "5px"
+                  - background-color: "rgba(var(--color-theme),0.05)"
+                  - border-radius: "14px"
+                  - place-self: "center"
+                  - height: "45px"
+          item2:
+            card:
+              type: "custom:button-card"             
+              color: "var(--primary-color)"
+              show_label: true
+              show_icon: false
+              name: "Upload"
+              tap_action:
+                action: >
+                  [[[ return 'more-info' ]]]                
+              entity: >
+                [[[ return variables.ulm_custom_card_irmajavi_speedtest_upload_speed_entity; ]]]
+              label: |
+                [[[
+                    var state1 = "";
+                    if (states[variables.ulm_custom_card_irmajavi_speedtest_upload_speed_entity].state){
+                        var state1 = states[variables.ulm_custom_card_irmajavi_speedtest_upload_speed_entity].state;
+                        if (variables.ulm_custom_card_unit){
+                          state1 += variables.ulm_custom_card_unit;
+                        }
+                        else if (states[variables.ulm_custom_card_irmajavi_speedtest_upload_speed_entity].attributes.unit_of_measurement) {
+                          state1 += states[variables.ulm_custom_card_irmajavi_speedtest_upload_speed_entity].attributes.unit_of_measurement;
+                        }
+                    }
+                    return state1;
+                ]]]
+              styles:
+                label:
+                  - align-self: "center"
+                  - justify-self: "center"
+                  - font-weight: "bold"
+                  - font-size: "12px"
+                name:
+                  - align-self: "center"
+                  - justify-self: "center"
+                  - font-weight: "bold"
+                  - font-size: "8px"
+                  - filter: "opacity(40%)"
+                grid:
+                  - grid-template-areas: "'l' 'n'"
+                  - grid-template-columns: "auto"
+                  - grid-template-rows: "min-content"
+                card:
+                  - box-shadow: "none"
+                  - padding-top: "8px"
+                  - padding-botton: "5px"
+                  - background-color: "rgba(var(--color-theme),0.05)"
+                  - border-radius: "14px"
+                  - place-self: "center"
+                  - height: "45px"

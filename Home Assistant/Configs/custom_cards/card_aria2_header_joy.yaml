@@ -1,0 +1,102 @@
+---
+### Card Graph ###
+card_aria2_header_joy:
+  variables:
+    ulm_card_graph_color: "var(--info-color)"
+    ulm_card_graph_name: "n/a"
+    ulm_card_graph_hours: 1
+    ulm_card_graph_points: 60
+    ulm_card_graph_type: "fill"
+    ulm_card_aria2_entry: ""
+    ulm_card_aria2_download_speed: ""
+    ulm_card_aria2_upload_speed: ""    
+  triggers_update: "all"
+  styles:
+    grid:
+      - grid-template-areas: "'item1 item2'"
+      - grid-template-columns: "3fr 2fr"
+      - grid-template-rows: "min-content"
+    card:
+      - border-radius: "var(--border-radius)"
+      - box-shadow: "var(--box-shadow)"
+      - padding: "0"
+      - backdrop-filter: var(--bg-filter)
+      - background: var(--card-blur-color)       
+  custom_fields:
+    item1:
+      card:          
+        type: "custom:button-card"
+        icon: "mdi:raspberry-pi"     
+        label: |
+           [[[
+             let dl = states[variables.ulm_card_aria2_download_speed].state.toString();
+             let up = states[variables.ulm_card_aria2_upload_speed].state.toString();
+             return "↓" + dl + "MB/s  ↑" + up + "MB/s";
+           ]]]                 
+        name: "Aria2"            
+        template: "icon_info_computer_status"
+        styles:
+          icon:
+            - color: "rgba(var(--color-theme),0.9)" 
+          card:
+            - border-radius: "0px"
+            - box-shadow: "none"
+            - padding: "12px 12px 12px" 
+            - background-color: transparent 
+          name:
+            - align-self: "end"
+            - justify-self: "start"
+            - font-weight: "bold"
+            - font-size: "14px"
+            - margin-left: "12px"
+            - filter: "opacity(100%)"
+          label:
+            - justify-self: "start"
+            - align-self: "start"
+            - font-weight: "bolder"
+            - font-size: "13px"
+            - filter: "opacity(40%)"
+            - margin-left: "12px"           
+        custom_fields:
+          # notification: >
+            # [[[
+            #   if (states["binary_sensor.rpi_power_status"].state =="off"){
+            #     return `<ha-icon icon="mdi:check" style="color: var(--primary-background-color); border-radius: 20px; position: absolute; left: 38px; top: 8px; height: 12px; width: 12px; border: 2px solid var(--card-background-color); font-size: 10px; line-height: 8px; background-color: rgba(var(--color-green),1);"></ha-icon>`
+            #   }
+            #   else {
+            #     return `<ha-icon icon="mdi:exclamation" style="color: var(--primary-background-color); border-radius: 20px; position: absolute; left: 38px; top: 8px; height: 12px; width: 12px; border: 2px solid var(--card-background-color); font-size: 10px; line-height: 8px; background-color: rgba(var(--color-amber),1);"></ha-icon>`
+            #   }
+            # ]]]            
+    item2:
+      card:
+        type: "custom:mini-graph-card"
+        entities: > 
+          [[[
+            var ent = [];
+            ent.push(variables.ulm_card_aria2_download_speed);
+            return ent;
+          ]]]
+        line_color: var(--google-green)
+        show:
+          name: false
+          icon: false
+          legend: false
+          state: false
+          graph: "bar"
+        hours_to_show: "0.5"
+        points_per_hour: "80"
+        color_thresholds:
+          - value: 0.5
+            color: "#E61E63"    
+          - value: 3
+            color: "#FCD663"                   
+          - value: 5
+            color: "#80C994"      
+        height: 160
+        style: |
+          ha-card {
+            box-shadow: none;
+            border-radius: 0px;
+            padding: 0px 18px 0px 12px !important;
+            background-color: transparent !important;
+          }            

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        background-color: #ffffff;
+      }
+    </style>
+    <title>ESP Captive Portal</title>
+  </head>
+  <body>
+    <h1>ESP Captive Portal</h1>
+    <p>Hello World, this is ESP32!</p>
+    <div id="content"></div>
+    <hr>
+    <form action='/api/scan' method='get'><button>Scan WiFi</button></form><br/>
+    <button onclick="wsSentFcn()">Click</button><br/>   
+  </body>
+  <script>
+    const contentDiv = document.getElementById('content');
+    var ws;
+    function updateContent(message) {
+        contentDiv.textContent = message;
+    }
+    function wsSentFcn() {
+        ws.send("Hello world");
+    }
+    function connect() {
+        ws = new WebSocket(`ws://${window.location.hostname}:80/socket/ws`); // Replace with your server address
+        ws.onopen = function() {
+            console.log('Ws connected');
+    };
+    ws.onmessage = function(e) {
+        console.log('Message:', e.data);
+        updateContent(event.data);
+    };
+    ws.onclose = function(e) {
+        console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+        setTimeout(function() {
+        connect();
+        }, 2000);
+    };
+    ws.onerror = function(err) {
+        console.error('Socket encountered error: ', err.message, 'Closing socket');
+        ws.close();
+    };
+    }
+    connect();
+</script>  
+</html>

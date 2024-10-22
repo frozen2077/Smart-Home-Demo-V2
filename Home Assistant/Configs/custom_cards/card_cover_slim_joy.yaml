@@ -1,0 +1,311 @@
+---
+### Card Cover ###
+card_cover_slim_joy:
+  template:
+    - "ulm_translation_engine"
+  show_last_changed: false
+  variables:
+    ulm_card_cover_name: "[[[ return entity.attributes.friendly_name ]]]"
+  show_icon: false
+  show_name: false
+  show_label: false
+  style: |
+    #overlap {grid-area: item1 !important; z-index: 0;}     
+  styles:
+    grid:
+      - grid-template-areas: >
+          [[[
+            return "\"item1\"";
+          ]]]
+      - grid-template-columns: "1fr"
+      - grid-template-rows: >
+          [[[
+                  return "min-content";
+          ]]]
+      - column-gap: 28px    
+      - row-gap: "12px"
+    card:
+      - border-radius: "var(--border-radius)"
+      - box-shadow: "var(--box-shadow)"
+      - padding: "0px"
+      - backdrop-filter: var(--bg-filter)
+      - background: "var(--card-blur-color)" 
+  # state:
+  #   - value: "open"
+  #     styles:
+  #       card:
+  #         - background: rgba(var(--primary-color-plain),0.1)           
+  custom_fields:
+    item1:
+      card:
+        type: "custom:button-card"
+        style: |
+          #roundbar {grid-area: item1 !important; pointer-events: none; z-index: 3;}
+          #item1 { z-index: 2;} 
+          #item2 {pointer-events: none; z-index: 1;} 
+        show_icon: false
+        show_name: false
+        show_label: false
+        styles:
+          grid:
+            - grid-template-areas: "'item1 item2'"
+            - grid-template-columns: "min-content auto"
+            - grid-template-rows: "min-content"
+            - column-gap: "0px"      
+          card:
+            - background: "none" 
+            - padding: "12px"                 
+        custom_fields:
+          roundbar:
+            card:            
+              type: "custom:round-progressbar-card"
+              entity: "[[[return variables.ulm_card_cover_battery_entity]]]"
+              radius: "42px"
+              inner_radius: "30px"
+              width: "7"
+              opacity: [0.5, 0.3, 1]
+              circle_enabled: false
+              # tap_action:
+              #   action: 'call-service'
+              #   service: 'cover.toggle'
+              #   service_data: '' 
+              #   target:
+              #     entity_id: "[[[ return entity.entity_id ]]]"
+              # double_tap_action:
+              #   action: 'more-info'                
+              # hold_action:
+              #   action: 'more-info'
+              #   entity: "[[[ return entity.entity_id ]]]"                                 
+              color: >
+                [[[
+                  if (states[entity.entity_id].state == "open" || states[entity.entity_id].state == "closed"  ){
+                  return      ["var(--primary-color-plain)", "var(--primary-color-plain)","var(--primary-color-plain)", "var(--primary-color-plain)", "var(--primary-color-plain)", "var(--color-theme)"];
+                  }
+                  else {
+                    return  '[var(--color-theme),var(--color-theme),var(--color-theme),var(--color-theme),var(--color-theme),var(--color-theme)]';
+                  }
+                ]]]              
+          item1:
+            card:
+              type: "custom:button-card"
+              color: "var(--google-grey)"
+              show_icon: true
+              show_label: false
+              show_name: false              
+              entity: "[[[ return entity.entity_id ]]]"
+              tap_action:
+                action: 'more-info'
+              hold_action:
+                action: 'more-info'                
+              variables: >
+                [[[
+                  let vars = variables;
+                  if(variables.ulm_card_cover_enable_popup) {
+                    vars.ulm_custom_popup = {
+                      'template': 'popup_cover'
+                    };
+                  }
+                  return vars;
+                ]]]
+              icon: |
+                [[[
+                    var icon = "mdi:help-circle";
+                    if (typeof states[entity.entity_id].attributes.current_position === "undefined"){
+                      if (states[entity.entity_id].state == "closed"){
+                        if (variables.ulm_card_curtain_display_collapse_expand){
+                          var icon = "mdi:curtains-closed";
+                        } else if (variables.ulm_card_cover_garage){
+                          var icon = "mdi:garage-variant";
+                        } else if (variables.ulm_card_cover_gate){
+                          var icon = "mdi:gate";
+                        } else
+                          var icon = "mdi:roller-shade-closed";
+                      } else
+                        if (variables.ulm_card_curtain_display_collapse_expand){
+                          var icon = "mdi:curtains";
+                        } else if (variables.ulm_card_cover_garage){
+                          var icon = "mdi:garage-open-variant";
+                        } else if (variables.ulm_card_cover_gate){
+                          var icon = "mdi:gate-open";
+                        }else
+                          var icon = "mdi:roller-shade";
+                    } else {
+                      if (states[entity.entity_id].attributes.current_position == 0){
+                        if (variables.ulm_card_curtain_display_collapse_expand){
+                          var icon = "mdi:curtains-closed";
+                        } else if (variables.ulm_card_cover_garage){
+                          var icon = "mdi:garage-variant";
+                        } else if(variables.ulm_card_cover_gate){
+                          var icon = "mdi:gate";
+                        } else
+                          var icon = "mdi:roller-shade-closed";
+                      } else
+                        if (variables.ulm_card_curtain_display_collapse_expand){
+                          var icon = "mdi:curtains";
+                        } else if(variables.ulm_card_cover_garage){
+                          var icon = "mdi:garage-open-variant";
+                        } else if(variables.ulm_card_cover_gate){
+                          var icon = "mdi:gate-open";
+                        }
+                        else
+                          var icon = "mdi:roller-shade";
+                    }
+                    return icon ;
+                ]]]
+              styles:
+                grid:
+                  - grid-template-areas: "'i'"
+                  - grid-template-columns: "min-content"
+                  - grid-template-rows: "min-content"
+                card:
+                  - border-radius: "21px"
+                  - box-shadow: "none"
+                  - padding: "0px"              
+                  - background-color: transparent
+                icon:
+                  - color: >
+                      [[[
+                          if (typeof states[entity.entity_id].attributes.current_position === "undefined"){
+                            if (states[entity.entity_id].state == "closed"){
+                              return 'rgba(var(--color-theme),0.2)';
+                            } else
+                              return 'rgba(var(--primary-color-plain),1)'
+                          } else {
+                            if (states[entity.entity_id].attributes.current_position == 0){
+                              return 'rgba(var(--color-theme),0.2)';
+                            } else {
+                              return 'rgba(var(--primary-color-plain),1)'
+                            }
+                          }
+                      ]]]
+                img_cell:
+                  - border-radius: "50%"
+                  - place-self: "center"
+                  - width: "42px"
+                  - height: "42px"                
+                  - background-color: >
+                      [[[
+                          if (typeof states[entity.entity_id].attributes.current_position === "undefined"){
+                            if (states[entity.entity_id].state == "closed"){
+                              return 'rgba(var(--color-theme),0.05)';
+                            } else
+                              return 'rgba(var(--primary-color-plain),0.3)';
+                          } else {
+                            if (states[entity.entity_id].attributes.current_position == 0){
+                              return 'rgba(var(--color-theme),0.05)';
+                            } else {
+                              return 'rgba(var(--primary-color-plain),0.3)';
+                            }
+                          }
+                      ]]]
+          item2:
+            card:
+              type: "custom:button-card"
+              entity: "[[[ return entity.entity_id ]]]"
+              color: "var(--google-grey)"
+              show_label: true
+              show_name: true              
+              show_icon: false
+              entity: "[[[ return entity.entity_id ]]]"              
+              name: "[[[ return variables.ulm_card_cover_name ]]]"
+              label: >-
+                [[[
+                    if (entity.state !="unavailable"){
+                      if (typeof states[entity.entity_id].attributes.current_position === "undefined"){
+                        if (states[entity.entity_id].state == "closed"){
+                          return variables.ulm_translation_state;
+                        } else
+                          return variables.ulm_translation_state;
+                      } else {
+                        if (states[entity.entity_id].attributes.current_position == 0){
+                          return variables.ulm_translation_state;
+                        } else {
+                          return variables.ulm_translation_state + " • " + (states[entity.entity_id].attributes.current_position) + "%" ;
+                        }
+                      }
+                  } else {
+                    return variables.ulm_translation_state;
+                  }
+                ]]]
+              styles:
+                icon:
+                  - color: "rgba(var(--color-theme),0.2)"
+                label:
+                  - justify-self: "start"
+                  - align-self: "start"
+                  - font-weight: "bolder"
+                  - font-size: "12px"
+                  - filter: "opacity(40%)"
+                  - margin-left: "12px"
+                name:
+                  - align-self: "end"
+                  - justify-self: "start"
+                  - font-weight: "bold"
+                  - font-size: "14px"
+                  - margin-left: "12px"
+                state:
+                  - justify-self: "start"
+                  - align-self: "start"
+                  - font-weight: "bolder"
+                  - font-size: "12px"
+                  - filter: "opacity(40%)"
+                  - margin-left: "12px"
+                img_cell:
+                  - background-color: "rgba(var(--color-theme),0.05)"
+                  - border-radius: "50%"
+                  - place-self: "center"
+                  - width: "42px"
+                  - height: "42px"
+                grid:
+                  - grid-template-areas: "'i n' 'i l'"
+                  - grid-template-columns: "min-content auto"
+                  - grid-template-rows: "min-content min-content"
+                card:
+                  - border-radius: "21px 8px 8px 21px"
+                  - box-shadow: "none"
+                  # - background-color: "rgba(var(--color-theme),0)" 
+                  - overflow: "visible"
+                  - padding: "6px"
+                  - margin-left: "-6px"
+                  - background-color: "rgba(0,0,0,0)"
+                  - max-height: 30px                               
+    overlap:
+      card:
+        type: "custom:my-slider-v2"
+        entity: "[[[ return entity.entity_id ]]]"
+        radius: "14px"
+        height: "100%"
+        vertical: false
+        flipped: false
+        inverse: false
+        styles:
+          card: 
+            - height: 66px
+            - padding: 6px
+          container:
+            - border-radius: 'calc( var(--border-radius) - 4px)'  
+          track:
+            - background: >
+                [[[
+                      return "none";                 
+                ]]]
+          progress:
+            - background: >
+                [[[
+                  return 'radial-gradient(at left, rgba(var(--primary-color-plain),0.5) 0%, rgba(var(--primary-color-plain),0) 80%) 80% 50% / 120% 700% no-repeat transparent';                
+                ]]]
+            - border-radius: '0 calc( var(--border-radius) - 4px) calc( var(--border-radius) - 4px) 0'  
+            - display: flex
+          thumb:
+            - background: 'rgba(255,255,255,0.2)'
+            - border-radius: 14px  
+            - right: 10px
+            - height: 35%
+            - width: 3px  
+            - place-self: center        
+        card_mod:
+        style: |
+          ha-card {
+            box-shadow: none;
+            background-color: transparent;
+          }     

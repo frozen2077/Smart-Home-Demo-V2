@@ -1,0 +1,282 @@
+---
+### Card Light ###
+card_automation_test_joy:
+  template:
+    - "ulm_language_variables"
+  variables:
+    ulm_card_min_number_entity: ""
+    ulm_card_max_number_entity: ""
+  show_icon: false
+  show_name: false
+  show_label: false
+  triggers_update: "all"  
+  state:
+    - value: "on"
+      styles:
+        card:
+          - background: >-
+              [[[            
+                  return 'radial-gradient(at left, rgba(var(--primary-color-plain),0.5) 0%, rgba(var(--primary-color-plain),0) 50%) 80% 50% / 120% 700% no-repeat var(--card-blur-color)';
+              ]]]
+  styles:
+    grid:
+      - grid-template-areas: >
+          [[[
+                    return "\"item1 item2\"";
+          ]]]
+      - grid-template-columns: >
+          [[[
+                    return "2fr 3fr";
+          ]]]
+      - grid-template-rows: >
+          [[[
+                    return "min-content";                   
+          ]]]
+      - column-gap: "12px"
+    card:
+      - border-radius: "100px"
+      - box-shadow: "var(--box-shadow)"
+      - padding: "8px"
+      - backdrop-filter: var(--bg-filter)   
+      - background-color: var(--card-blur-color)       
+    custom_fields:
+           
+  custom_fields:
+    item1:
+      card:
+        type: "custom:button-card"
+        show_icon: false
+        show_name: false
+        show_label: false
+        styles:
+          grid:
+            - grid-template-areas: "'item1 item2'"
+            - grid-template-columns: "1fr 3fr"
+            - grid-template-rows: "min-content"
+            - column-gap: "7px"
+          card:
+            - box-shadow: none
+            - padding: "0"
+            - backdrop-filter: none
+            - background: none
+            - border-radius: 0
+        style: |
+          #roundbar {grid-area: item1 !important; pointer-events: none;}    
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card"
+              entity: "[[[ return entity.entity_id ]]]"
+              color: "var(--google-grey)"
+              show_icon: true
+              show_label: false
+              show_name: false
+              icon: '[[[ return entity.attributes.icon || "mdi\:robot" ]]]'
+              styles:
+                grid:
+                  - grid-template-areas: "'i'"
+                card:
+                  - place-self: "center"
+                  - border-radius: calc(var(--border-radius) - 4px)
+                  - box-shadow: "var(--box-shadow)"
+                  - padding: "8px"
+                  - backdrop-filter: var(--bg-filter)   
+                  - background-color: var(--card-blur-color)   
+                card:
+                  - border-radius: "0"
+                  - box-shadow: "none"
+                  - padding: "0px"
+                  - background: transparent
+                  - width: "50px"
+                  - height: "50px" 
+                icon:
+                  - color: >
+                      [[[
+                        if (entity.state != "on"){
+                          return "rgba(var(--color-theme),1)";
+                        }
+                        else {
+                          return 'rgba(var(--primary-color-plain),1)'
+                        }
+                      ]]]                                         
+                img_cell:
+                  - background-color: >
+                      [[[
+                        if (entity.state != "on"){
+                          return "rgba(var(--color-theme),0.05)";
+                        }
+                        else {
+                          return 'rgba(var(--primary-color-plain),0.3)'
+                        }
+                      ]]]                   
+                  - border-radius: "50%"
+                  - place-self: "center"
+                  - width: "100%"
+                  - height: "100%"                     
+          roundbar:
+            card:            
+              type: "custom:round-progressbar-card"
+              entity: sensor.dht22_temperature
+              radius: "50px"
+              inner_radius: "38px"
+              width: "7"
+              circle_enabled: false
+              # tap_action:
+              #   action: 'call-service'
+              #   service: 'automation.toggle'
+              #   service_data: '' 
+              #   target:
+              #     entity_id: 'automation.heater'
+              # double_tap_action:
+              #   action: 'more-info'                
+              # hold_action:
+              #   action: 'more-info'
+              #   entity: 'automation.heater'                                 
+              color: >
+                [[[
+                  if (states["automation.heater"].state != "on" ){
+                    return '[var(--color-theme),var(--color-theme),var(--color-theme),var(--color-theme),var(--color-theme),var(--color-theme)]';
+                  }
+                  else {
+                    return '';
+                  }
+                ]]]                
+          item2:
+            card:
+              type: "custom:button-card"
+              show_icon: false
+              entity: "[[[ return entity.entity_id ]]]"
+              template:
+                - "icon_info"
+              label: "[[[ return entity.state ]]]"
+              styles:
+                card:
+                  - padding: "6px"
+                  - margin-left: "-6px"
+                  - background-color: "rgba(0,0,0,0)"
+                name: 
+                  - margin-left: 6px  
+                label: 
+                  - margin-left: 6px                    
+              custom_fields:      
+
+    item2:
+      card:
+        type: "custom:button-card"
+        styles:
+          grid:
+            - grid-template-areas: "'item1 item2'"
+            - grid-template-columns: "1fr 1fr"
+            - grid-template-rows: "min-content"
+            - justify-content: center
+            - column-gap: 8px
+          card:
+            - padding: "0 4px 0 0"
+            - background: "none"
+            - border-radius: "0"
+            - box-shadow: "none"          
+        custom_fields:
+          item1:
+            card:  
+              type: entities                   
+              entities:               
+                - entity:  "[[[ return variables.ulm_card_min_number_entity ]]]" 
+                  style:
+                    hui-generic-entity-row:
+                      .: |
+                        ha-textfield {border-radius: 0px; height: 38px; width: 100%;   }
+                      $: |
+                        state-badge, .info {display: none;} 
+                      ha-textfield $: |
+                        .mdc-line-ripple {display:none;} 
+                        .mdc-text-field {padding: 0 12px !important;}                  
+                        .mdc-text-field__affix {padding: 0 !important;}                        
+                        .mdc-text-field__input, .mdc-text-field__affix {font-weight: 600 !important; color: rgba(137,205,255,0.9) !important;}          
+              style: 
+                .: |
+                  ha-card {background: transparent; box-shadow: none; padding: 0px;}  
+                  #states {padding: 0px;} 
+                  hui-input-number-entity-row {border-radius: 30px; background: rgba(137,205,255,0.2); border-style: solid; border-width: 3px; border-color: rgba(137,205,255,0.4)}     
+
+                # hui-input-number-entity-row$: 
+                #   .: |  
+                #     ha-textfield {height: 42px;}                                     
+                #   hui-generic-entity-row$: 
+                #     .: |
+                #       state-badge {display:none;}  
+                #       .info {display:none;}  
+                #   ha-textfield$: |
+                #     .mdc-line-ripple {display:none;} 
+                #     .mdc-text-field {padding: 0 12px !important;}                  
+                #     .mdc-text-field__affix {padding: 0 !important;}                        
+                #     .mdc-text-field__input {font-weight: 500;} 
+
+          item2:
+            card:  
+              type: entities                    
+              entities:               
+                - entity:  "[[[ return variables.ulm_card_max_number_entity ]]]"  
+                  style:
+                    hui-generic-entity-row:
+                      .: |
+                        ha-textfield {border-radius: 0px; height: 38px; width: 100%;   }
+                      $: |
+                        state-badge, .info {display: none;} 
+                      ha-textfield $: |
+                        .mdc-line-ripple {display:none;} 
+                        .mdc-text-field {padding: 0 12px !important;}                  
+                        .mdc-text-field__affix {padding: 0 !important;}                        
+                        .mdc-text-field__input, .mdc-text-field__affix {font-weight: 600 !important; color: rgba(255,154,108,0.9) !important;}          
+              style: 
+                .: |
+                  ha-card {background: transparent; box-shadow: none; padding: 0px;}  
+                  #states {padding: 0px;} 
+                  hui-input-number-entity-row {border-radius: 30px; background: rgba(255,154,108,0.2); border-style: solid; border-width: 3px; border-color: rgba(255,154,108,0.4)}      
+                                                               
+          # item1:
+          #   card:           
+          #     type: custom:mod-card
+          #     style: 
+          #       .: |
+          #         ha-card.type-entities {
+          #           background: transparent;
+          #           box-shadow: none;            
+          #         } 
+          #         ha-card #states {
+          #           padding: 0px;
+          #         } 
+          #       slider-entity-row$: 
+          #         .: |
+          #           .state {font-size: 12px;}
+          #           .wrapper {height: 24px !important;}     
+          #           ha-slider.full {width: 150px !important;}
+
+          #     card:                        
+          #       type: custom:slider-entity-row
+          #       entity: "[[[ return variables.ulm_card_min_number_entity ]]]"
+          #       hide_state: false
+          #       full_row: true
+          #       grow: true                      
+          # item2:
+          #   card:                                                         
+          #     type: custom:mod-card
+          #     style: 
+          #       .: |
+          #         ha-card.type-entities {
+          #           background: transparent;
+          #           box-shadow: none;            
+          #         } 
+          #         ha-card #states {
+          #           padding: 0px;
+          #         } 
+          #       slider-entity-row$: 
+          #         .: |
+          #           .state {font-size: 12px;}
+          #           .wrapper {height: 24px !important;}     
+          #           ha-slider.full {width: 150px !important;}
+          #     card:                        
+          #       type: custom:slider-entity-row
+          #       entity: "[[[ return variables.ulm_card_max_number_entity ]]]"
+          #       hide_state: false
+          #       full_row: true
+          #       grow: true    

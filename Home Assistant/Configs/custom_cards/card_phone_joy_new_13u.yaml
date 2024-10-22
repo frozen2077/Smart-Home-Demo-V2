@@ -1,0 +1,452 @@
+---
+### Card Battery ###
+card_phone_joy_new_13u:
+  variables:
+    ulm_card_battery_attribute:
+    ulm_card_battery_battery_state_entity_id:
+    ulm_card_battery_charger_type_entity_id:
+    ulm_card_battery_battery_level_danger:
+    ulm_card_battery_battery_level_warning:
+    ulm_card_battery_color_battery_level_danger: "var(--google-red)"
+    ulm_card_battery_color_battery_level_warning: "var(--google-yellow)"
+    ulm_card_battery_color_battery_level_ok: "var(--google-green)"
+    ulm_card_battery_temp:
+    ulm_card_name: "Mi"
+    ulm_card_wifi_freq:
+    ulm_card_wifi_speed:
+    ulm_card_wifi_signal:
+    ulm_card_wifi_state:
+    ulm_card_internal_storage:
+    ulm_card_external_storage:
+    ulm_card_picture: 
+  triggers_update: "all"
+  show_icon: false
+  show_label: false
+  show_name: false  
+  styles:
+    grid:
+      - grid-template-areas: "'item1 item6' 'item2 item5' 'item3 item4'"
+      - grid-template-columns: "1fr 1fr"
+    card:
+      - border-radius: "var(--border-radius)"
+      - box-shadow: "var(--box-shadow)"
+      - padding: "0"
+      - backdrop-filter: var(--bg-filter)
+      - background: var(--card-blur-color)        
+  custom_fields:
+    item1:
+      card:          
+        type: "custom:button-card"          
+        template: "icon_info_computer_status"
+        icon: |
+          [[[
+            // Get battery level
+            const battery_level = variables.ulm_card_battery_attribute !== null ?
+              states[entity.entity_id].attributes[variables.ulm_card_battery_attribute] :
+              states[entity.entity_id].state;
+            // Generate icon infix
+            let infix = "";
+            if (variables.ulm_card_battery_charger_type_entity_id == null) {
+              // Check wether the battery state is charging
+              infix = variables.ulm_card_battery_battery_state_entity_id !== null &&
+                states[variables.ulm_card_battery_battery_state_entity_id].state.toLowerCase() === "charging" ?
+                "-charging" : ""
+            } else {
+              // Select the infix based on the entity charging state
+              switch (states[variables.ulm_card_battery_charger_type_entity_id].state.toLowerCase()) {
+                case "wireless":
+                  infix = "-charging-wireless";
+                  break;
+                case "charging":
+                  infix = "-charging";
+                  break;
+                case "ac":
+                  infix = "-charging";
+                  break;
+                case "usb":
+                  infix = "-charging";
+                  break;
+                default:
+                  infix = "";
+              }
+            }
+            // Generate the icon based on the battery_level
+            let icon = "mdi:help-circle-outline";
+            if (battery_level == 100) {
+              icon = "mdi:battery";
+            } else if (battery_level < 10) {
+              icon = "mdi:battery" + infix + "-outline";
+            } else {
+              icon = "mdi:battery" + infix + "-" + Math.floor(battery_level / 10) * 10;
+            }
+            return icon;
+          ]]]
+        name: |
+          [[[
+            const battery_level = variables.ulm_card_battery_attribute !== null
+              ? states[entity.entity_id].attributes[variables.ulm_card_battery_attribute]
+              : states[entity.entity_id].state;
+            const battery_temp = variables.ulm_card_battery_temp !== null
+              ? states[variables.ulm_card_battery_temp].state
+              : "unavailable";              
+            return battery_level + "%" + " • " + battery_temp + "℃";
+          ]]]
+        label: |
+          [[[
+            return variables.ulm_card_name;
+          ]]]
+        styles:
+          icon:
+            - color: |
+                [[[
+                  const battery_level = variables.ulm_card_battery_attribute !== null ?
+                    states[entity.entity_id].attributes[variables.ulm_card_battery_attribute] :
+                    states[entity.entity_id].state;
+                  // Get the color based on battery_level
+                  let color = "rgba(var(--color-theme), 0.9)";
+                  if (battery_level !== "unavailable" && (variables.ulm_card_battery_battery_level_danger !== null || variables.ulm_card_battery_battery_level_warning !== null)) {
+                    if (battery_level <= variables.ulm_card_battery_battery_level_danger) {
+                      color = variables.ulm_card_battery_color_battery_level_danger;
+                    } else if (battery_level <= variables.ulm_card_battery_battery_level_warning) {
+                      color = variables.ulm_card_battery_color_battery_level_warning;
+                    } else {
+                      color = variables.ulm_card_battery_color_battery_level_ok;
+                    }
+                  }
+                  return color;
+                ]]]
+          card:
+            - border-radius: "0px"
+            - box-shadow: "none"
+            - padding: "12px 12px 12px"  
+            - background-color: transparent 
+          label:
+            - align-self: "end"
+            - justify-self: "start"
+            - font-weight: "bold"
+            - font-size: "14px"
+            - margin-left: "12px"
+            - filter: "opacity(100%)"
+          name:
+            - justify-self: "start"
+            - align-self: "start"
+            - font-weight: "bolder"
+            - font-size: "14px"
+            - filter: "opacity(40%)"
+            - margin-left: "12px"
+          grid:
+            - grid-template-areas: "'i l' 'i n'"
+            - grid-template-columns: "min-content auto"
+            - grid-template-rows: "min-content min-content"
+    item2:
+      card:
+        type: "custom:button-card"
+        show_icon: false
+        show_label: false
+        show_name: false
+        styles:
+          grid:
+            - grid-template-areas: "'item1 item2'"
+            - grid-template-columns: "1fr 3fr"
+          card:
+            - border-radius: "0px"
+            - box-shadow: none
+            - padding: "12px 12px 12px 12px"
+            - background-color: transparent             
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card"
+              icon: "mdi:harddisk"
+              template:
+                - "icon_only"
+              styles:
+                card:
+                  - border-radius: "0px"
+                  - box-shadow: "none"
+                  - padding: "0"
+                  - background-color: transparent 
+                img_cell:
+                  - background-color: "rgba(var(--color-theme),0.05)"
+                  - border-radius: "30%"
+                  - width: "42px"
+                  - height: "42px"                    
+              tap_action:
+                action: "more-info"
+          item2:
+            card:
+              type: custom:bar-card
+              positions:
+                name: 'outside'
+                icon: 'off'
+                state: 'on'
+                indicator: 'off'
+                value: 'outside'
+              name: "Internal Storage"
+              height: 6px
+              speed: 5
+              entities:
+                - entity: "[[[return variables.ulm_card_internal_storage]]]"
+              max: 100
+              min: 0
+              severity:
+                - color: rgba(var(--color-red),1)
+                  from: 0
+                  to: 10
+                - color: rgba(var(--color-amber),1)
+                  from: 10
+                  to: 30
+                - color: rgba(var(--color-green),1)
+                  from: 30
+                  to: 100
+              style: |
+                [[[
+                    const style = `bar-card-divider {display: none;}
+                      ha-card #states {padding: 0;}
+                      ha-card {box-shadow: none; padding: 0px 0px 0px 12.5px; border-radius: 0; background-color: transparent !important;} 
+                      bar-card-backgroundbar {right: 0px;} 
+                      bar-card-background {margin-right: 10px !important;}
+                      bar-card-currentbar {right: 0px !important;} 
+                      bar-card-card {flex-direction: column !important;}
+                      bar-card-name {margin: 0px auto 2px 0px !important; font-size: 10px; font-weight: bolder !important;}   
+                      bar-card-value {margin: 2px 0px auto 0px !important; font-size: 10px;font-weight: bolder !important; filter: opacity(40%); align-self: flex-start !important;} 
+                      bar-card-value::after {margin-left: 0%; content:                      
+                    `;
+                    const storage_level = states[variables.ulm_card_internal_storage].attributes["Free internal storage"];
+                    return style + "\"  (" + storage_level + ")\"\;\}";                    
+                ]]] 
+    item3:
+      card:          
+        type: "custom:button-card"          
+        template: "icon_info_computer_status"
+        icon: |
+          [[[ 
+            let infix = "";
+            let signal_level = "off";
+            if (states[variables.ulm_card_wifi_state].state !== "off") {
+              signal_level = states[variables.ulm_card_wifi_signal].state;
+              if (signal_level > -45) {infix = "-4";}
+              else if (signal_level > -55) {infix = "-3";}
+              else if (signal_level > -65) {infix = "-2";}              
+              else {infix = "-1";}
+            }
+            else {infix = "-off";}          
+            let icon = "mdi:wifi-strength";
+            icon = icon + infix;
+            return icon;
+          ]]]
+        label: |
+          [[[
+            var ssid = states[variables.ulm_card_wifi_connection].state;
+            return ssid;
+          ]]]
+        name: |
+          [[[
+            var strength = states[variables.ulm_card_wifi_signal].state;    
+            var speed = states[variables.ulm_card_wifi_speed].state; 
+            var frep = states[variables.ulm_card_wifi_freq].state;                 
+            return strength + "dB " + speed + "Mbps" ;
+          ]]]
+        styles:
+          icon:
+            - color: |
+                [[[
+                   let color = "";
+                   let signal_level = "off";
+                   if (states[variables.ulm_card_wifi_state].state !== "off") {
+                     signal_level = states[variables.ulm_card_wifi_signal].state;
+                     if (signal_level > -45) {color = "rgba(var(--color-green),1)";}
+                     else if (signal_level > -55) {color = "rgba(var(--color-blue),1)";}
+                     else if (signal_level > -65) {color = "rgba(var(--color-amber),1)";}              
+                     else {color = "rgba(var(--color-red),1)";}
+                   }
+                   else {color = "rgba(var(--color-grey),1)";}
+                   return color;
+                ]]]
+          card:
+            - border-radius: "0px"
+            - box-shadow: none
+            - padding: "12px 12px 12px" 
+            - background-color: transparent             
+          img_cell:
+            - border-radius: "14px"         
+          label:
+            - align-self: "end"
+            - justify-self: "start"
+            - font-weight: "bold"
+            - font-size: "14px"
+            - margin-left: "12px"
+            - filter: "opacity(100%)"
+          name:
+            - justify-self: "start"
+            - align-self: "start"
+            - font-weight: "bolder"
+            - font-size: "10px"
+            - filter: "opacity(40%)"
+            - margin-left: "12px"
+          grid:
+            - grid-template-areas: "'i l' 'i n'"
+            - grid-template-columns: "min-content auto"
+            - grid-template-rows: "min-content min-content" 
+    item4:
+      card:          
+        type: "custom:button-card" 
+        show_icon: false
+        show_label: false
+        show_name: false
+        name: "w"
+        styles:
+          card:
+            - background-image: variables.ulm_card_picture;
+            - background-repeat: no-repeat;
+            - background-position: 60% -80%;
+            - background-size: 80%  ;
+            - width: 177px;           
+        style: |
+          @media (max-width: 1600px) and (min-width: 1000px) and (max-height: 800px ) {
+            ha-card {
+              background-image: url("/local/13u.png");
+              background-repeat: no-repeat;
+              background-position: 60% 10%;
+              background-size: 74%  ;
+              width: 177px;
+            }          
+          }
+          @media (max-width: 1600px) and (min-width: 1000px ) and (min-height: 800px ) {
+            ha-card {
+              background-image: url("/local/13u.png");
+              background-repeat: no-repeat;
+              background-position: 60% 10%;
+              background-size: 74%  ;
+              width: 157px;
+            }
+          }  
+          @media (max-width: 1000px) {
+            ha-card {
+              background-image: url("/local/13u.png");
+              background-repeat: no-repeat;
+              background-position: 60% 10%;
+              background-size: 74%  ;
+              width: 177px;
+            }          
+          }            
+        styles:
+          card:
+            - border-radius: "0px"
+            - box-shadow: none
+            - padding: "0"
+            - height: 66px
+            - background-color: transparent 
+    item5:
+      card:
+        type: "custom:button-card"
+        show_icon: false
+        show_label: false
+        show_name: false
+        styles:
+          grid:
+            - grid-template-areas: "'item1 item2'"
+            - grid-template-columns: "1fr 3fr"
+          card:
+            - border-radius: "0px"
+            - padding: "12px 12px 12px 12px"
+            - background-color: transparent             
+        style: |
+          ha-card {
+            box-shadow: none !important;       
+          }            
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card"
+              icon: "mdi:harddisk"
+              template:
+                - "icon_only"
+              styles:
+                card:
+                  - border-radius: "0px"
+                  - box-shadow: "none"
+                  - padding: "0"
+                  - background-color: transparent 
+                img_cell:
+                  - background-color: "rgba(var(--color-theme),0.05)"
+                  - border-radius: "30%"
+                  - width: "42px"
+                  - height: "42px"                    
+              tap_action:
+                action: "more-info"
+          item2:
+            card:
+              type: custom:bar-card
+              positions:
+                name: 'outside'
+                icon: 'off'
+                state: 'on'
+                indicator: 'off'
+                value: 'outside'
+              name: "External Storage"
+              height: 6px
+              speed: 5
+              entities:
+                - entity: "[[[return variables.ulm_card_external_storage]]]"
+              max: 100
+              min: 0
+              severity:
+                - color: rgba(var(--color-red),1)
+                  from: 0
+                  to: 10
+                - color: rgba(var(--color-amber),1)
+                  from: 10
+                  to: 30
+                - color: rgba(var(--color-green),1)
+                  from: 30
+                  to: 100
+              style: |
+                [[[
+                    const style = `bar-card-divider {display: none;}
+                      ha-card #states {padding: 0;}
+                      ha-card {box-shadow: none; padding: 0px 0px 0px 12.5px; border-radius: 0; background-color: transparent !important;} 
+                      bar-card-backgroundbar {right: 0px;} 
+                      bar-card-background {margin-right: 10px !important;}
+                      bar-card-currentbar {right: 0px !important;} 
+                      bar-card-card {flex-direction: column !important;}
+                      bar-card-name {margin: 0px auto 2px 0px !important; font-size: 10px; font-weight: bolder !important;}   
+                      bar-card-value {margin: 2px 0px auto 0px !important; font-size: 10px;font-weight: bolder !important; filter: opacity(40%); align-self: flex-start !important;} 
+                      bar-card-value::after {margin-left: 50%; content:                      
+                    `;
+                    const external_storage_level = states[variables.ulm_card_internal_storage].attributes["Free internal storage"];
+                    return style + "\"" + external_storage_level + "\"\;\}";                    
+                ]]] 
+    item6:
+      card:
+        type: "custom:mini-graph-card"
+        entities: > 
+          [[[
+            var ent = [];
+            ent.push(variables.ulm_card_battery_temp);
+            return ent;
+          ]]]
+        line_color: var(--google-blue)
+        show:
+          name: false
+          icon: false
+          legend: false
+          state: false
+          graph: "bar"
+        hours_to_show: "24"
+        points_per_hour: "3"
+        color_thresholds:
+          - value: 30
+            color: var(--google-blue)
+          - value: 35
+            color: var(--google-green)
+          - value: 40
+            color: "#E61E63"             
+        height: 120
+        style: |
+          ha-card {
+            box-shadow: none;
+            border-radius: 0px;
+            padding: 12px 20px 12px 12px !important;
+            background-color: transparent !important;
+          }                   

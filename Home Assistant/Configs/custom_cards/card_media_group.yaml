@@ -1,0 +1,181 @@
+---
+### Card Light ###
+card_media_group:
+  template:
+    - "ulm_language_variables"
+  variables:
+    ulm_card_media_player_name: "[[[ return entity.attributes.friendly_name ]]]"
+    ulm_card_media_player_icon: false
+    ulm_card_media_player_enable_art: false
+    ulm_card_media_player_enable_controls: false
+    ulm_card_media_player_enable_volume_slider: false
+    ulm_card_media_player_player_controls_entity: "[[[ return entity.entity_id ]]]"
+    ulm_card_media_player_enable_popup: false
+  show_icon: false
+  show_name: false
+  show_label: false
+  tap_action:
+    action: 'none'
+  hold_action:
+    action: 'more-info' 
+  style: |
+    #overlap {grid-area: item1 !important; z-index: 0;}    
+  styles:
+    grid:
+      - grid-template-areas: >
+          [[[
+              return "\"item1\"";
+          ]]]
+      - grid-template-columns: >
+          [[[
+              return "1fr";
+          ]]]
+      - grid-template-rows: >
+          [[[
+              return "1fr";
+          ]]]
+      - row-gap: "12px"
+      - column-gap: "8px"
+    card:
+      - border-radius: calc(var(--border-radius) - 4px)
+      - box-shadow: "var(--box-shadow)"
+      - padding: 0
+      - backdrop-filter: var(--bg-filter)
+      - background: |
+          [[[ 
+            return'var(--card-blur-color)'
+          ]]]      
+    custom_fields:
+      item2:
+        - display: >
+            [[[
+                return "block";
+            ]]]
+  custom_fields:
+    item1:
+      card:
+        type: "custom:button-card"
+        style: |
+          #item1 {z-index: 1;} 
+          #item2 {pointer-events: none;} 
+        show_icon: false
+        show_name: false
+        show_label: false
+        styles:
+          grid:
+            - grid-template-areas: "'item1 item2'"
+            - grid-template-columns: "min-content auto"
+            - grid-template-rows: "min-content"
+            - column-gap: "0px"      
+          card:
+            - background: "none" 
+            - padding: "12px"
+            - border-radius: 0;                 
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card"
+              entity: "[[[ return entity.entity_id ]]]"
+              template:
+                - "icon"        
+              icon: |
+                [[[
+                  var icon = "mdi:speaker";
+                  if(entity.attributes.app_name){
+                    var app = entity.attributes.app_name.toLowerCase();
+                    if(app == "spotify"){
+                      var icon = "mdi:spotify";
+                    } else if(app == "google podcasts"){
+                      var icon = "mdi:google-podcast";
+                    } else if(app == "plex"){
+                      var icon = "mdi:plex";
+                    } else if(app == "soundcloud"){
+                      var icon = "mdi:soundcloud";
+                    } else if(app == "youtube music"){
+                      var icon = "mdi:youtube";
+                    } else if (app == "oto music"){
+                      var icon = "mdi:music-circle";
+                    } else if (entity.attributes.icon){
+                      var icon = entity.attributes.icon;
+                    }
+                  }
+                  return variables.ulm_card_media_player_icon || icon;
+                ]]]      
+              tap_action:
+                action: >
+                  [[[
+                        return 'more-info'
+                  ]]] 
+              styles:   
+                icon:
+                  - color: |
+                      [[[
+                        return variables.ulm_card_media_player_enable_art && states[entity.entity_id].attributes.entity_picture_local != null
+                        ? 'white'
+                        : 'rgba(var(--color-theme), 0.2)'
+                      ]]]
+                img_cell:
+                  - background: "none"
+                      # [[[
+                      #   return variables.ulm_card_media_player_enable_art && states[entity.entity_id].attributes.entity_picture_local != null
+                      #   ? 'rgba(0, 0, 0, 0.2)'
+                      #   : 'rgba(var(--color-theme), 0.05)'
+                      # ]]]
+                  - border-radius: 0
+                  - place-self: "center"
+                  - width: "28px"
+                  - height: "28px"       
+                card:
+                  - padding: "0px"
+                  - background: "none"
+                  - border-radius: "0"
+                  - box-shadow: "none"         
+
+    overlap:
+      card:
+        type: "custom:my-slider-v2"
+        entity: "[[[ return entity.entity_id ]]]"
+        styles:
+          card: 
+            - height: 40px
+            - margin: 0 6px
+          container:
+            - border-radius: 14px
+          progress:
+            - background: >
+                [[[
+                    if (entity.state == "unavailable"){
+                      return "rgba(var(--color-grey),1)";
+                    }
+                    if (entity.state  != "off"){
+                      return 'rgba(var(--primary-color-plain),0.5)';
+                    }
+                    else return "rgba(var(--color-theme),0.05)"                     
+                ]]]
+            - border-radius: 14px  
+            - display: flex                
+          track:
+            - background: >
+                [[[
+                    if (entity.state == "unavailable"){
+                      return "rgba(var(--color-grey),1)";
+                    }
+                    if (entity.state  != "off"){
+                      return 'rgba(var(--primary-color-plain),0.2)';
+                    }
+                    else return "rgba(var(--color-theme),0.05)"                 
+                ]]]
+          thumb:
+            - background: 'rgba(255,255,255,0.3)'
+            - border-radius: 14px  
+            - right: 10px
+            - height: 50%
+            - width: 3px  
+            - place-self: center        
+        card_mod:
+        style: |
+          ha-card {
+            border-radius: 10px;
+            box-shadow: none;
+            background-color: transparent;              
+          }        

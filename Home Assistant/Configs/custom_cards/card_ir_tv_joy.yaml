@@ -1,0 +1,159 @@
+---
+card_ir_tv_joy:
+  variables:
+    ulm_card_name: "No name set"
+    ulm_main_entity: ""
+    ulm_main_device: ""
+    ulm_sub_cmd_0: ""
+    ulm_sub_cmd_1: ""
+    ulm_sub_cmd_2: ""    
+    ulm_sub_cmd_3: ""    
+    ulm_sub_cmd_4: ""    
+    ulm_sub_cmd_5: ""                       
+    ulm_sub_cmd_6: ""  
+    ulm_sub_icon_0: "mdi:script"
+    ulm_sub_icon_1: "mdi:script"
+    ulm_sub_icon_2: "mdi:script"   
+    ulm_sub_icon_3: "mdi:script"   
+    ulm_sub_icon_4: "mdi:script"   
+    ulm_sub_icon_5: "mdi:script"                      
+    ulm_sub_icon_6: "mdi:script"           
+  styles:
+    grid:
+      - grid-template-areas: "'item1' 'item2' 'item3'"
+      - grid-template-columns: "1fr"
+      - grid-template-rows: "min-content min-content min-content"
+      - row-gap: "12px"
+    card:
+      - border-radius: "var(--border-radius)"
+      - box-shadow: "var(--box-shadow)"
+      - padding: "12px"
+      - backdrop-filter: var(--bg-filter)
+      - background: "var(--card-blur-color)"
+  custom_fields:
+    item1:
+      card:
+        type: "custom:button-card"
+        size: "20px"
+        show_icon: true
+        show_entity_picture: false
+        show_state: false
+        show_name: true
+        template:
+          - "icon_info"
+          - "ulm_translation_engine"
+        label: "IR Module"
+        tap_action:
+          action: "call-service"
+          service: remote.send_command
+          service_data:
+            entity_id: "[[[ return variables.ulm_main_entity ]]]"
+            device: "[[[ return variables.ulm_main_device ]]]"
+            command: "[[[ return variables.ulm_sub_cmd_0 ]]]"
+        name: "[[[ return variables.ulm_card_name ]]]"
+        entity: "button.tv_power"
+        styles:
+          card:
+            - box-shadow: "none"
+            - padding: "0px"
+            - background-color: transparent
+        icon: "[[[ return variables.ulm_sub_icon_0 ]]]"  
+        state:
+          - styles:
+              icon:
+                - color: "rgba(var(--primary-color-plain),1)"
+              img_cell:
+                - background-color: "rgba(var(--primary-color-plain), 0.2)"
+            value: "unavailable"
+            operator: "!="        
+    item2:
+      card:
+        type: "custom:button-card"
+        template: "list_items"
+        styles:
+          card:
+            - border-radius: "0px"
+            - background-color: transparent            
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              tap_action:
+                action: "call-service"
+                service: remote.send_command
+                service_data:
+                  entity_id: "[[[ return variables.ulm_main_entity ]]]"
+                  device: "[[[ return variables.ulm_main_device ]]]"
+                  command: "[[[ return variables.ulm_sub_cmd_1 ]]]"
+              icon: "[[[ return variables.ulm_sub_icon_1 ]]]"                
+          item2:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              tap_action:
+                action: "call-service"
+                service: remote.send_command
+                service_data:
+                  entity_id: "[[[ return variables.ulm_main_entity ]]]"
+                  device: "[[[ return variables.ulm_main_device ]]]"
+                  command: "[[[ return variables.ulm_sub_cmd_2 ]]]"
+              icon: "[[[ return variables.ulm_sub_icon_2 ]]]"          
+          item3:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              tap_action:
+                action: "call-service"
+                service: remote.send_command
+                service_data:
+                  entity_id: "[[[ return variables.ulm_main_entity ]]]"
+                  device: "[[[ return variables.ulm_main_device ]]]"
+                  command: "[[[ return variables.ulm_sub_cmd_3 ]]]"
+              icon: "[[[ return variables.ulm_sub_icon_3 ]]]"  
+    item3:
+      card:
+        type: "custom:button-card"
+        template: "list_items"
+        styles:
+          card:
+            - border-radius: "0px"  
+            - background-color: transparent            
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              tap_action:
+                action: "call-service"
+                service: remote.send_command
+                service_data:
+                  entity_id: "[[[ return variables.ulm_main_entity ]]]"
+                  device: "[[[ return variables.ulm_main_device ]]]"
+                  command: "[[[ return variables.ulm_sub_cmd_4 ]]]"
+              icon: "[[[ return variables.ulm_sub_icon_4 ]]]"     
+          item2:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              tap_action:
+                action: "call-service"
+                service: remote.send_command
+                service_data:
+                  entity_id: "[[[ return variables.ulm_main_entity ]]]"
+                  device: "[[[ return variables.ulm_main_device ]]]"
+                  command: "[[[ return variables.ulm_sub_cmd_5 ]]]"
+              icon: "[[[ return variables.ulm_sub_icon_5 ]]]"  
+          item3:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              tap_action:
+                action: "call-service"
+                service: remote.send_command
+                service_data:
+                  entity_id: "[[[ return variables.ulm_main_entity ]]]"
+                  device: "[[[ return variables.ulm_main_device ]]]"
+                  command: "[[[ return variables.ulm_sub_cmd_6 ]]]"
+              icon: "[[[ return variables.ulm_sub_icon_6 ]]]"  
+              

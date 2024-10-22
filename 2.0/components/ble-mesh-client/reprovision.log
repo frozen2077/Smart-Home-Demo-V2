@@ -1,0 +1,156 @@
+I (400) coexist: coex firmware version: 77cd7f8
+I (405) main_task: Started on CPU0
+I (415) main_task: Calling app_main()
+I (455) Touch: Initializing touch pad
+I (775) Touch: touch pad [7] base 1322, thresh 925
+I (775) Touch: touch pad [9] base 1320, thresh 924
+I (775) Touch: Touch pad system initialized
+I (775) BTDM_INIT: BT controller compile version [0f0c5a2]
+I (785) BTDM_INIT: Bluetooth MAC: c0:49:ef:cd:ee:02
+I (785) phy_init: phy_version 4791,2c4672b,Dec 20 2023,16:06:06
+I (1015) BLE_HOST_TASK: Task Started
+I (1045) BLE_HOST_SYNC: Synced, Addr: [02:ee:cd:ef:49:c0]
+I (1045) BLE_MESH_DEV_UUID: Completed, UUID: [000002ee-cdef-49c0-0000000000000000]
+I (1045) BLE_MESH_INIT: Initializing mesh stack
+Bluetooth Mesh v1.1 commit: [154b4fcc98]
+I (1055) BLE_MESH: Relay not supported
+I (1055) BLE_MESH: GATT Proxy not supported
+I (1065) BLE_MESH: Friend not supported
+I (1115) BLE_MESH: Restored mesh device role: Provisioner
+I (1125) BLE_MESH: Restored IV Index 0x00000000 (IV Update Flag 0) duration 96 hours
+I (1125) BLE_MESH: Restored Sequence Number 0x00000a
+I (1135) BLE_MESH: Restored RPL entry 0x0005: seq 0x000007, old_iv 0
+I (1135) BLE_MESH: Restored Model Bound AppKey, index 0000ffffffff
+I (1145) BLE_MESH: Not support publication, model_id 0x0000, cid 0x02e5
+I (1155) BLE_MESH: Restored Primary Address 0x0001, next address alloc 0x0006
+I (1155) BLE_MESH: Restored next NetKeyIndex alloc 0x001
+I (1165) BLE_MESH: Restored next AppKeyIndex alloc 0x000
+I (1175) BLE_MESH: Restored NetKeyIndex 0x000
+I (1175) BLE_MESH: Restored NetKey 8ecb5255b825938741d132a86f93f861
+I (1185) BLE_MESH: Restored AppKeyIndex 0x000, NetKeyIndex 0x000
+I (1185) BLE_MESH: Restored AppKey 12121212121212121212121212121212
+I (1195) BLE_MESH: Restored Node 0x0005, UUID 3210dedecdef49c00000000000000000
+I (1205) BLE_MESH: Restored Node 0x0005, Name NODE-00
+I (1215) BLE_MESH: Restored Node 0x0005, Composition Data e502000000000a000300000001010000e5020100
+I (1215) BLE_MESH: Settings commit, p_sub[0]->net_idx 0x000
+I (1225) BLE_MESH_PROV_CB: PROV_REGISTER_COMP | Err: >0<
+I (1235) BLE_MESH_INFO_RESTORE: Restored info successfully
+I (1235) BLE_MESH_INIT: Initializing vendor client
+I (1245) BLE_MESH_INIT: Setting matching device uuid
+I (1245) BLE_MESH_PROV_CB: SET_DEV_UUID_MATCH_COMP | Err: >0<
+I (1255) BLE_MESH_INIT: Enabling mesh provisioner
+I (1265) BLE_MESH: Provisioner already created network
+I (1265) BLE_MESH: NetKeyIndex 0x000, NID 0x19
+I (1275) BLE_MESH: NetKey 8ecb5255b825938741d132a86f93f861
+I (1275) BLE_MESH: Primary address 0x0001, element count 1
+I (1285) BLE_MESH_INIT: Adding local app key
+I (1285) BLE_MESH_INIT: Provisioner initialized
+W (1295) BLE_MESH: AppKey exists, AppKeyIndex updated
+I (1295) BLE_MESH_PROV_CB: PROV_ENABLE_COMP | Err: >0<
+I (1305) BLE_MESH_PROV_CB: ADD_LOCAL_APP_KEY_COMP | Err: >0<
+I (1315) BLE_MESH: AppKey 0x000 already bound to model
+I (1315) BLE_MESH_PROV_CB: BIND_APP_KEY_TO_MODEL_COMP | Err: >0<
+I (1325) main_task: Returned from app_main()
+
+
+I (106235) BLE_MESH: Provisioned before, start to provision again
+I (106235) BLE_MESH_PROV_CB: RECV_UNPROV_ADV_PKT_EVT
+I (106235) NVS HELPER: Device MAC [de:de:cd:ef:49:c0] | type: [0x00] | adv: [0x03]
+I (106245) NVS HELPER: Device UUID [3210dede-cdef-49c0-0000000000000000] | oob: [0x0000] | bearer: [PB-ADV]
+I (106255) BLE_MESH: Provisioned before, start to provision again
+I (106255) BLE_MESH_PROV_CB: RECV_UNPROV_ADV_PKT_EVT
+I (106265) NVS HELPER: Device MAC [de:de:cd:ef:49:c0] | type: [0x00] | adv: [0x03]
+I (106275) NVS HELPER: Device UUID [3210dede-cdef-49c0-0000000000000000] | oob: [0x0000] | bearer: [PB-ADV]
+I (106285) BLE_MESH: Provisioned before, start to provision again
+W (106295) BLE_MESH: Device already exists in queue
+I (106295) BLE_MESH_PROV_CB: PROV_LINK_OPEN | Bearer: [PB-ADV]
+I (106305) BLE_MESH_PROV_CB: ADD_UNPROV_DEV_COMP | Err: >0<
+I (106305) BLE_MESH_PROV_CB: ADD_UNPROV_DEV_COMP | Err: >-120<
+I (106375) BLE_MESH: Link ACK is already received
+I (106395) BLE_MESH: Link ACK is already received
+I (106425) BLE_MESH: Link ACK is already received
+I (106555) BLE_MESH: Elements:          0x01
+I (106555) BLE_MESH: Algorithms:        0x0003
+I (106555) BLE_MESH: Public Key Type:   0x00
+I (106555) BLE_MESH: OOB Type:   0x00
+I (106565) BLE_MESH: Output OOB Size:   0x00
+I (106565) BLE_MESH: Output OOB Action: 0x0000
+I (106575) BLE_MESH: Input OOB Size:    0x00
+I (106575) BLE_MESH: Input OOB Action:  0x0000
+I (106585) BLE_MESH: Resending ack
+I (107205) BLE_MESH: Get Start while there are unreceived segments
+I (107235) BLE_MESH: Get Start while there are unreceived segments
+I (107255) BLE_MESH: Get Start while there are unreceived segments
+I (107315) BLE_MESH: Ignore already received segment
+I (107325) BLE_MESH: Ignore already received segment
+I (107345) BLE_MESH: Ignore already received segment
+I (107515) BLE_MESH: Resending ack
+I (107515) BLE_MESH: Resending ack
+I (107515) BLE_MESH: Resending ack
+I (107915) BLE_MESH: Get Start while there are unreceived segments
+I (107935) BLE_MESH: Get Start while there are unreceived segments
+I (107975) BLE_MESH: Resending ack
+I (108255) BLE_MESH: Get Start while there are unreceived segments
+I (108315) BLE_MESH: Get Start while there are unreceived segments
+I (108355) BLE_MESH: Resending ack
+I (108405) BLE_MESH: Resending ack
+I (108615) BLE_MESH: Unicast addr 0x0005, element num 1, NetKeyIndex 0x0000
+I (108615) BLE_MESH: UUID 3210dedecdef49c00000000000000000
+I (108625) BLE_MESH: DevKey 90130421f85cd497d06885e3fd393a46
+I (108635) BLE_MESH_PROV_COMPLETE: Device UUID [3210dede-cdef-49c0-0000000000000000] | node_idx 0 | primary_addr 0x0005 | 
+elem_num 1 | net_idx 0x000
+I (108645) BLE_MESH_INFO_STORE: Stored info successfully
+I (108655) BLE_MESH: Client message 0x00008008 with timeout 4000ms
+I (108655) BLE_MESH: send, app_idx 0xfffe src 0x0001 dst 0x0005
+I (108665) BLE_MESH: send, len 3: 800800
+I (108665) BLE_MESH: Unseg, send_tag 0x00, send_szmic 0, aszmic 0
+I (108675) BLE_MESH: Settings store, waiting 0 seconds
+I (108685) BLE_MESH: Use security credentials 0x00, proxy 0
+I (108685) BLE_MESH: Network PDU, count 2, interval 20
+I (108695) BLE_MESH_PROV_CB: SET_NODE_NAME_COMP | Err: >0<
+I (108695) BLE_MESH_PROV_CB: Node [0] Name: [NODE-00]
+I (108885) BLE_MESH: Seg 0/2 received
+I (108965) BLE_MESH_PROV_CB: PROV_LINK_CLOSE | Bearer: [PB-ADV] | Reason: [0x00]
+I (108975) BLE_MESH: Seg 1/2 received
+I (109075) BLE_MESH: Seg 2/2 received
+I (109075) BLE_MESH: Settings store, waiting 0 seconds
+I (109075) BLE_MESH: Settings store, waiting 0 seconds
+I (109075) BLE_MESH: Use security credentials 0x00, proxy 0
+I (109085) BLE_MESH: Network PDU, count 2, interval 20
+I (109085) BLE_MESH: recv, app_idx 0xfffe src 0x0005 dst 0x0001
+I (109095) BLE_MESH: recv, len 22: 0200e502000000000a000300000001010000e5020100
+I (109105) BLE_MESH_CFG_CLI_CB: Err: [0] | Event: [0] | Addr: [0x0005] | Opcode: [0x32776]
+I (109115) BLE_MESH_CFG_CLI_CB: COMPOSITION_DATA_GET, sending add APP Key request...
+I (109125) BLE_MESH: Original timeout 4000ms, calculated timeout 2960ms
+I (109125) BLE_MESH: Client message 0x00000000 with timeout 4000ms
+I (109135) BLE_MESH: send, app_idx 0xfffe src 0x0001 dst 0x0005
+I (109145) BLE_MESH: send, len 20: 0000000012121212121212121212121212121212
+I (109145) BLE_MESH: Seg, send_tag 0x01, send_szmic 0, aszmic 0
+I (109155) BLE_MESH: Settings store, waiting 0 seconds
+I (109175) BLE_MESH: Use security credentials 0x00, proxy 0
+I (109175) BLE_MESH: Network PDU, count 2, interval 20
+I (109175) BLE_MESH: Settings store, waiting 0 seconds
+I (109185) BLE_MESH: Use security credentials 0x00, proxy 0
+I (109185) BLE_MESH: Network PDU, count 2, interval 20
+I (109195) BLE_MESH_PROV_CB: STORE_NODE_COMP_DATA_COMP | Err: >0<
+I (109305) BLE_MESH: Settings store, waiting 0 seconds
+I (109315) BLE_MESH: Seg 0/1 acked
+I (109315) BLE_MESH: Seg 1/1 acked
+I (109395) BLE_MESH: Settings store, waiting 0 seconds
+I (109405) BLE_MESH: recv, app_idx 0xfffe src 0x0005 dst 0x0001
+I (109405) BLE_MESH: recv, len 6: 800300000000
+I (109405) BLE_MESH_CFG_CLI_CB: Err: [0] | Event: [1] | Addr: [0x0005] | Opcode: [0x0000]
+I (109415) BLE_MESH_CFG_CLI_CB: APP_KEY_ADD, sending bind model app request...
+I (109425) BLE_MESH: Attempts: 3
+I (109425) BLE_MESH: Client message 0x0000803d with timeout 4000ms
+I (109435) BLE_MESH: send, app_idx 0xfffe src 0x0001 dst 0x0005
+I (109435) BLE_MESH: send, len 10: 803d05000000e5020100
+I (109445) BLE_MESH: Unseg, send_tag 0x00, send_szmic 0, aszmic 0
+I (109455) BLE_MESH: Settings store, waiting 0 seconds
+I (109545) BLE_MESH: Use security credentials 0x00, proxy 0
+I (109545) BLE_MESH: Network PDU, count 2, interval 20
+I (109565) BLE_MESH: Settings store, waiting 0 seconds
+I (109575) BLE_MESH: recv, app_idx 0xfffe src 0x0005 dst 0x0001
+I (109575) BLE_MESH: recv, len 11: 803e0005000000e5020100
+I (109575) BLE_MESH_CFG_CLI_CB: Err: [0] | Event: [1] | Addr: [0x0005] | Opcode: [0x32829]
+I (109585) BLE_MESH_CFG_CLI_CB: MODEL_APP_BIND finished, enable send task

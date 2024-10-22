@@ -1,0 +1,88 @@
+---
+### Icon More Info ###
+icon_more_info_joy:
+  show_icon: false
+  show_name: false
+  show_label: false
+  template:
+  styles:
+    grid:
+      - grid-template-areas: "'item1'"
+      - grid-template-columns: "1fr"
+      - grid-template-rows: "1fr"
+      - column-gap: "0px"
+    card:
+      - border-radius: "var(--border-radius)"
+      - box-shadow: "var(--box-shadow)"
+      - padding: "12px"
+  custom_fields:
+    item1:
+      card:
+        type: "custom:button-card"
+        show_icon: false
+        show_name: false
+        show_label: false
+        template:
+          - "list_2_items"
+        styles:
+          grid:
+            - grid-template-columns: "min-content auto"
+            - column-gap: "0px"
+          card:
+            - background-color: "rgba(0,0,0,0)"
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card"
+              entity: "[[[ return entity.entity_id ]]]"
+              color: "var(--google-grey)"
+              show_icon: true
+              show_label: false
+              show_name: false
+              size: "20px"              
+              variables:
+              styles:
+                icon:
+                  - color: "rgba(var(--color-theme),0.2)"
+                img_cell:
+                  - background-color: "rgba(var(--color-theme),0.05)"
+                  - border-radius: "50%"
+                  - place-self: "center"
+                  - width: "42px"
+                  - height: "42px"
+                grid:
+                  - grid-template-areas: "'i'"
+                  - grid-template-columns: "min-content"
+                  - grid-template-rows: "min-content"
+                card:
+                  - border-radius: "21px"
+                  - box-shadow: "none"
+                  - padding: "0px"
+                  - overflow: >
+                      [[[
+                        if (entity.state == "unavailable"){
+                          return "visible"
+                        }
+                        return "hidden"
+                      ]]]                  
+          item2:
+            card:
+              type: "custom:button-card"
+              show_icon: false
+              entity: "[[[ return entity.entity_id ]]]"
+              template:
+                - "icon_info"
+              variables:
+              styles:
+                card:
+                  - overflow: "visible"
+                  - padding: "6px"
+                  - margin-left: "-6px"
+                  - background-color: "rgba(0,0,0,0)"
+                # label:
+                #   - overflow: "visible"
+                # name:
+                #   - overflow: "visible"
+                custom_fields:
+                  notification:
+                    - display: "none"

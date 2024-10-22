@@ -1,0 +1,495 @@
+---
+card_timer_joy:
+  show_name: false
+  show_icon: false
+  variables:
+    ulm_card_default_color: var(--primary-color-plain)
+    ulm_card_icon: "[[[ return entity.attributes.icon ]]]"    
+  triggers_update: "all"
+  styles:
+    grid:
+      - grid-template-areas: "'item1 item4 item2' 'item3 item3 item3'"
+      - grid-template-columns: "2fr 1fr 3fr"
+      - grid-template-rows: "min-content  min-content"
+      - row-gap: "12px"
+    card:
+      - border-radius: "var(--border-radius)"
+      - box-shadow: "var(--box-shadow)"
+      - padding: "12px"
+      - backdrop-filter: "var(--bg-filter)"   
+      - background: "var(--card-blur-color)"
+  state:
+    - value: "active"
+      styles:
+        card:
+          - background: >- 
+              [[[
+                var color = variables.ulm_card_default_color;
+                return 'radial-gradient(at top left, rgba(' + color + ',0.5) 0%, rgba(29,29,29,0) 70%) 70% 0% / 100% 97% no-repeat var(--card-blur-color)'
+                
+              ]]]     
+  custom_fields:
+    item1:
+      card:
+        type: "custom:button-card"
+        template:
+          - "icon_info"
+          - "ulm_language_variables"   
+        icon: "[[[ return variables.ulm_card_icon]]]"           
+        styles:
+          icon:
+            - color: >
+                [[[
+                    let color = variables.ulm_card_default_color;
+                    if (entity.state != "active"){
+                      return 'rgba(var(--color-theme),0.2)';
+                    }
+                    else{
+                      return 'rgba(' + color + ',1)'
+                    }
+                ]]]
+          img_cell:
+            - background-color: >
+                [[[
+                    let color = variables.ulm_card_default_color;                  
+                    if (entity.state != "active"){
+                      return 'rgba(var(--color-theme),0.05)';
+                    }
+                    else{
+                      return 'rgba(' + color + ',0.2)'
+                    }
+                ]]] 
+          card:
+            - box-shadow: "none"
+            - background: none                     
+        entity: "[[[ return entity.entity_id ]]]"
+        name: >
+            [[[ 
+                                 
+                if (entity.state == "active" ){
+                  let now = new Date().getTime();
+                  let futureDate = new Date(entity.attributes.finishes_at).getTime();
+
+                  let timeleft = futureDate - now;
+
+                  let hours   = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+                  let minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+                  let seconds = Math.floor((timeleft % (1000 * 60)) / 1000).toString().padStart(2, '0');
+
+                  var formattedTime = hours + ':' + minutes + ':' + seconds;                  
+                  return formattedTime;                  
+
+                }
+                else if (entity.state == "paused") {
+                  return entity.attributes.remaining.padStart(8, '0');
+                }
+                else{
+                  return entity.attributes.friendly_name;
+                }
+            ]]]         
+        label: >-
+            [[[
+                if (entity.state != "active" && entity.state != "paused"){
+                  return entity.state;
+                }
+                else{
+                  return entity.attributes.friendly_name;
+                }                 
+            ]]]           
+        tap_action:
+          action: "call-service"
+          service: > 
+                [[[                
+                    if (entity.state == "active" ){
+                      return 'timer.pause';
+                    }
+                    else {
+                      return 'timer.start'
+                    }
+                ]]]           
+          service_data:
+            entity_id: "[[[ return entity.entity_id ]]]"
+        hold_action:
+          action: "call-service"
+          service: timer.cancel
+          service_data:
+            entity_id: "[[[ return entity.entity_id ]]]" 
+    item4:
+      card:
+        type: "custom:button-card"
+        template: "widget_icon_joy"
+        styles:
+          card:
+            - padding: "0px" 
+            - box-shadow: "none"
+            - border-radius: "0"                  
+            - background-color: transparent                    
+          img_cell:
+            - background-color: >
+                [[[
+                      return 'rgba(var(--color-theme),0.05)';
+                ]]]
+            - border-style: solid
+            - border-width: 2px
+            - border-color: rgba(var(--color-theme),0.05)                          
+            - place-self: "center"
+            - border-radius: "14px"                  
+            - width: "36px"
+            - height: "36px"                                     
+        tap_action:
+          action: "call-service"
+          service: 'timer.start'                
+          service_data:
+            entity_id: "[[[ return entity.entity_id ]]]"
+            duration: >
+              [[[                
+                  if (entity.state == "active"){
+                    let futureDate = (new Date(entity.attributes.finishes_at).getTime() - new Date().getTime()) / 1000 + 30;
+                    return futureDate;
+                  }
+                  else {
+                    return '30'
+                  }
+              ]]] 
+        hold_action:
+          action: "call-service"
+          service: 'timer.start'                
+          service_data:
+            entity_id: "[[[ return entity.entity_id ]]]"
+            duration: >
+              [[[                
+                  if (entity.state == "active"){
+                    let futureDate = (new Date(entity.attributes.finishes_at).getTime() - new Date().getTime()) / 1000 - 30;
+                    return futureDate;
+                  }
+                  else {
+                    return '-30'
+                  }
+              ]]]                   
+        icon: "mdi:fast-forward-30"            
+    item2:
+      card:            
+        type: custom:timer-bar-card
+        entities: 
+          - "[[[ return entity.entity_id ]]]"
+        layout: full_row  # hides the name and icon, but not time remaining
+        text_width: 0px # hide the time remaining
+        bar_height: 40px
+        invert: true
+        bar_background: 'rgba(var(--color-theme),0.0)'
+        bar_foreground: >
+          [[[
+            let color = variables.ulm_card_default_color;                  
+            return 'rgba(' + color + ',0.5)'
+          ]]]
+        bar_radius: 12px
+        sync_issues: ignore
+        style: 
+          .: |
+            .card-content {padding: 0px;}
+            ha-card {background: rgba(var(--color-theme),0.05); border-radius: 12px; box-shadow: none;}
+          timer-bar-entity-row$: |
+            .bar {margin-top: 0px !important;} 
+            .status {color: transparent !important;}  
+    item3:
+      card:
+        type: "custom:button-card"
+        styles:
+          grid:
+            - grid-template-areas: "'item1 item2 item3 item4 item5 item6 item7 item8 item9 item10'"
+            - grid-template-columns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr"
+            - grid-template-rows: "min-content"
+            - column-gap: "7px"
+          card:
+            - padding: "0px"
+            - border-radius: "0"
+            - box-shadow: "none" 
+            - background: none                  
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              styles:
+                card:
+                  - height: 42px
+                  - border-radius: 9px              
+              tap_action:
+                action: "call-service"
+                service: 'timer.start'                
+                service_data:
+                  entity_id: "[[[ return entity.entity_id ]]]"
+                  duration: >
+                    [[[                
+                        if (entity.state == "active"){
+                          let futureDate = (new Date(entity.attributes.finishes_at).getTime() - new Date().getTime()) / 1000 + 60;
+                          return futureDate;
+                        }
+                        else {
+                          return '60'
+                        }
+                    ]]]     
+              icon: "mdi:numeric-1-circle-outline"
+          item2:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              styles:
+                card:
+                  - height: 42px
+                  - border-radius: 9px 
+              tap_action:
+                action: "call-service"
+                service: 'timer.start'     
+                service_data:
+                  entity_id: "[[[ return entity.entity_id ]]]"                
+                  duration: >
+                    [[[                
+                        if (entity.state == "active"){
+                          let futureDate = (new Date(entity.attributes.finishes_at).getTime() - new Date().getTime()) / 1000 + 120;
+                          return futureDate;
+                        }
+                        else {
+                          return '120'
+                        }
+                    ]]]   
+              icon: "mdi:numeric-2-circle-outline"
+          item3:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              styles:
+                card:
+                  - height: 42px
+                  - border-radius: 9px 
+              tap_action:
+                action: "call-service"
+                service: 'timer.start'     
+                service_data:
+                  entity_id: "[[[ return entity.entity_id ]]]"                
+                  duration: >
+                    [[[                
+                        if (entity.state == "active"){
+                          let futureDate = (new Date(entity.attributes.finishes_at).getTime() - new Date().getTime()) / 1000 + 180;
+                          return futureDate;
+                        }
+                        else {
+                          return '180'
+                        }
+                    ]]]   
+              icon: "mdi:numeric-3-circle-outline"
+          item4:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              styles:
+                card:
+                  - height: 42px
+                  - border-radius: 9px 
+              tap_action:
+                action: "call-service"
+                service: 'timer.start'     
+                service_data:
+                  entity_id: "[[[ return entity.entity_id ]]]"                
+                  duration: >
+                    [[[                
+                        if (entity.state == "active"){
+                          let futureDate = (new Date(entity.attributes.finishes_at).getTime() - new Date().getTime()) / 1000 + 240;
+                          return futureDate;
+                        }
+                        else {
+                          return '240'
+                        }
+                    ]]]   
+              icon: "mdi:numeric-4-circle-outline"
+          item5:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              styles:
+                card:
+                  - height: 42px
+                  - border-radius: 9px 
+              tap_action:
+                action: "call-service"
+                service: 'timer.start'     
+                service_data:
+                  entity_id: "[[[ return entity.entity_id ]]]"                
+                  duration: >
+                    [[[                
+                        if (entity.state == "active"){
+                          let futureDate = (new Date(entity.attributes.finishes_at).getTime() - new Date().getTime()) / 1000 + 300;
+                          return futureDate;
+                        }
+                        else {
+                          return '300'
+                        }
+                    ]]]   
+              icon: "mdi:numeric-5-circle-outline" 
+          item6:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              styles:
+                card:
+                  - height: 42px
+                  - border-radius: 9px             
+              tap_action:
+                action: "call-service"
+                service: 'timer.start'     
+                service_data:
+                  entity_id: "[[[ return entity.entity_id ]]]"
+                  duration: >
+                    [[[                
+                        if (entity.state == "active"){
+                          let futureDate = (new Date(entity.attributes.finishes_at).getTime() - new Date().getTime()) / 1000 + 360;
+                          return futureDate;
+                        }
+                        else {
+                          return '360'
+                        }
+                    ]]]   
+              icon: "mdi:numeric-6-circle-outline"
+          item7:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              styles:
+                card:
+                  - height: 42px
+                  - border-radius: 9px 
+              tap_action:
+                action: "call-service"
+                service: 'timer.start'     
+                service_data:
+                  entity_id: "[[[ return entity.entity_id ]]]"                
+                  duration: >
+                    [[[                
+                        if (entity.state == "active"){
+                          let futureDate = (new Date(entity.attributes.finishes_at).getTime() - new Date().getTime()) / 1000 + 420;
+                          return futureDate;
+                        }
+                        else {
+                          return '420'
+                        }
+                    ]]]   
+              icon: "mdi:numeric-7-circle-outline"
+          item8:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              styles:
+                card:
+                  - height: 42px
+                  - border-radius: 9px 
+              tap_action:
+                action: "call-service"
+                service: 'timer.start'     
+                service_data:
+                  entity_id: "[[[ return entity.entity_id ]]]"                
+                  duration: >
+                    [[[                
+                        if (entity.state == "active"){
+                          let futureDate = (new Date(entity.attributes.finishes_at).getTime() - new Date().getTime()) / 1000 + 480;
+                          return futureDate;
+                        }
+                        else {
+                          return '480'
+                        }
+                    ]]]   
+              icon: "mdi:numeric-8-circle-outline"
+          item9:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              styles:
+                card:
+                  - height: 42px
+                  - border-radius: 9px 
+              tap_action:
+                action: "call-service"
+                service: 'timer.start'     
+                service_data:
+                  entity_id: "[[[ return entity.entity_id ]]]"                
+                  duration: >
+                    [[[                
+                        if (entity.state == "active"){
+                          let futureDate = (new Date(entity.attributes.finishes_at).getTime() - new Date().getTime()) / 1000 + 540;
+                          return futureDate;
+                        }
+                        else {
+                          return '540'
+                        }
+                    ]]]   
+              icon: "mdi:numeric-9-circle-outline"
+          item10:
+            card:
+              type: "custom:button-card"
+              template: "widget_icon_joy"
+              styles:
+                card:
+                  - height: 42px
+                  - border-radius: 9px 
+              tap_action:
+                action: "call-service"
+                service: 'timer.start'     
+                service_data:
+                  entity_id: "[[[ return entity.entity_id ]]]"                
+                  duration: >
+                    [[[                
+                        if (entity.state == "active"){
+                          let futureDate = (new Date(entity.attributes.finishes_at).getTime() - new Date().getTime()) / 1000 + 600;
+                          return futureDate;
+                        }
+                        else {
+                          return '600'
+                        }
+                    ]]]   
+              icon: "mdi:numeric-10-circle-outline"                                           
+# input_datetime:
+#   tap_action:
+#     action: "more-info"
+#   show_last_changed: true
+
+# widget_text:
+#   tap_action:
+#     action: "toggle"
+#   show_icon: false
+#   show_label: true
+#   show_name: false
+#   label: >-
+#     [[[
+#       var unit = entity.attributes.unit_of_measurement != null ? ' ' + entity.attributes.unit_of_measurement : ''
+#       if (entity.state == 'on') {
+#         return variables.ulm_on;
+#       } else if (entity.state == 'off') {
+#         return variables.ulm_off;
+#       } else if (entity.state == 'unavailable') {
+#         return variables.ulm_unavailable;
+#       } else if (entity.state == 'idle') {
+#         return variables.ulm_idle;
+#       } else if (entity.state == 'open') {
+#         return variables.ulm_open;
+#       } else if (entity.state == 'closed') {
+#         return variables.ulm_closed;
+#       } else {
+#         return entity.state.slice(0,5);
+#       }
+#     ]]]
+#   styles:
+#     grid:
+#       - grid-template-areas: "'l'"
+#     card:
+#       - box-shadow: "none"
+#       - padding: "0px"
+#       - background-color: "rgba(var(--color-theme),0.05)"
+#       - border-radius: "14px"
+#       - place-self: "center"
+#       - height: "42px"
+#     state:
+#       - color: "rgba(var(--color-theme),0.9)"
+#     label:
+#       - font-weight: "bolder" 
+#       - font-size: "14.5px"      
+#   size: "20px"
+#   color: "var(--google-grey)"

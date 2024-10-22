@@ -1,0 +1,106 @@
+---
+### Card Light ###
+card_light_group:
+  variables:
+    ulm_card_light_name: "[[[ return entity.attributes.friendly_name ]]]"
+    ulm_card_light_icon: "[[[ return entity.attributes.icon ]]]"
+    ulm_card_light_enable_collapse: false
+    ulm_card_light_enable_slider: false
+    ulm_card_light_enable_horizontal: false
+    ulm_card_light_enable_horizontal_wide: false
+    ulm_card_light_enable_color: false
+    ulm_card_light_force_background_color: false
+    ulm_card_light_enable_popup: false
+  show_icon: true
+  icon: "[[[ return variables.ulm_card_light_icon ]]]"
+  size: "20px"  
+  show_name: false
+  show_label: false
+  show_state: false  
+  tap_action:
+    action: "toggle"
+  hold_action:
+    action: 'fire-dom-event'
+    browser_mod:
+      command: "popup"
+      large: true
+      hide_header: true
+      card:
+        type: "custom:button-card"
+        template: "popup_light_brightness"
+        variables:
+          ulm_popup_light_entity: "[[[ return entity.entity_id ]]]"
+  state:
+    - value: "on"
+      styles:
+        card:
+          - background-color: >-
+              [[[
+                  var color = entity.attributes.rgb_color;
+                  if (variables.ulm_card_light_enable_color == true){
+                    if(variables.ulm_card_light_force_background_color == true || hass.themes.darkMode){
+                      if (color){
+                        return 'rgba(' + color + ',0.1)'
+                      } else {
+                        return 'rgba(var(--color-yellow-text),0.1)'
+                      }
+                    }
+                  }
+                  return 'rgba(var(--color-background-yellow),var(--opacity-bg))';
+              ]]]
+        icon:
+          - color: >
+              [[[
+                  var color = entity.attributes.rgb_color;
+                  if (entity.state != "on"){
+                    return 'rgba(var(--color-theme),0.2)';
+                  }
+                  else if (color && variables.ulm_card_light_enable_color){
+                    return 'rgba(' + color + ',1)'
+                  }
+                  else{
+                    return 'rgba(var(--color-yellow),1)'
+                  }
+              ]]]
+        img_cell:
+          - background-color: >
+              [[[
+                  var color = entity.attributes.rgb_color;
+                  if (entity.state != "on"){
+                    return 'rgba(var(--color-theme),0.05)';
+                  }
+                  else if (color && variables.ulm_card_light_enable_color){
+                    return 'rgba(' + color + ',0.2)';
+                  }
+                  else{
+                    return 'rgba(var(--color-yellow),0.2)';
+                  }
+              ]]]              
+  styles:
+    icon:
+      - color: "rgba(var(--color-theme),0.2)"
+    label:
+      - justify-self: "center"
+      - align-self: "start"
+      - font-weight: "bolder"
+      - font-size: "12px"
+      - filter: "opacity(40%)"
+    name:
+      - margin-top: "10px"
+      - justify-self: "center"
+      - font-weight: "bold"
+      - font-size: "14px"
+    img_cell:
+      - background-color: "rgba(var(--color-theme),0.05)"
+      - border-radius: "50%"
+      - place-self: "center"
+      - width: "32px"
+      - height: "32px"
+    grid:
+      - grid-template-areas: "'i'"
+    card:
+      - border-radius: "var(--border-radius)"
+      - box-shadow: "var(--box-shadow)"
+      - padding: "10px 0px 8px 0px"
+      - width: "63.4px"
+      - height: "50px"

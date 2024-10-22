@@ -1,0 +1,442 @@
+---
+### Card Light ###
+card_light_slim_joy:
+  template:
+    - "ulm_language_variables"
+  variables:
+    ulm_card_light_name: "[[[ return entity.attributes.friendly_name ]]]"
+    ulm_card_light_icon: "[[[ return entity.attributes.icon ]]]"
+    ulm_card_light_enable_collapse: false
+    ulm_card_light_enable_slider: false
+    ulm_card_light_enable_horizontal: false
+    ulm_card_light_enable_horizontal_wide: false
+    ulm_card_light_enable_color: false
+    ulm_card_light_force_background_color: false
+    ulm_card_light_enable_popup: false
+  show_icon: false
+  show_name: false
+  show_label: false
+  tap_action:
+    action: "toggle"
+  hold_action:
+    action: >
+      [[[
+          if (variables.ulm_card_light_enable_popup){
+            return 'fire-dom-event'
+          }
+          else{
+            return 'more-info'
+          }
+      ]]]
+    browser_mod:
+      service: browser_mod.popup
+      data:
+        large: false
+        hide_header: true
+        content:
+          type: "custom:button-card"
+          template: "popup_light_color_joy"
+          variables:
+            ulm_popup_light_entity: "[[[ return entity.entity_id ]]]"       
+  state:
+    - value: "on"
+      styles:
+        card:
+          - background: >-
+              [[[            
+                  var color = entity.attributes.rgb_color;                
+                  if (variables.ulm_card_light_enable_color == true){
+                    if(variables.ulm_card_light_force_background_color == true || hass.themes.darkMode){
+                      if (color){      
+                        let r = color[0] / 255;
+                        let g = color[1] / 255;
+                        let b = color[2] / 255;
+                        let v=Math.max(r,g,b), c=v-Math.min(r,g,b);
+                        let h= c && ((v==r) ? (g-b)/c : ((v==g) ? 2+(b-r)/c : 4+(r-g)/c)); 
+                        let hue = Math.round(60*(h<0?h+6:h));
+                        let sat = v&&c/v;
+                        let value = v;   
+                        if (sat > 0.6) sat = 0.6; 
+                        let f= (n,k=(n+hue/60)%6) => value - value*sat*Math.max( Math.min(k,4-k,1), 0);   
+                        let red = f(5) * 255;
+                        let green = f(3) * 255;
+                        let blue = f(1) * 255;                                               
+                        let color2 = Math.round(red) + ',' + Math.round(green) + ',' + Math.round(blue);                         
+                        return 'radial-gradient(at bottom, rgba(' + color2 + ',1) 0%, rgba(29,29,29,0) 70%) 50% 100% / 140% 70% no-repeat var(--card-blur-color)'
+                      } else {
+                        return 'radial-gradient(at bottom, rgba(94,114,235,1) 0%, rgba(245, 132, 66, 1) 25%, rgba(245, 188, 66, 1) 50%, rgba(var(--primary-color-plain),1) 70%) 50% 100% / 140% 70% no-repeat var(--card-blur-color)'
+                      }
+                    }
+                  }
+                  return 'radial-gradient(at right, rgba(var(--primary-color-plain),0.5) 0%, rgba(var(--primary-color-plain),0) 40%) 80% 50% / 120% 700% no-repeat var(--card-blur-color)';
+              ]]]
+  styles:
+    grid:
+      - grid-template-areas: >
+          [[[
+                if (variables.ulm_card_light_enable_collapse && entity.state != "on") {
+                    return "\"item1\"";
+                } else if (variables.ulm_card_light_enable_horizontal) {
+                    return "\"item1 item2\"";
+                } else if (variables.ulm_card_light_enable_slider) {
+                    return "\"item1\" \"item2\" \"item3\"";
+                } else {
+                    return "\"item1\"";
+                }
+          ]]]
+      - grid-template-columns: >
+          [[[
+                if (variables.ulm_card_light_enable_collapse && entity.state != "on") {
+                    return "1fr";
+                } else if (variables.ulm_card_light_enable_horizontal) {
+                  if(variables.ulm_card_light_enable_horizontal_wide){
+                    return "1fr 2fr";
+                    } else {
+                      return "1fr 1fr";
+                    }
+                } else {
+                    return "1fr";
+                }
+          ]]]
+      - grid-template-rows: >
+          [[[
+                if (variables.ulm_card_light_enable_collapse && entity.state != "on") {
+                    return "1fr";
+                } else if (variables.ulm_card_light_enable_slider && !variables.ulm_card_light_enable_horizontal) {
+                    return "min-content min-content min-content";                   
+                } else {
+                    return "1fr";
+                }
+          ]]]
+      - row-gap: "12px"
+    card:
+      - border-radius: "var(--border-radius)"
+      - box-shadow: "var(--box-shadow)"
+      - padding: "12px"
+      - backdrop-filter: var(--bg-filter)   
+      - background-color: var(--card-blur-color)       
+    custom_fields:
+      item2:
+        - display: >
+            [[[
+                  if (variables.ulm_card_light_enable_collapse && entity.state != "on") {
+                      return "none";
+                  } else if (variables.ulm_card_light_enable_slider) {
+                      return "block";
+                  } else {
+                      return "none";
+                  }
+            ]]]
+      item3:
+        - display: >
+            [[[
+                  if (variables.ulm_card_light_enable_collapse && entity.state != "on") {
+                      return "none";
+                  } else if (variables.ulm_card_light_enable_slider) {
+                      return "block";
+                  } else {
+                      return "none";
+                  }
+            ]]]  
+           
+  custom_fields:
+    item1:
+      card:
+        type: "custom:button-card"
+        template:
+          - "icon_more_info"
+        styles:
+          card:
+            - background-color: transparent           
+        custom_fields:
+          item1:
+            card:
+              type: "custom:button-card"
+              entity: "[[[ return entity.entity_id ]]]"
+              icon: "[[[ return variables.ulm_card_light_icon ]]]"
+              hold_action:
+                action: >
+                  [[[
+                      if (variables.ulm_card_light_enable_popup){
+                        return 'fire-dom-event'
+                      }
+                      else{
+                        return 'more-info'
+                      }
+                  ]]]                
+                browser_mod:
+                  service: browser_mod.popup
+                  data:
+                    large: false
+                    hide_header: true
+                    content:
+                      type: "custom:button-card"
+                      template: "popup_light_color_joy"
+                      variables:
+                        ulm_popup_light_entity: "[[[ return entity.entity_id ]]]" 
+              tap_action:
+                action: >
+                  [[[ return 'more-info' ]]]                          
+              styles: 
+                card:
+                  - background-color: transparent
+                icon:
+                  - color: >
+                      [[[
+                          var color = entity.attributes.rgb_color;                       
+                          if (entity.state != "on"){
+                            return 'rgba(var(--color-theme),0.2)';
+                          }
+                          else if (color && variables.ulm_card_light_enable_color){
+                            let r = color[0] / 255;
+                            let g = color[1] / 255;
+                            let b = color[2] / 255;
+                            let v=Math.max(r,g,b), c=v-Math.min(r,g,b);
+                            let h= c && ((v==r) ? (g-b)/c : ((v==g) ? 2+(b-r)/c : 4+(r-g)/c)); 
+                            let hue = Math.round(60*(h<0?h+6:h));
+                            let sat = v&&c/v;
+                            let value = v;   
+                            if (sat > 0.6) sat = 0.6; 
+                            let f= (n,k=(n+hue/60)%6) => value - value*sat*Math.max( Math.min(k,4-k,1), 0);   
+                            let red = f(5) * 255;
+                            let green = f(3) * 255;
+                            let blue = f(1) * 255;                                               
+                            let color2 = Math.round(red) + ',' + Math.round(green) + ',' + Math.round(blue);                         
+                            return 'rgba(' + color2 + ',1)'
+                          }
+                          else{
+                            return 'rgba(var(--primary-color-plain),1)'
+                          }
+                      ]]]
+                img_cell:
+                  - background-color: >
+                      [[[
+                          var color = entity.attributes.rgb_color;                           
+                          if (entity.state != "on"){
+                            return 'rgba(var(--color-theme),0.05)';
+                          }
+                          else if (color && variables.ulm_card_light_enable_color){
+                            let r = color[0] / 255;
+                            let g = color[1] / 255;
+                            let b = color[2] / 255;
+                            let v=Math.max(r,g,b), c=v-Math.min(r,g,b);
+                            let h= c && ((v==r) ? (g-b)/c : ((v==g) ? 2+(b-r)/c : 4+(r-g)/c)); 
+                            let hue = Math.round(60*(h<0?h+6:h));
+                            let sat = v&&c/v;
+                            let value = v;   
+                            if (sat > 0.6) sat = 0.6; 
+                            let f= (n,k=(n+hue/60)%6) => value - value*sat*Math.max( Math.min(k,4-k,1), 0);   
+                            let red = f(5) * 255;
+                            let green = f(3) * 255;
+                            let blue = f(1) * 255;                                               
+                            let color2 = Math.round(red) + ',' + Math.round(green) + ',' + Math.round(blue);                               
+                            return 'rgba(' + color2 + ',0.2)';
+                          }
+                          else{
+                            return 'rgba(var(--primary-color-plain),0.2)';
+                          }
+                      ]]]
+          item2:
+            card:
+              type: "custom:button-card"
+              entity: "[[[ return entity.entity_id ]]]"
+              name: "[[[ return variables.ulm_card_light_name ]]]"
+              hold_action:
+                action: >
+                  [[[
+                      if (variables.ulm_card_light_enable_popup){
+                        return 'fire-dom-event'
+                      }
+                      else{
+                        return 'more-info'
+                      }
+                  ]]]
+                browser_mod:
+                  service: browser_mod.popup
+                  data:
+                    large: false
+                    hide_header: true
+                    content:
+                      type: "custom:button-card"
+                      template: "popup_light_color_joy"
+                      variables:
+                        ulm_popup_light_entity: "[[[ return entity.entity_id ]]]"      
+              label: >-
+                [[[
+                  if (entity.state !="unavailable"){
+                    if (entity.state =="off"){
+                      return "Off";
+                    } else if (entity.state == "on"){
+                      if (entity.attributes.brightness != null){
+                        var bri = Math.round(entity.attributes.brightness / 2.55);
+                        return (bri ? bri : "0") + "%";
+                      } else {
+                        return variables.ulm_on
+                      }
+                    }
+                  } else {
+                    return variables.ulm_unavailable;
+                  }
+                ]]]
+              state:
+                - value: "on"
+                  styles:
+                    name:
+                      - color: >-
+                          [[[
+                              var color = entity.attributes.rgb_color;                                 
+                              if (variables.ulm_card_light_enable_color == true){
+                                if(variables.ulm_card_light_force_background_color == true || hass.themes.darkMode){
+                                  if (color){
+                                    let r = color[0] / 255;
+                                    let g = color[1] / 255;
+                                    let b = color[2] / 255;
+                                    let v=Math.max(r,g,b), c=v-Math.min(r,g,b);
+                                    let h= c && ((v==r) ? (g-b)/c : ((v==g) ? 2+(b-r)/c : 4+(r-g)/c)); 
+                                    let hue = Math.round(60*(h<0?h+6:h));
+                                    let sat = v&&c/v;
+                                    let value = v;   
+                                    if (sat > 0.6) sat = 0.6; 
+                                    let f= (n,k=(n+hue/60)%6) => value - value*sat*Math.max( Math.min(k,4-k,1), 0);   
+                                    let red = f(5) * 255;
+                                    let green = f(3) * 255;
+                                    let blue = f(1) * 255;                                               
+                                    let color2 = Math.round(red) + ',' + Math.round(green) + ',' + Math.round(blue);                            
+                                    return 'rgba(' + color2 + ',1)'
+                                  } else {
+                                    return 'rgba(var(--color-yellow-text),1)'
+                                  }
+                                }
+                              }
+                              return 'rgba(var(--primary-color-plain),1)'
+                          ]]]
+                    label:
+                      - color: >-
+                          [[[
+                              var color = entity.attributes.rgb_color;                               
+                              if (variables.ulm_card_light_enable_color == true){
+                                if(variables.ulm_card_light_force_background_color == true || hass.themes.darkMode){
+                                  if (color){
+                                    let r = color[0] / 255;
+                                    let g = color[1] / 255;
+                                    let b = color[2] / 255;
+                                    let v=Math.max(r,g,b), c=v-Math.min(r,g,b);
+                                    let h= c && ((v==r) ? (g-b)/c : ((v==g) ? 2+(b-r)/c : 4+(r-g)/c)); 
+                                    let hue = Math.round(60*(h<0?h+6:h));
+                                    let sat = v&&c/v;
+                                    let value = v;   
+                                    if (sat > 0.6) sat = 0.6; 
+                                    let f= (n,k=(n+hue/60)%6) => value - value*sat*Math.max( Math.min(k,4-k,1), 0);   
+                                    let red = f(5) * 255;
+                                    let green = f(3) * 255;
+                                    let blue = f(1) * 255;                                               
+                                    let color2 = Math.round(red) + ',' + Math.round(green) + ',' + Math.round(blue);                                                            
+                                    return 'rgba(' + color2 + ',1)'
+                                  } else {
+                                    return 'rgba(var(--color-yellow-text),1)'
+                                  }
+                                }
+                              }
+                              return 'rgba(var(--primary-color-plain),1)'
+                          ]]]
+    item2:
+      card:
+        type: "custom:my-slider"
+        entity: "[[[ return entity.entity_id ]]]"
+        radius: "14px"
+        height: "var(--widget-height)"
+        mainSliderColor: >
+          [[[
+              var color = entity.attributes.rgb_color;
+              if (entity.state == "unavailable"){
+                 return "rgba(var(--color-grey),1)";
+              }
+              else if (color && variables.ulm_card_light_enable_color){
+                 let r = color[0] / 255;
+                 let g = color[1] / 255;
+                 let b = color[2] / 255;
+                 let v=Math.max(r,g,b), c=v-Math.min(r,g,b);
+                 let h= c && ((v==r) ? (g-b)/c : ((v==g) ? 2+(b-r)/c : 4+(r-g)/c)); 
+                 let hue = Math.round(60*(h<0?h+6:h));
+                 let sat = v&&c/v;
+                 let value = v;   
+                 if (sat > 0.6) sat = 0.6; 
+                 let f= (n,k=(n+hue/60)%6) => value - value*sat*Math.max( Math.min(k,4-k,1), 0);   
+                 let red = f(5) * 255;
+                 let green = f(3) * 255;
+                 let blue = f(1) * 255;                                               
+                 let color2 = Math.round(red) + ',' + Math.round(green) + ',' + Math.round(blue); 
+                 return "rgba(" + color2 + ",0.5)";
+              }
+              else{
+                return "rgba(var(--primary-color-plain),1)";
+              }
+          ]]]
+        secondarySliderColor: >
+          [[[
+              var color = entity.attributes.rgb_color;
+              if (entity.state == "unavailable"){
+                 return "rgba(var(--color-grey),0.2)";
+              }
+              else if (color && variables.ulm_card_light_enable_color){
+                let r = color[0] / 255;
+                let g = color[1] / 255;
+                let b = color[2] / 255;
+                let v=Math.max(r,g,b), c=v-Math.min(r,g,b);
+                let h= c && ((v==r) ? (g-b)/c : ((v==g) ? 2+(b-r)/c : 4+(r-g)/c)); 
+                let hue = Math.round(60*(h<0?h+6:h));
+                let sat = v&&c/v;
+                let value = v;   
+                if (sat > 0.6) sat = 0.6; 
+                let f= (n,k=(n+hue/60)%6) => value - value*sat*Math.max( Math.min(k,4-k,1), 0);   
+                let red = f(5) * 255;
+                let green = f(3) * 255;
+                let blue = f(1) * 255;                                               
+                let color2 = Math.round(red) + ',' + Math.round(green) + ',' + Math.round(blue); 
+                return "rgba(" + color2 + ",0.2)"
+                }
+              else{
+                return "rgba(var(--primary-color-plain),1)";
+              }
+          ]]]
+        mainSliderColorOff: "rgba(var(--color-theme),0.05)"
+        secondarySliderColorOff: "rgba(var(--color-theme),0.05)"
+        thumbHorizontalPadding: "0px"
+        thumbVerticalPadding: "0px"
+        thumbWidth: "0px"
+        card_mod:
+        style: |
+          ha-card {
+            border-radius: 14px;
+            box-shadow: none;
+            background-color: transparent;
+          }
+    item3:
+      card:
+        type: "custom:my-slider-v2"
+        entity: "[[[ return entity.entity_id ]]]"
+        radius: "14px"
+        height: "var(--widget-height)"
+        colorMode: "temperature"
+        styles:
+          card: 
+            - height: var(--widget-height)
+          container:
+            - border-radius: 14px
+          track:
+            - background: >
+                [[[
+                  if (entity.state == "on") return "linear-gradient(to right,rgba(100,180,255,0.2),rgba(255,255,255,0.2),rgba(255,136,13,0.2))";
+                  else return "rgba(var(--color-grey),0.07)";
+                ]]]    
+          progress:
+            - background: 'rgba(255, 255, 255, 0.3)'  
+          thumb:
+            - background: 'transparent'            
+        card_mod:
+        style: |
+          ha-card {
+            box-shadow: none;
+            background-color: transparent;
+          }        
+   
