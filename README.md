@@ -59,8 +59,8 @@ The repository is organized into several components, each responsible for differ
 ### App UI (1.0)
 [Feature Showcase on Bilibili](https://www.bilibili.com/video/BV1FN411o7tJ/?vd_source=0720b0b898d660cb78d6a08f4cce925d)
 
-<img src="UI/0.jpg" alt="app-ui-1" width="300" >
-<img src="UI/2.jpg" alt="app-ui-3" width="300" >
+<img src="UI/0.jpg" alt="app-ui-1" width="200" >
+<img src="UI/2.jpg" alt="app-ui-3" width="200" >
 
 ### Schematics (2.0)
 ![render](Schematics/3D_PCB1_2023-11-02.png)
@@ -69,8 +69,8 @@ The repository is organized into several components, each responsible for differ
 
 ### Schematics (1.0)
 ![1.0](1.0/45470061212566221.jpg)
-<img src="1.0/8.png" alt="1.0-8" width="300" >
-<img src="1.0/9.png" alt="1.0-9" width="300" >
+<img src="1.0/8.png" alt="1.0-8" width="200" >
+<img src="1.0/9.png" alt="1.0-9" width="200" >
 
 ### Stream Deck HomeAssistant Controller
 
